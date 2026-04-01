@@ -1,0 +1,164 @@
+/* couple of global styles */
+
+.content--menu{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    columns: 2;
+    text-transform: uppercase;
+    li{
+        margin-bottom: .5rem;
+    }
+    a{
+        color: #fff;
+        text-decoration: none;
+        &:hover, &:focus{
+            color: #000;
+            text-decoration: underline;
+        }
+        &:focus{
+            text-decoration: underline;
+        }
+    }
+    .menu--selected{
+        color: #000;
+    }
+}
+
+
+
+.contact--info{
+    .contact--wrap{
+        margin-top: 2rem;
+    }
+    .contact--socials{
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #f58226;
+    }
+
+}
+.contact--in-person p{
+    margin-bottom: .3rem;
+}
+
+/*
+Default style for WP-PageNavi plugin
+
+http://wordpress.org/extend/plugins/wp-pagenavi/
+*/
+
+.paged--pagination {
+    margin: 2rem 0;
+    text-align: center;
+}
+.page-numbers{
+    display: inline-block;
+    color: #00a5b5;
+    //text-decoration: none;
+    //border: 1px solid #BFBFBF;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.page-numbers li{
+    display: inline-block;
+    margin: 0;
+}
+.page-numbers a, .page-numbers span {
+    text-decoration: none;
+    border: 1px solid #612611;
+    border-radius: 50%;
+    padding: .5rem;
+    margin: 2px;
+    color: #612611;
+    background-color: #fcbc89;
+    height: 25px;
+    width: 25px;
+    transition: background-color 0.15s linear .1s;
+}
+.page-numbers a:hover, .page-numbers a:focus, .page-numbers span.current {
+    border-color: #3c054f;
+    color: #3c054f;
+    background-color: #fed5b4;
+}
+// .page-numbers span.current {
+//     font-weight: bold;
+// }
+
+.paged--label{
+    color: #612611;
+}
+
+
+/* Min width 480px
+---------------------------------------------- */
+@mixin bp-480() { 
+    // min-width: 30em;
+}
+
+/* Min width 600px
+---------------------------------------------- */
+@mixin bp-600() { 
+    // min-width: 37.5em;
+}
+
+/* Min width 768px
+---------------------------------------------- */
+@mixin bp-768() { 
+    // min-width: 48em;
+    
+    .content--menu{
+        columns: 3;
+    }
+
+}
+
+/* Min width 920px
+---------------------------------------------- */
+@mixin bp-920() { 
+    // min-width: 57.5em;
+}
+
+/* Min width 1024px
+---------------------------------------------- */
+@mixin bp-1024() { 
+    // min-width: 64em;
+    
+    .contact--info{
+
+        .contact--socials{
+            border-bottom: 0 none;
+        }
+
+    }
+
+}
+
+/* Min width 1280px
+---------------------------------------------- */
+@mixin bp-1280() { 
+    // min-width: 80em;
+    
+}
+
+/* Min width 1440px
+---------------------------------------------- */
+@mixin bp-1440() { 
+    // min-width: 90em;
+
+
+}
+
+/* Min width 1600px
+---------------------------------------------- */
+@mixin bp-1600() { 
+    // min-width: 100em;
+        
+}
+
+/* Min width 2100px
+---------------------------------------------- */
+@mixin bp-2100() { 
+    // min-width: 131.25em;
+}

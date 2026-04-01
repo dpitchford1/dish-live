@@ -1,0 +1,16 @@
+@use '../toolbox' as *;
+@use 'website-setup';
+@use '../base-layout/header/menu-enhanced';
+
+@mixin all() {
+
+  @include respond-below(767) {
+    @include menu-enhanced.bp-767();
+  }
+
+  @include respond-to(768) {
+    @include website-setup.bp-768();
+    @include menu-enhanced.bp-768();
+  }
+
+}

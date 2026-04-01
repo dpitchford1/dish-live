@@ -1,0 +1,246 @@
+// FONTS
+$font-default: 'body', Verdana, 'Helvetica Neue', Arial, sans-serif;
+$font-light: 'light', 'Helvetica', Arial, sans-serif;
+$font-reg: 'reg', 'Helvetica', Arial, sans-serif;
+
+// IMG's
+$logo--light: url("/assets/img/logos/new/kaneism-logo--dark.svg");
+$logo--dark: url("/assets/img/logos/new/kaneism-logo--light.svg");
+
+$logo-ss--light: url("/assets/img/logos/logo-light.svg");
+$logo-ss--dark: url("/assets/img/logos/logo-dark.svg");
+
+
+///// LEGEND LIGHT THEME /////
+$transparent: transparent;
+
+// GENERAL COLOURS
+$color-black: #000;
+$color-white: #fff;
+
+$accent--dark: #02101e;
+
+$swatch-primary: #00a5b5; // Primary Blue
+$swatch-primary--dark: #187387; // Primary dark accent
+
+$swatch-primary--mid: #99cad4; // Primary mid accent
+$swatch-primary--light: #c1dce3; // Primary light accent
+
+
+$swatch-secondary: #f58226; // Primary Orange
+$swatch-secondary--dark: #f15a22; // Primary dark accent
+
+$swatch-secondary--mid: #fcbc89; // Primary mid accent
+$swatch-secondary--light: #fed5b4; // Primary light accent
+
+
+///// LEGEND LIGHT THEME /////
+/// Color 1: #ffffff - White
+/// Color 2: #5a5a5a - text color
+/// Color 3: #56005b - The purple
+/// 
+
+///// LEGEND DARK THEME /////
+/// Color 1: #000000 - Black
+/// Color 2: #bdbdbd - text color
+/// Color 3: #b0aeff - The Purple
+/// #181723 - Dark Purple
+
+
+// Colors
+$swatch-default--light: #fff;
+$swatch-default--dark: #000;
+$swatch-base--light: #5a5a5a;
+$swatch-base--dark: #bdbdbd;
+
+$ui-accent--light: #dbdbdb;
+$ui-accent--dark: #b0aeff;
+
+$ui-selected--light: #d3d2ff;
+$ui-selected--dark: #1d1d28;
+
+$swatch-primary--light: #fefefe; // header and body BG
+$swatch-primary--dark: #1d1d28; // header and body BG
+
+$swatch-secondary--light: #f8f8f8; // nav bg
+$swatch-secondary--dark: #262631; // nav bg
+
+$swatch-dark--accent: #181723;
+
+$swatch-accent--light: #56005b;
+$swatch-accent--dark: #b0aeff;
+
+// Utilize swatches above
+$swatch-links--light: $swatch-accent--light;
+$swatch-links--dark: $swatch-accent--dark;
+
+//Buttons
+$button-bg--light: #f8f8f8;
+$button-text--light: #56005b;
+$button-hover--light: #dbdbdb;
+$button-hovertext--light: #f8f8f8;
+$button-bgselected--light: #dbdbdb;
+// $button-off--light: ;
+
+$button-bg--dark: #262631;
+$button-text--dark: #fefefe;
+$button-hover--dark: #181723;
+$button-hovertext--dark: #01f3d8;
+$button-bgselected--dark: #56005b ;
+// $button-off--dark: ;
+
+
+$bling--light: #F1B33B;
+$bling--dark: #01f3d8;
+
+$callout--light: #bb5800;
+$callout--dark: #01f3d8;
+
+
+
+
+$themes: (
+    
+    'light': (
+        // IMG's 
+        'logo': $logo--dark,
+        'logo-ss': $logo-ss--dark, 
+
+        'color-white': $color-white,
+        'color-black': $color-black,
+
+
+
+
+        'swatch-default': $swatch-default--light,
+        'swatch-text': $swatch-base--light,
+
+
+        // Background colours
+        'swatch-primary': $swatch-primary--light,
+        'swatch-secondary': $swatch-secondary--light,
+
+        'swatch-accent': $swatch-accent--light,
+        'swatch-links': $swatch-links--light,
+        'swatch-link-hovers': $callout--light,
+
+        // Headings
+        //'headings': $swatch-base--light,
+
+        'bling-primary': $color-black,
+
+        'ui-accent': $ui-accent--light,
+
+        'ui-selected-focus': $swatch-primary--dark,
+
+        'callouts': $callout--light,
+
+        // Borders
+        'dotted-borders': $swatch-accent--light,
+        'ui-borders': $ui-selected--light,
+
+        // FORMS
+        'form-borders': $ui-accent--light,
+        'form-placeholder': $swatch-base--light,
+        'disabled-text': $swatch-base--light,
+        'disabled-bg': $ui-accent--light,
+
+        'button-hover': $ui-selected--light,
+        'buttons': $swatch-accent--light,
+
+        'img-borders': $ui-accent--light,
+
+        'btn-bg': $button-bg--light,
+        'btn-text': $button-text--light,
+        'btn-hover': $button-hover--light,
+        'btn-hovertext': $button-hovertext--light,
+        'btn-bgselected': $button-bgselected--light,
+
+    ),
+
+    'dark': (
+        // IMG's 
+        'logo': $logo--light,
+        'logo-ss': $logo-ss--light,
+
+        'color-white': $color-white,
+        'color-black': $color-black,
+
+        'swatch-default': $swatch-default--dark,
+        'swatch-text': $swatch-base--dark,
+
+        // Background colours
+        'swatch-primary': $swatch-primary--dark,
+        'swatch-secondary': $swatch-secondary--dark,
+
+        'swatch-accent': $swatch-accent--dark,
+        'swatch-links': $swatch-links--dark,
+        'swatch-link-hovers': $callout--dark,
+
+        // Headings
+        //'headings': $swatch-base--dark,
+
+        'bling-primary': $bling--dark,
+
+        'ui-accent': $ui-accent--dark,
+
+        'ui-selected-focus': $swatch-accent--dark,
+
+        'callouts': $callout--dark,
+
+        // Borders
+        'dotted-borders': $swatch-accent--dark,
+        'ui-borders': $ui-selected--dark,
+
+        // FORMS
+        'form-borders': $ui-accent--dark,
+        'form-placeholder': $swatch-base--dark,
+        'disabled-text': $swatch-base--dark,
+        'disabled-bg': $swatch-dark--accent,
+
+        'button-hover': $ui-selected--dark,
+        'buttons': $swatch-accent--dark,
+
+        'img-borders': $ui-accent--dark,
+
+        'btn-bg': $button-bg--dark,
+        'btn-text': $button-text--dark,
+        'btn-hover': $button-hover--dark,
+        'btn-hovertext': $button-hovertext--dark,
+        'btn-bgselected': $button-bgselected--dark,
+    )
+);
+
+
+// BG COLOURS
+// $bg-primary--light: #f8f8f8;
+// $bg-primary--dark: #070707;
+
+// THEME COLOURS
+
+// Default Theme
+//$brand-primary: #222; 		// Dark Grey
+//$brand-secondary: #444; 	// Grey
+//$body-color: #5a5a5a;   	// MED grey
+//$link-color: #56005b; 			// purple
+//$link-hover: #bb5800;  		// Grey
+//$callout: #cf86ee; 			// callout purple
+
+// ─── Breakpoints ───────────────────────────────────────────
+
+$breakpoints: (
+    480:    30em,
+    600:    37.5em,
+    768:    48em,
+    920:    57.5em,
+    1024:   64em,
+    1280:   80em,
+    1440:   90em,
+    1600:   100em,
+    2100:   131.25em,
+);
+
+$breakpoints-max: (
+    767: 47.938em,
+);
+

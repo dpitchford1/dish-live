@@ -1,0 +1,167 @@
+/* General Typography
+---------------------------------------------- */
+/** HEADINGS **/
+
+/* Links
+---------------------------------------------- */
+:where(a) {
+    background: transparent;
+    text-decoration: underline;
+    //color: #fff;
+    @include theme() {
+        color: theme-get('color-white');
+    }
+}
+:where(a:hover) {
+    outline: none;
+    text-decoration: none;
+    //color:#02101e;
+
+    @include theme() {
+        color: theme-get('swatch-link-hovers');
+    }
+}
+:where(a:focus) {
+    text-decoration: underline;
+    outline: none;
+}
+:where(a:active) {
+    color: inherit;
+    background-color: transparent;
+    outline: none;
+}
+
+/** HEADING LINKS **/
+:where(h1 a, h2 a, h3 a, h4 a, h5 a, h6 a) {
+    text-decoration: none;
+    display: inline-block;
+}
+
+:where(h1 a:hover, h1 a:focus, h2 a:hover, h2 a:focus, h3 a:hover, h3 a:focus, h4 a:hover, h4 a:focus, h5 a:hover, h5 a:focus, h6 a:hover, h6 a:focus) {
+    text-decoration: underline;
+}
+///
+
+/* Call out colour */
+// :where(.cc){ 
+// 	@include theme() {
+// 	    color: theme-get('callouts'); 
+// 	} 
+// }
+// :where(.cc:hover){ text-decoration: none; }
+// :where(.cc:focus){ outline: none; text-decoration: underline; } 
+
+/* Tables
+---------------------------------------------- */
+:where(th){ 
+    font-weight: 600;
+}
+:where(th summary){ font-weight: normal; }
+
+:where(caption) {
+    color: currentColor;
+}
+
+/* Media
+---------------------------------------------- */
+:where(img){ color: inherit; }
+
+:where(figcaption){
+    font-weight: normal; 
+    color: inherit; 
+    }
+
+/* Forms
+---------------------------------------------- */
+:where([type="text"], [type="button"], [type="search"], [type="password"], [type="number"], [type="url"], [type="email"], [type="tel"], [type="date"], [type="time"], [type="month"], [type="week"], select, optgroup, textarea) {
+    font-family: $font-reg;
+    border: 1px solid;
+    outline: 1px solid transparent;
+    color: rgb(45, 40, 40);
+}
+
+// :where(input, optgroup, select, textarea) {
+//     @include theme() {
+//         background-color: theme-get('swatch-primary');
+//     }
+// }
+// change the cursor color only
+// .dark :where(input, textarea) {
+//     caret-color:  $bling--dark;
+//     color: $swatch-base--dark;
+//     }
+
+
+:where(button:focus, .button.alt:focus, input:focus, textarea:focus, select:focus, optgroup:focus, [type="checkbox"]:focus, [type="radio"]:focus){ 
+    box-shadow: inset 0px 1px 2px 0px rgba(0,0,0,0.40);
+}
+input:focus:not(.search-form input:focus), textarea:focus{
+    // @include theme() { 
+    //     border-color: theme-get('ui-selected-focus');
+    // }
+    box-shadow: inset 0px 1px 2px 0px rgba(41, 248, 82, 0.4);
+    //border-color:#000;
+}
+
+// input:invalid, textarea:invalid, [aria-invalid="true"] {  
+//     @include theme() {
+//         border-color: red;
+//         }
+// }
+
+/* PLACEHOLDER STYLING
+---------------------------------------------- */
+// input::placeholder {
+//     @include theme() {
+//         color: theme-get('form-placeholder');
+//         }
+//     font-style: italic;
+//     }
+input:focus::placeholder {
+    
+    opacity: .2;
+    // @include theme() {
+    //     color: theme-get('color-text-d');
+    //     color: red;
+    //     }
+    
+    }
+
+legend {
+    color: inherit;
+    }
+label{ 
+    font-family: inherit;
+    }
+
+/* Buttons
+---------------------------------------------- */
+// :where(button, [type="button" i], [type="reset" i], [type="submit" i]){
+//     color: $link-color;
+//     color: red;
+// }
+
+/* Interactive
+---------------------------------------------- */
+// :where(dialog) {
+//     border: solid;
+//     @include theme() {
+//         background-color: theme-get('swatch-default');
+//         color: theme-get('swatch-text');
+//         }
+// }
+:where(.hide-text:focus){
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+}
+:where(.quick-links:focus){
+    outline: 1px solid #000;
+    text-decoration: none;
+}
+
+
+.exit-offcanvas{
+    opacity: 0;
+}
+[data-off-canvas="visible"] .exit-offcanvas, [data-off-screen="visible"] .exit-offcanvas {
+    opacity: 0.5;
+}

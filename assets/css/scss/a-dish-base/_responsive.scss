@@ -1,0 +1,73 @@
+@use '../toolbox' as *;
+@use 'global-structure';
+// @use 'header';
+@use 'global-footer';
+@use 'grid-global';
+
+@mixin all() {
+
+    @include respond-to(480) {
+        @include global-structure.bp-480();
+        // @include header.bp-480();
+        // @include header.menu-global-bp-480();
+        @include global-footer.bp-480();
+        @include grid-global.bp-480();
+    }
+
+    @include respond-to(600) {
+        @include global-structure.bp-600();
+        // @include header.bp-600();
+        // @include header.menu-global-bp-600();
+        @include global-footer.bp-600();
+        @include grid-global.bp-600();
+    }
+
+    @include respond-to(768) {
+        @include global-structure.bp-768();
+        // @include header.bp-768();
+        // @include header.menu-global-bp-768();
+        @include global-footer.bp-768();
+        @include grid-global.bp-768();
+    }
+
+    @include respond-to(920) {
+        @include global-structure.bp-920();
+        @include grid-global.bp-920();
+        @include global-footer.bp-920();
+    }
+
+    @include respond-to(1024) {
+        @include global-structure.bp-1024();
+        // @include header.bp-1024();
+        // @include header.menu-global-bp-1024();
+        @include global-footer.bp-1024();
+        @include grid-global.bp-1024();
+    }
+
+    @include respond-to(1280) {
+        @include global-structure.bp-1280();
+        // @include header.bp-1280();
+        // @include header.menu-global-bp-1280();
+        @include global-footer.bp-1280();
+        @include grid-global.bp-1280();
+    }
+
+    @include respond-to(1440) {
+        // @include header.bp-1440();
+        @include global-footer.bp-1440();
+        @include grid-global.bp-1440();
+    }
+
+    @include respond-to(1600) {
+        @include global-structure.bp-1600();
+        @include global-footer.bp-1600();
+        @include grid-global.bp-1600();
+    }
+
+    @include respond-to(2100) {
+        @include global-structure.bp-2100();
+        @include global-footer.bp-2100();
+        @include grid-global.bp-2100();
+    }
+
+}

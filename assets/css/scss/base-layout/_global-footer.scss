@@ -1,0 +1,255 @@
+/* Global Footers
+---------------------------------------------- */
+.global-footer{
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    color: #fff;
+    padding: 3rem 0 1.5rem;
+    margin-top: 3.5vh;
+    content-visibility: auto;
+    }
+
+/* Footer Branding
+---------------------------------------------- */
+.footer-logo{
+    height: 131px;
+    margin: 1rem auto;
+    width: 131px;
+    background-size: contain;
+    background-position: top center;
+    background-image: url('/assets/img/logos/d.svg');
+    }
+
+
+/* Footer Structure
+---------------------------------------------- */
+.global-footer a{
+    &:hover, &:focus{
+        color: #02101e;
+        }
+    }
+.footer-menu{
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+    text-transform: uppercase;
+    li{
+        margin-bottom: .1rem
+    }
+    a{
+        display: block;
+        padding: .2rem 0;
+    }
+    column-count: 2;
+}
+
+// re-order template areas for different screen sizes
+.footer-grid{
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-areas:
+     "footer-logo footer-logo"
+     "footer-menu footer-menu"
+     "footer-nav footer-nav"
+     //"footer-about footer-about"
+     "footer-about footer-about"
+     "footer-newsletter footer-newsletter"
+     "copyright copyright"
+}
+.footer-area{
+    margin: 0 0 1rem 0;
+}
+
+.footer-span-1{
+    grid-area: footer-logo;
+}
+.footer-span-2{
+    grid-area: footer-menu;
+}
+.footer-span-3{
+    grid-area: footer-about;
+}
+.footer-span-4{
+    grid-area: footer-nav;
+}
+.footer-span-5{
+    grid-area: footer-newsletter;
+    .circle{ zoom: .85; }
+    .slick--btn .button-text{ padding: .5rem 0; }
+}
+.footer-span-6{
+    grid-area: copyright;
+}
+
+.copyright{ font-size: .875rem; margin-bottom: 0; padding: 3rem 0 0rem; text-align: center; }
+
+
+/* Footer Type
+---------------------------------------------- */
+.footer-lists{
+    margin-bottom: 2rem;
+    a{
+        display: block;
+        padding: .2rem;
+        }
+    }
+
+.footer-area .is--flex-list{
+    margin-bottom: 1rem;
+}
+
+.js-BackToTop{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    }
+
+/* Min width 480px
+---------------------------------------------- */
+@mixin bp-480() { 
+    // min-width: 30em
+}
+
+/* Min width 600px
+---------------------------------------------- */
+@mixin bp-600() { 
+    // min-width: 37.5em
+    .footer-grid{
+        // display: grid;
+        // grid-gap: 1rem;
+        grid-template-areas:
+        "footer-logo footer-logo"
+        "footer-menu footer-menu"
+        "footer-nav footer-about"
+        //"footer-about footer-about"
+        "footer-newsletter footer-newsletter"
+        "copyright copyright"
+    }
+}
+
+/* Min width 768px
+---------------------------------------------- */
+@mixin bp-768() { 
+
+    // min-width: 48em
+
+    /* Footer Structure
+    ---------------------------------------------- */
+    .footer-grid{
+        grid-template-areas:
+        "footer-logo footer-logo footer-logo"
+        "footer-menu footer-about footer-nav"
+        "footer-newsletter footer-newsletter footer-newsletter"
+        "copyright copyright copyright"
+    }
+    .footer-menu{
+        column-count: 1;
+        }
+    .footer-area{
+        margin: 0;
+        }
+
+}
+
+/* Min width 920px
+---------------------------------------------- */
+@mixin bp-920() { 
+    // min-width: 57.5em
+}
+
+/* Min width 1024px
+---------------------------------------------- */
+@mixin bp-1024() { 
+
+    // min-width: 64em
+
+    /* Footer Structure
+    ---------------------------------------------- */
+    .footer-grid{
+        grid-template-columns: 20% 15% 25% auto;
+        grid-template-areas:
+        "footer-logo footer-menu footer-about footer-nav"
+        "footer-newsletter footer-newsletter footer-newsletter footer-newsletter"
+        "copyright copyright copyright copyright"
+    }
+    .footer-logo{
+        height: 136px;
+        margin: 1rem 0;
+        width: 131px;
+        }
+
+}
+
+/* Min width 1280px
+---------------------------------------------- */
+@mixin bp-1280() { 
+
+    // min-width: 80em
+    
+    /* Footer Branding
+    ---------------------------------------------- */
+    .brand-footer{
+        font-size: .875rem;
+        }
+
+    .global-footer{
+        margin-top: 4rem;
+        }
+    
+        /* Footer Structure
+    ---------------------------------------------- */
+    .footer-grid{
+        grid-template-columns: 10% 10% 25% auto auto;
+        grid-template-areas:
+            "footer-logo footer-menu footer-about footer-nav footer-newsletter"
+            "copyright copyright copyright copyright copyright"
+    }
+
+    .footer-logo{
+        height: 100px;
+        margin: 1rem 0;
+        width: 104px;
+        }
+        
+}
+
+/* Min width 1440px
+---------------------------------------------- */
+@mixin bp-1440() { 
+    // min-width: 90em
+
+}
+
+/* Min width 1600px
+---------------------------------------------- */
+@mixin bp-1600() { 
+
+    // min-width: 100em
+    
+    /* Footer Structure
+    ---------------------------------------------- */
+    .footer-grid{
+        grid-template-columns: 11% 15% 20% 15% 35%;
+        grid-template-areas:
+            "footer-logo footer-menu footer-about footer-nav footer-newsletter"
+            "copyright copyright copyright copyright copyright"
+    }
+    .footer-logo{
+        height: 120px;
+        margin: 0 0 1rem;
+        width: 124px;
+        }
+}
+
+/* Min width 2100px
+---------------------------------------------- */
+@mixin bp-2100() { 
+    // min-width: 131.25em
+
+    .footer-logo{
+        height: 140px;
+        margin: 1rem 0;
+        width: 144px;
+        }
+    
+}

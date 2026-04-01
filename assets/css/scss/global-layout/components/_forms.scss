@@ -1,0 +1,359 @@
+/* Form Elements */
+/**
+* Remove the margin on controls in Safari.
+*/
+
+/* :where(button, input, select) {
+    margin: 0;
+} */
+
+:where([type="text"], [type="button"], [type="search"], [type="password"], [type="number"], [type="url"], [type="email"], [type="tel"], [type="date"], [type="time"], [type="month"], [type="week"], select, optgroup, textarea) {
+    font-size: 1rem;
+    line-height: 1.15;
+    vertical-align: baseline;
+    border-radius: 0;
+    padding: .6180469716rem;
+    overflow: visible;
+    }
+
+:where([type="file"], [type="color"]) {
+    font-size: 1rem;
+    line-height: 1.15;
+    vertical-align: baseline;
+    border-radius: 0;
+    border: 0;
+    overflow: visible;
+    }
+:where([type="file"]) {
+    background-color: transparent;
+    }
+
+// input[type="number"]:focus, input[type="text"]:focus, input[type="search"]:focus{
+//     outline: 1px solid #7f54b3;
+// }
+
+// :where([type="text"], [type="search"], [type="password"], [type="url"], [type="email"], [type="tel"], textarea) {
+//     padding: .3em .6em;
+//     }
+
+// button:focus, .button.alt:focus, input:focus, textarea:focus, input[type="button"]:focus, input[type="reset"]:focus, input[type="submit"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="search"]:focus, select:focus, optgroup:focus{
+//         outline-color: #7f54b3; 
+//     }
+
+// :where(input, textarea, select):focus {
+//     outline: none;
+//     border: 1px solid #7f54b3;
+// }
+
+:where(input[type="text"], input[type="email"], input[type="password"], textarea) {
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+:where(input[type="text"], input[type="email"], input[type="password"], textarea):not(.mc4wp-form-fields input) {
+    background-color: #fcbc89;
+    border: 1px solid #7f54b3;
+}
+
+:where(input:focus, textarea:focus){
+  border-color: #02101e;
+  background-color: #fed5b4;
+  box-shadow: 0 0 5px rgba(0, 119, 204, 0.3);
+}
+
+
+// :where(select){ padding: initial; }
+:where(optgroup) {
+    font-weight: bold;
+    }
+:where(select) {
+    /* background-color: #fff;  */
+    /* border-radius: 0; */
+    -webkit-appearance: menulist;
+    appearance: menulist;
+    -webkit-box-align: center; 
+    -webkit-rtl-ordering: logical;
+    outline-offset: -2px;
+}
+:where(button, select) {
+    text-transform: none;
+    }
+
+:where(input[type="number"]){
+    text-align: center;
+}
+
+/**
+* Add the correct vertical alignment in Chrome, Edge, and Firefox.
+*/
+
+:where(progress) {
+  vertical-align: baseline;
+}
+
+/**
+* 1. Remove the margin in Firefox and Safari.
+* 3. Change the resize direction in all browsers (opinionated).
+*/
+
+:where(textarea) {
+  margin: 0; /* 1 */
+  resize: vertical; /* 3 */
+}
+
+/**
+* 1. Correct the odd appearance in Chrome, Edge, and Safari.
+* 2. Correct the outline style in Safari.
+*/
+
+:where([type="search" i]) {
+  -webkit-appearance: textfield; /* 1 */
+  appearance: textfield;
+  outline-offset: -2px; /* 2 */
+}
+
+/**
+* Correct the cursor style of increment and decrement buttons in Safari.
+*/
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+* Correct the text style of placeholders in Chrome, Edge, and Safari.
+*/
+
+::-webkit-input-placeholder {
+  color: inherit;
+  opacity: 0.54;
+}
+
+/**
+* Remove the inner padding in Chrome, Edge, and Safari on macOS.
+*/
+
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/**
+* 1. Correct the inability to style upload buttons in iOS and Safari.
+* 2. Change font properties to `inherit` in Safari.
+*/
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button; /* 1 */
+  appearance: button;
+  font: inherit; /* 2 */
+}
+
+::-ms-reveal,
+::-ms-clear {
+    display: none !important;
+    }
+
+:where([hidden]) {
+    display: none !important;
+}
+
+input[type="file"]:focus, input[type="radio"]:focus, input[type="checkbox"]:focus, select:focus{ 
+    box-shadow: none; 
+    outline: none; 
+    }
+
+button::-moz-focus-inner, [type="button"]::-moz-focus-inner, [type="reset"]::-moz-focus-inner, [type="submit"]::-moz-focus-inner {
+    border-style: none;
+    padding: 0;
+    }
+
+button:-moz-focusring,[type="button"]:-moz-focusring,[type="reset"]:-moz-focusring,[type="submit"]:-moz-focusring {
+    outline: 1px dotted #fff;
+    }
+
+/* Form Structure
+---------------------------------------------- */
+form{ margin-bottom: 1em;}
+
+fieldset {
+    border: 0;
+    }
+legend {
+    white-space: normal;
+    color: inherit;
+    }
+label{ 
+    display:block; 
+    margin-bottom: .3rem;
+    font-family: inherit;
+    }
+
+/* PLACEHOLDER STYLING
+---------------------------------------------- */
+::-moz-placeholder {
+    opacity: .75;
+    font-style: italic;
+    }
+::placeholder {
+    opacity: .75;
+    font-style: italic;
+    }
+input:focus::-moz-placeholder {
+    opacity: 0.2;
+}
+input:focus::placeholder {
+    opacity: 0.2;
+}
+
+/* GLOBAL STRUCTURES & WRAPPERS
+---------------------------------------------- */
+.general-form {
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+/* MAILCHIMP NEWSLETTER FORM
+---------------------------------------------- */
+// .mc4wp-form{
+//     width: 85%;
+// }
+
+.mc4wp-form-fields{
+    margin-bottom: 1.1rem;
+    text-align: center;
+
+    label{
+        font-size: 0.875rem;
+    }
+    input[type="email"]{
+        margin-bottom: .5rem;
+    }
+    .slick--btn{
+        zoom: .8;
+    }
+}
+
+.mc4wp-response{
+    font-style: italic;
+    font-size: .875rem;
+    width: 80%;
+    display: none;
+}
+
+/* Min width 480px
+---------------------------------------------- */
+@mixin bp-480() { 
+    // min-width: 30em;
+}
+
+/* Min width 600px
+---------------------------------------------- */
+@mixin bp-600() { 
+    // min-width: 37.5em;
+}
+
+/* Min width 768px
+---------------------------------------------- */
+@mixin bp-768() { 
+    // min-width: 48em;
+
+    .mc4wp-form-fields{
+        text-align: left;
+
+    }
+}
+
+/* Min width 920px
+---------------------------------------------- */
+@mixin bp-920() { 
+    // min-width: 57.5em;
+}
+
+/* Min width 1024px
+---------------------------------------------- */
+@mixin bp-1024() { 
+    // min-width: 64em;
+
+    
+}
+
+/* Min width 1280px
+---------------------------------------------- */
+@mixin bp-1280() { 
+    // min-width: 80em;
+
+}
+
+/* Min width 1440px
+---------------------------------------------- */
+@mixin bp-1440() { 
+    // min-width: 90em;
+
+    .mc4wp-form{
+        width: 85%;
+    }
+}
+
+/* Min width 1600px
+---------------------------------------------- */
+@mixin bp-1600() { 
+    // min-width: 100em;
+
+}
+
+/* Min width 2100px
+---------------------------------------------- */
+@mixin bp-2100() { 
+    // min-width: 131.25em;
+
+}
+
+
+/* GLOBAL FORM ELEMENTS
+---------------------------------------------- */
+  /* Styled legend tag */
+//   .legend-visible {
+//     font-size: 1rem;
+//     line-height: normal;
+//     margin-bottom: 0.2rem;
+//   }
+  
+//   /* Labels */
+//   /* Text Fields */
+//   .field-inline {
+//     margin-right: 15px;
+//   }
+  
+//   /* Radio Buttons and Checkboxes */
+//   .checkbox abbr {
+//     display: none;
+//   }
+  
+//   .checkbox .form-label {
+//     font-size: 0.8125rem;
+//     font-family: "body", Verdana, "Helvetica Neue", Arial, sans-serif;
+//   }
+  
+//   .form-label input[type=checkbox] {
+//     float: left;
+//     margin-top: 4px;
+//   }
+  
+  
+  /* GENERAL FORM STYLES
+  ---------------------------------------------- */
+//   .general-form .text-field {
+//     width: 375px;
+//   }
+  
+//   .general-form .btn {
+//     margin-top: 0.8rem;
+//   }
+  
+//   .general-form .controls .date {
+//     margin-right: 15px;
+//     width: 90px;
+//     padding: 0.3rem 0 0.3rem 0.5rem;
+//   }
+  

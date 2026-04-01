@@ -1,0 +1,257 @@
+
+/* Main global Navigation
+---------------------------------------------- */
+
+// Main global Navigation
+.navigation-global{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    background-color: #187387;
+    //opacity: .75;
+    //backdrop-filter: blur(5px);
+
+    li{
+        margin: 0;
+        padding: 0;
+        }
+    a{
+        display: block;
+        padding: .7rem 5%;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+    }
+}
+.navigation-global a:hover, .navigation-global a:focus{ 
+    color: #02101e;
+    text-decoration: none;
+    background-color: #99cad4;
+}
+.navigation-global a:active{ 
+    background-color: #c1dce3;
+}
+.navigation-global .menu--selected{ 
+    color: #187387;
+    background-color: #c1dce3;
+
+    & a:hover, & a:focus{
+        color: #02101e;
+    }
+}
+
+.footer-menu .menu--selected{
+    color: #02101e;
+}
+
+
+/* Min width 480px
+---------------------------------------------- */
+@mixin bp-480() { 
+    // min-width: 30em;
+}
+
+/* Min width 600px
+---------------------------------------------- */
+@mixin bp-600() { 
+    // min-width: 37.5em;
+}
+
+/* Min width 768px
+---------------------------------------------- */
+@mixin bp-768() { 
+    // min-width: 48em;
+
+    /* Main global Navigation
+    ---------------------------------------------- */
+    .global-header {
+        // backdrop-filter: blur(5px);
+        // border-bottom: 1px solid #000;
+
+        // background-color: rgba(121, 115, 115, 0.9);
+
+        // mix-blend-mode:overlay ;
+    }
+    // .global-header::before{
+    //     content: '';
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    //     right: 0;
+    //     width: 100%;
+    //     height: 100%;
+        
+    //     z-index: 0;
+    // }
+
+    .navigation-global{
+        border-bottom: 0 none;
+        display: inline-flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        background-color: rgba(0,0,0, 0.3);
+        border-radius: 11px;
+        //backdrop-filter: blur(10px);
+    }
+    
+    .navigation-global a{
+        padding: .5rem .7rem;
+        transition: color 0.3s linear .1s, background-color 0.2s linear .1s;
+        }
+    .navigation-global li:first-child a{
+        border-top-left-radius: 11px;
+        border-bottom-left-radius: 11px;
+    }
+    .navigation-global li:last-child a{
+        border-top-right-radius: 11px;
+        border-bottom-right-radius: 11px;
+    }
+    .navigation-global a:hover, .navigation-global a:focus{ 
+        color: #fcbc89;
+        //text-decoration: underline;
+        //background-color: transparent;
+
+        background-color: rgba(0,0,0, 0.4);
+        
+    }
+    .navigation-global a:active{ 
+        //background-color: transparent;
+        background-color: rgba(0,0,0, 0.8);
+    }
+
+    .navigation-global a.menu--selected{ 
+        //background-color: transparent;
+        background-color: rgba(0,0,0, 0.75);
+        //color: #02101e;
+        color: #99cad4;
+    
+        & :hover, & :focus{
+            background-color: transparent;
+            color: #fcbc89;
+        }
+    }
+
+    .is--sticky{
+        .navigation-global, .navigation-global a{
+            background-color: transparent;
+        }
+        .navigation-global a:hover, .navigation-global a:focus{  
+            color: #fcbc89;
+        }
+        .navigation-global .menu--selected{ 
+            color: #99cad4;
+        
+            & a:hover, & a:focus{
+                color: #fcbc89;
+                text-decoration: none;
+            }
+        }
+    }
+
+    // .navigation-global{
+    //     border-bottom: 0 none;
+    //     display: inline-flex;
+    //     justify-content: flex-start;
+    //     align-items: flex-start;
+    //     flex-wrap: wrap;
+    //     background-color: transparent;
+
+    //     /* Underline From Center */
+    //     & a {
+    //         border-bottom: 0 none;
+    //         padding: .5rem .7rem;
+    //         -webkit-transform: perspective(1px) translateZ(0);
+    //         transform: perspective(1px) translateZ(0);
+    //         }
+    //     & a:before{
+    //         content: "";
+    //         position: absolute;
+    //         z-index: -1;
+    //         left: 51%;
+    //         right: 51%;
+    //         bottom: 0;
+    //         height: 1px;
+    //         -webkit-transition-property: left, right;
+    //         transition-property: left, right;
+    //         -webkit-transition-duration: 0.3s;
+    //         transition-duration: 0.3s;
+    //         -webkit-transition-timing-function: ease-out;
+    //         transition-timing-function: ease-out;
+    //         }
+    //     & a:hover:before, a:focus:before, a:active:before, .menu--selected:before{
+    //         left: 0;
+    //         right: 0;
+    //     }
+    //     & a:hover, a:focus, .menu--selected{ 
+    //         border-bottom: 0 none;
+    //     }
+    // }
+
+}
+
+/* Min width 920px
+---------------------------------------------- */
+@mixin bp-920() { 
+    // min-width: 57.5em;
+}
+
+/* Min width 1024px
+---------------------------------------------- */
+@mixin bp-1024() { 
+    // min-width: 64em;
+    
+    /* Main global Navigation
+    ---------------------------------------------- */
+    .navigation-global{
+        & a {
+            padding: .6rem .8rem;
+            }
+    }
+
+}
+
+/* Min width 1280px
+---------------------------------------------- */
+@mixin bp-1280() { 
+    // min-width: 80em;
+    
+    /* Main global Navigation
+    ---------------------------------------------- */
+    .navigation-global{
+
+        & a {
+            padding: .85rem 1.1rem;
+        }
+    }
+
+    .is--sticky{
+       .navigation-global{
+
+        & a {
+            padding: .7rem 1.1rem;
+        }
+    }
+    }
+        
+}
+
+/* Min width 1440px
+---------------------------------------------- */
+@mixin bp-1440() { 
+    // min-width: 90em;
+}
+
+/* Min width 1600px
+---------------------------------------------- */
+@mixin bp-1600() { 
+    // min-width: 100em;
+}
+
+/* Min width 2100px
+---------------------------------------------- */
+@mixin bp-2100() { 
+    // min-width: 131.25em;
+}

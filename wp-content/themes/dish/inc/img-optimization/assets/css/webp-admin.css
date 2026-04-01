@@ -1,0 +1,174 @@
+/**
+ * WebP Conversion Admin Styles
+ *
+ * @package basecamp
+ */
+
+.webp-conversion-wrap h1 {
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    background-color: #f0f0f0;
+    height: 20px;
+    margin-bottom: 15px;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.progress {
+    background-color: #0073aa;
+    height: 20px;
+    transition: width 0.3s ease-in-out;
+    border-radius: 3px;
+}
+
+.progress-text {
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+#processing-log {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    border-radius: 3px;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+#log-entries {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.log-entry {
+    margin-bottom: 5px;
+    padding: 3px 0;
+    border-bottom: 1px dotted #eee;
+}
+
+.log-time {
+    color: #666;
+    margin-right: 5px;
+}
+
+.log-icon {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.log-success .log-icon {
+    color: #46b450;
+}
+
+.log-error .log-icon {
+    color: #dc3232;
+}
+
+.log-paused .log-icon {
+    color: #ffb900;
+}
+
+.log-info .log-icon {
+    color: #00a0d2;
+}
+
+.log-warning .log-icon {
+    color: #ffb900;
+}
+
+.log-success {
+    background-color: rgba(70, 180, 80, 0.05);
+}
+
+.log-error {
+    background-color: rgba(220, 50, 50, 0.05);
+}
+
+.log-warning {
+    background-color: rgba(255, 185, 0, 0.05);
+}
+
+#current-processing {
+    padding: 10px;
+    background-color: #f0f7ff;
+    border-left: 4px solid #0073aa;
+    margin-bottom: 15px;
+}
+
+.controls {
+    margin: 15px 0;
+}
+
+.controls button {
+    margin-right: 10px;
+}
+
+.reset-conversion {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.stats-section {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.stats-section h3 {
+    margin-top: 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 15px;
+    margin-top: 15px;
+}
+
+.stat-card {
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 3px;
+}
+
+.stat-card h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #23282d;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #0073aa;
+}
+
+.stat-description {
+    margin-top: 5px;
+    color: #666;
+    font-size: 12px;
+}
+
+.start-conversion .form-table th {
+    width: 200px;
+}
+
+.webp-notice {
+    padding: 15px;
+    margin: 15px 0;
+    background-color: #fff;
+    border-left: 4px solid #00a0d2;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+} 

@@ -1,0 +1,82 @@
+Tweaks needed:
+
+Calendar Card:
+- Add Format Word Label (Hands On)
+- Spot for img
+
+Classes need a "disabled" state, "Call to book" label.
+
+Dish Workshop format needed.
+Ticketing needs:
+- chekbox "call to book"
+- disables the price
+- adds "call to book" label on calendar. 
+
+
+
+Format page (Hands on) only showing 1 event in Upcoming, needs to show all.
+
+Chefs Admin page: 
+- Add checkbox to "Add to Chefs list"
+-- Used for Widgets, shortcodes to display only chefs.
+-- chefs page lists all.
+
+Menus
+A menu listing page by date, attched to the Calendar.
+- Format
+- Chef
+- Guest Chefs -- possible profile.
+- Description, img, excerpt,
+
+
+Next is a small feature, but not sure the best way to implement.
+Is it it's own CPT? Category? Taxonomy?
+Which level to add it to, or create it's own section within the admin?
+
+Context:
+- Each Class type has it's own Menu the class will be cooking that class.
+
+Requirements:
+- An archive page listing the Menus by date.
+- Menu would be associated with the Template --> Hands On - German Beer Hall
+- Chef included in meta
+- The Menu would be output on the German Beer Hall template, and the class detail page (which already includes chef, Format etc.)
+
+
+03/29/26 - Whole Hog Butchery 
+
+Chef: Peter Sanagan  
+Format: Workshop  
+
+Join us for a 3-hour Hands On pork butchery lesson from professional butcher and owner of Sanagan's Meat Locker Peter Sanagan!  This is an intensive class where you will be breaking down an entire pastured pig from snout to tail. 
+In this class YOU ARE THE BUTCHER. You will be learning about each cut and how it can be used.  This class has a limit of 12 people and each participant goes home with approximately 10 - 15lbs of pork at the end of the workshop.
+
+03/31/26 - Maritime Kitchen Party 
+
+Chef: Erin Ross 
+Format: Hands On 
+
+Menu: 
+Nova Scotia Lobster Cakes, Charred Leek Salad + Dill Creme Fraiche
+Prince Edward Island Clam Chowder, Double Smoked Bacon, with Chive + Cheddar Biscuits
+Maple Mustard Glazed Atlantic Salmon, Haricot Vert, Warm New Potato Salad
+Maple Toffee Chomeur, Vanilla Bean Ice cream + Maple Walnut Brittle
+
+**Dietary Flags: Seafood, Gluten, Dairy, Nuts, Pork
+Pescatarian/Gluten Free Friendly 
+Please contact us if any of the above dietary flags apply to you to ensure we can accommodate your dietary requirements.
+
+04/04/26 - Passport to Portugal 
+
+Chef: Cat Mostazo
+Format:  Hands On
+
+Menu: 
+Salt Cod Fritters with Chili Caper Oil and Spicy Tomato Dipping Sauce
+Olive Oil Poached Cod and Chickpea Salad with Fresh Herbs + Grilled Sourdough Crostini
+Alentejo’s Braised Pork and Clams with Crispy Smashed Potatoes 
+Portuguese Almond Cake with Port Caramel Sauce, Candied Orange Peel + Chantilly Cream
+
+**Dietary Flags: Eggs, Dairy, Shellfish, Tree Nuts
+Pescatarian/Gluten Free Friendly
+Please contact us if any of the above dietary flags apply to you to ensure we can accommodate your dietary requirements.

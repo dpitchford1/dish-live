@@ -1,0 +1,62 @@
+/* Images, Media & Embedded content
+========================================================================== */
+/* pulled in to: website-setup.scss */
+
+/**
+ * Remove the border on images inside links in IE 10.
+ */
+ :where(img) {
+    color: inherit;
+    border-style: none;
+    border: 0;
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+}
+:where(picture) {
+    overflow: hidden;
+}
+
+:where(figure) {
+    margin: 0 0 0.625rem;
+    padding: 0;
+}
+:where(figcaption) {
+    font-weight: normal;
+    color: inherit;
+}
+:where(video) {
+    max-width: 100%;
+    height: auto;
+}
+
+/*
+* Change the alignment on media elements in all browsers (opinionated).
+*/
+:where(audio, canvas, iframe, img, svg, video) {
+    vertical-align: middle;
+}
+audio, canvas, video, progress {
+    display: inline-block;
+    vertical-align: baseline;
+}
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+[hidden], template {
+    display: none;
+}
+/**
+* Remove the border on iframes in all browsers (opinionated).
+*/
+:where(iframe) {
+    border-style: none;
+}
+
+/**
+* Change the fill color to match the text color in all browsers (opinionated).
+*/
+:where(svg:not([fill])) {
+    fill: currentColor;
+}

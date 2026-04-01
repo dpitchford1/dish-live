@@ -17,6 +17,31 @@
 /wp-*.php
 /xmlrpc.php
 
+.github/
+/assets/css/build/
+/assets/css/core/
+/assets/css/resources/
+/assets/css/scss/_archive/
+/assets/fonts/
+/assets/js/build/
+/assets/img/
+
+# Ignore the following files and directories 
+/dish-live.code-workspace
+/wp-content/upgrade/
+/wp-content/themes/basecamp_1/
+/wp-content/themes/dish/_archive/
+/wp-content/themes/basecamp/languages/
+/wp-content/themes/basecamp/library/
+/wp-content/themes/basecamp/inc/development/
+/wp-content/themes/basecamp/inc/woocommerce/
+
+/wp-content/plugins/dish-events/
+/wp-content/themes/dish/dish-events/
+/wp-content/themes/dish/Docs/
+
+/wp-content/themes/dish/inc/admin/assets/scss/
+
 # Configuration
 wp-config.php
 
@@ -24,13 +49,15 @@ wp-config.php
 /wp-content/themes/twenty*/
 
 # Example plugin
-/wp-content/plugins/hello.php
+/wp-content/plugins/
 
 # Uploads
 /wp-content/uploads/
 
 # Log files
 *.log
+*.DS_Store
+/repomix-output.json
 
 # htaccess
 /.htaccess

@@ -1,0 +1,26 @@
+/*
+Theme Name:  Dish
+Theme URI:   https://github.com/your-org/basecamp
+Description: A performance-focused, modular WordPress starter theme for developers.
+             No build pipeline — Dart Sass compiled by Live Sass Compiler.
+Author:      Kaneism
+Author URI:  https://kaneism.com
+Version:     1.0.0
+Text Domain: basecamp
+Tags:        accessibility-ready, translation-ready, full-width-template, custom-header, theme-options, e-commerce
+License:     WTFPL
+License URI: http://www.wtfpl.net/
+
+SCSS source: assets/css/scss/
+Compiled to: assets/css/build/
+Compiler:    Live Sass Compiler (VS Code extension — glenn2223.live-sass)
+*/
+
+/*
+ * WordPress required classes.
+ * Empty rules keep Theme Check and WordPress core happy.
+ * Do not remove.
+ */
+.sticky {}
+.gallery-caption {}
+.bypostauthor {}

@@ -1,0 +1,113 @@
+/* Interactive
+* ========================================================================== */
+
+/*
+* Add the correct styles in Safari.
+*/
+:where(dialog) {
+    height: -moz-fit-content;
+    height: fit-content;
+    left: 0;
+    margin: auto;
+    padding: 1em;
+    position: absolute;
+    right: 0;
+    width: -moz-fit-content;
+    width: fit-content;
+}
+  
+:where(dialog:not([open])) {
+    display: none;
+}
+  
+/*
+* Add the correct display in Safari.
+*/
+:where(details > summary:first-of-type) {
+    display: list-item;
+}
+summary {
+    display: list-item;
+    cursor: pointer;
+}
+    
+  
+/* Accessibility
+* ========================================================================== */
+/* Text meant only for screen readers. */
+:where(.hide-text, .screen-reader-text) {
+    border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute !important;
+    width: 1px;
+    word-wrap: normal !important; /* Many screen reader and browser combinations announce broken words as they would appear visually. */
+}
+:where(.hide-text:focus){
+    border-radius: 3px;
+    clip: auto !important;
+    clip-path: none;
+    display: block;
+    font-weight: bold;
+    height: auto;
+    left: 5px;
+    line-height: normal;
+    padding: 15px 23px 14px;
+    text-decoration: none;
+    top: 5px;
+    width: auto;
+    z-index: 100000;
+}
+:where(.hide-divider) { border: 0 none; height: 0 !important; margin: 0; padding: 0; }
+
+:where(.quick-links){
+    left: 10px;
+    padding: 5px 10px;
+    position: absolute;
+    text-decoration: none;
+    top: -100%;
+    transition: top 200ms ease-in-out 0s;
+    z-index: 5;
+    transform: translateZ(0);
+    color: #000;
+    }
+
+:where(.quick-links:focus){
+    top: 0;
+    outline: 1px solid #000;
+    text-decoration: none;
+    background-color: #fff;
+} 
+
+/**
+* Change the cursor on busy elements in all browsers (opinionated).
+*/
+
+:where([aria-busy="true" i]) {
+    cursor: progress;
+}
+
+/*
+* Change the cursor on disabled, not-editable, or otherwise
+* inoperable elements in all browsers (opinionated).
+*/
+
+:where([aria-disabled="true" i], [disabled]) {
+    cursor: not-allowed;
+}
+
+/*
+* Change the display on visually hidden accessible elements
+* in all browsers (opinionated).
+*/
+
+:where([aria-hidden="false" i][hidden]) {
+    display: initial;
+}
+
+:where([aria-hidden="false" i][hidden]:not(:focus)) {
+    clip: rect(0, 0, 0, 0);
+    position: absolute;
+}

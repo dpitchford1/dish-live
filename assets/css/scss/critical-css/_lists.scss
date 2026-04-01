@@ -1,0 +1,65 @@
+ul, ol, dl      { margin-top: 0; margin-bottom: 1.2rem; }
+ul              { list-style-type: disc; }
+ul li           { margin-bottom: .3rem; }
+ol              { list-style-type: decimal; list-style-position: outside; }
+ol li           { margin-bottom: .3rem; }
+
+
+/*definition lists*/
+dt              { font-family: $font-reg; font-weight: normal; }
+dl dd           { margin: 0 0 .5125rem; }
+dialog dd       { margin-bottom: .5rem; line-height: normal; }
+ul dl, ol dl    { margin: 0 0 0 .625rem; }
+
+/**
+* Remove the margin on nested lists in Chrome, Edge, and Safari.
+*/
+
+:where(dl, ol, ul) :where(dl, ol, ul) {
+    margin: .6rem 0 .6rem 1rem; padding-left: 25px;
+}
+
+/**
+* Remove the list style on navigation lists in all browsers (opinionated).
+*/
+
+:where(nav) :where(ol, ul) {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Tabular data
+* ========================================================================== */
+
+/**
+* 1. Collapse border spacing in all browsers (opinionated).
+* 2. Correct table border color in Chrome, Edge, and Safari.
+* 3. Remove text indentation from table contents in Chrome, Edge, and Safari.
+*/
+
+:where(table) {
+    border-collapse: collapse; /* 1 */
+    border-color: currentColor; /* 2 */
+    text-indent: 0; /* 3 */
+    table-layout: fixed;
+    border-spacing: 0;
+    caption-side: bottom;
+}
+
+:where(th){ text-align: -webkit-match-parent; text-align: match-parent; text-align: inherit; }
+:where(th summary)      { margin: 0 0 .625rem 0; }
+:where(td, th)          { padding: 0; }
+:where(thead, tbody, tfoot, tr, td, th) {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+    vertical-align: middle;
+    text-align: left;
+}
+  
+:where(caption) {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    color: currentColor;
+    text-align: left;
+}

@@ -1,0 +1,275 @@
+// =============================================================================
+// News Styles
+// General Posts renamed News for clarity, but this is where all the single post styles will go.
+// =============================================================================
+
+.entry-content img{
+    border: 1px solid #612611;
+    padding: 1px;
+}
+
+.news--content{
+    padding: 0 5%; 
+    font-size: clamp(1rem, calc(1rem + 1vw), 1.3rem);
+    margin-bottom: 4vh;
+    padding-bottom: 2vh;
+    background: radial-gradient(circle farthest-corner at 50% 100%, #f15a22 0%, #f5852900 56%);
+
+    h2{
+        line-height: 1.2;
+    }
+
+    h3, h4{ 
+        color:#612611;
+        font-family: 'secondary', 'Helvetica', Arial, sans-serif;
+        margin: 0 0 1rem 0;
+        line-height: normal; 
+    }
+    p + h3, p + h4{ 
+        margin-top: 2.5rem;
+    }
+    h3{
+        font-size: clamp(1.3rem, calc(1.3rem + 1vw), 1.6rem);
+    }
+    h4{
+        font-size: clamp(1.2rem, calc(1.2rem + 1vw), 1.4rem);
+    }
+    
+}
+
+/* Grid Container */
+
+.news--grid {  
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+    "Main"
+    "Aside";
+}
+  
+.news--grid-content {
+    //background-color: #9a16a1;
+    grid-area: Main;
+}
+
+.news--grid-aside {
+    //background-color: #33cbfb;
+    grid-area: Aside;
+    padding: 0 5%;
+}
+
+.news--grid-aside{
+
+    .section--heading{
+        font-size: clamp(1rem, calc(1rem + 1vw), 1.2rem);
+        // line-height: 1.2;
+        // margin-bottom: 1rem;
+        // padding: 0 .3rem;
+        font-weight: normal;
+        letter-spacing: normal;
+        color: #612611;
+    }
+    
+}
+.news--meta{
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #f58226;
+    p{
+        font-size: .9rem;
+        line-height: normal;
+        margin-bottom: .7rem;
+        //padding: 0 .3rem;
+    }
+}
+.details--meta{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: .3rem .5rem;
+    font-size: .9rem;
+    margin-bottom: .5rem;
+
+    dt{
+        font-style: italic;
+    }
+
+    dd{
+        margin: 0 0;
+        padding: 0 0;
+    }
+}
+
+// Overrides for the More in News widget on the single news page in an aside context.
+.news--subgrid{
+    .card--wrapper{
+        margin-bottom: 1.2rem;
+    }
+    .feature-card--img{
+        margin-bottom: .8rem;
+    }
+    .feature-card--title{
+        font-size: 1rem;
+        font-weight: normal;
+        letter-spacing: normal;
+        margin-bottom: 0;
+    }
+    .feature-card--meta{
+        display: none;
+    }
+}
+
+
+/* Min width 480px
+---------------------------------------------- */
+@mixin bp-480() { 
+
+}
+
+/* Min width 600px
+---------------------------------------------- */
+@mixin bp-600() { 
+    // min-width: 37.5em
+    
+}
+
+/* Min width 768px
+---------------------------------------------- */
+@mixin bp-768() { 
+    // min-width: 48em
+    .news--subgrid{
+        //display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+/* Min width 920px
+---------------------------------------------- */
+@mixin bp-920() { 
+    // min-width: 57.5em
+
+}
+
+/* Min width 1024px
+---------------------------------------------- */
+@mixin bp-1024() { 
+    // min-width: 64em;
+    
+    .entry-content img{
+        width: 35%;
+    }
+    .entry-content .alignleft{
+        float: left;
+        margin: 1rem 2rem 2rem 0;
+    }
+    .entry-content .alignright{
+        float: right;
+        margin: 1rem 0 2rem 2rem;
+    }
+
+}
+
+/* Min width 1280px
+---------------------------------------------- */
+@mixin bp-1280() { 
+    // min-width: 80em
+    
+    // .entry-content{
+        
+    // }
+    .news--content{
+        margin-bottom: 5vh;
+        padding: 0;
+        p{
+            margin-bottom: 1.5rem;
+        }
+    }
+    
+
+    .news--grid {
+        grid-template-columns: 4fr 1fr; 
+        grid-template-rows: 1fr; 
+        gap: 0px 5%; 
+        grid-template-areas: 
+            "Main Aside"; 
+        //max-width: 90%;
+        padding: 0 3%
+    }
+    /* Grid Item 1 - Desktop */
+    .news--grid-content {
+        width: 90%;
+        padding: 2rem 3% 4vh;
+    }
+    /* Grid Item 2 - Desktop */
+    .news--grid-aside {
+        width: 250px;
+        //padding-top: 5vh;
+        justify-self: end;
+    }
+
+    .news--subgrid{
+        grid-template-columns: repeat(1, 1fr);
+        // gap: 1.5rem;
+    }
+
+    .news--meta{
+        margin: 2rem 0 3rem;
+        // p{
+        //     font-size: .9rem;
+        //     line-height: normal;
+        //     margin-bottom: .7rem;
+        //     //padding: 0 .3rem;
+        // }
+    }
+    
+
+}
+
+/* Min width 1440px
+---------------------------------------------- */
+@mixin bp-1440() { 
+
+    // .news--content{
+    //     max-width: 70%;
+    //     margin-left: auto;
+    //     margin-right: auto;
+    // }
+    .news--grid {
+        // grid-template-columns: 4fr 1fr; 
+        // grid-template-rows: 1fr; 
+        // gap: 0px 5%; 
+        // grid-template-areas: 
+        //     "Main Aside"; 
+        max-width: 86%;
+        padding: 0 6%
+    }
+}
+
+/* Min width 1600px
+---------------------------------------------- */
+@mixin bp-1600() { 
+
+    .entry-content{
+        margin-bottom: 7vh;
+    }
+    .news--grid {
+        // grid-template-columns: 4fr 1fr; 
+        // grid-template-rows: 1fr; 
+        // gap: 0px 5%; 
+        // grid-template-areas: 
+        //     "Main Aside"; 
+        max-width: 76%;
+        padding: 0 12%
+    }
+
+}
+
+/* Min width 2100px
+---------------------------------------------- */
+@mixin bp-2100() { 
+ 
+
+}

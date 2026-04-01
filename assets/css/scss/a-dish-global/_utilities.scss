@@ -1,0 +1,165 @@
+/* Utilities
+* ========================================================================== */
+/* Globals */
+
+/* overflow */
+.ov{ overflow: visible; }
+.oh{ overflow: hidden; }
+
+/* display and visibility
+---------------------------------------------- */
+.is--block          { display: block; }   	/*displays as block, turns ON*/
+.is--inline         { display: inline; }           		/*displays as block, turns ON*/
+.is--inline-bl      { display: inline-block; }          /*displays as block, turns ON*/
+.is--hidden         { display: none !important; }      	/*displays as hidden, turns OFF*/
+.is--visible		{ display: block !important; }
+.is--invisible 		{ visibility: hidden; }
+.is--bold         { font-weight: bold; }
+
+// flex center it
+.flex--centered {
+    display: flex;
+    justify-content: center;  
+    align-items: center; 
+}
+// grid center it
+.grid--centered {
+    display: grid;
+    justify-content: center; 
+    align-content: center;   
+}
+.is--centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    z-index: 5;  
+}
+.text--centered {
+    text-align: center;  
+}
+.text--left {
+    text-align: left;  
+}
+.text--right {
+    text-align: right;  
+}
+
+//.ico-list{}
+.ico-list--item{
+    display: inline-block;
+    height: 25px; 
+    width: 25px;
+} 
+
+/**
+* Layout
+*/
+
+// flex it
+.is--flex {
+    display: flex;
+}
+.is--flex-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    //gap: .8rem;
+
+    li{
+        margin: 0 10px 0 0;
+        padding: 0;
+    }
+}
+// block it
+.is--block {
+    display: block;
+}
+.is--inline-block {
+    display: inline-block;
+}
+.is--inline {
+    display: inline;
+}
+
+/**
+* Boxy
+*/
+.no--margin {
+    margin: 0;
+}
+.no--padding {
+    padding: 0;
+}
+.no--border {
+    border: none;
+}
+.no--outline {
+    outline: none;
+}
+.no--background {
+    background: none;
+}
+
+/**
+* Text, copy, content
+*/
+.is--truncated{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* Reversed anchors (ra) - underlines -- anchors you want no underline, hover underline e.g. subnav */
+:where(.ra a) {
+    text-decoration: none;
+}
+
+:where(.ra a:hover) {
+    text-decoration: underline;
+}
+
+/* Width control */
+.has--width{
+    max-width: 70%;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.has--subnav{
+    padding: 3rem 0 5rem;
+    color: #fff
+}
+
+.inner--menu{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    columns: 2;
+    text-transform: uppercase;
+    li{
+        margin-bottom: .5rem;
+    }
+    a{
+        color: #fff;
+        text-decoration: none;
+        &:hover, &:focus{
+            color: #000;
+            text-decoration: underline;
+        }
+        &:focus{
+            text-decoration: underline;
+        }
+    }
+    .menu--selected{
+        color: #000;
+    }
+}
+
+// Callout Colour - Change the colour of the text
+.cc{
+    color: #ff7824;
+}

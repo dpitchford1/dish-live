@@ -1,0 +1,205 @@
+/* Document
+* ========================================================================== */
+
+/**
+* Instead of using Normalize or some such and then overriding with site specifics, we are modifying/adding to normalize to suit our needs.
+* Set it - don't reset it and then set it again. Lame.
+* This is an opinionated approach to CSS normalization, aiming for a clean and maintainable base.
+* The use of :where(){} allows for easier overrides and a more consistent styling approach.
+* You will find you will no longer need !important. If you do, you have funcdamentally broken the internet. Goog job.
+*/
+
+
+
+/**
+* Call the fonts early mang (opinionated) - but based on experience.
+* Host them yo' damn self, preload and cache them with a service worker.
+* Performance mang, performance.
+*/
+/* body font */
+@font-face {
+    font-family: "primary";
+    font-style: normal;
+    font-weight: normal;
+    src: url("/assets/fonts/futura/futura-book.woff2") format("woff2");
+    font-display: swap;
+}
+/* headings */
+@font-face {
+    font-family: "secondary";
+    font-style: normal;
+    font-weight: normal;
+    src: url("/assets/fonts/futura/futura-medium.woff2") format("woff2");
+    font-display: swap;
+}
+
+/**
+* Call them and instantiate early.
+*/
+:where(:root) {
+    font-family: "primary", Verdana, "Helvetica Neue", Arial, sans-serif;
+    // or use the system stack
+    // font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+/** HEADINGS - adjust which go where according to project specific html outline **/
+:where(h1, h2, h3) {
+    font-family: "secondary", "Helvetica", Arial, sans-serif;
+}
+:where(h4, h5, h6) {
+    font-weight: normal;
+}
+
+/* Root the things - Overall Document Setup
+====================================================================== */
+:where(:root) {
+    line-height: 1.6;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+    font-size: 1rem;
+    text-rendering: optimizeLegibility;
+
+    //color: #fff;
+    // @include theme() {
+    //     color: theme-get('color-white');
+    // }
+    // @include mix.theme() {
+    //     color: mix.theme-get(color-white);
+    //   }
+    //background-color: #02101e; 
+}
+
+// group the new/experiemental/prefix stuff
+:where(html) {
+    -webkit-overflow-scrolling: touch;
+    -moz-tab-size: 4;
+    tab-size: 4;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    font-smooth: always;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html{
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+html:focus-within {
+    scroll-behavior: smooth;
+}
+
+/**
+* 1. Add border box sizing in all browsers (opinionated).
+* 2. Backgrounds do not repeat by default (opinionated).
+*/
+*,
+::before,
+::after {
+    box-sizing: inherit; /* 1 */
+    background-repeat: no-repeat; /* 2 */
+    text-decoration: none; /* 1 */
+}
+
+// Seeing some weird behaviour with this, so commenting out for now
+
+// @media (prefers-reduced-motion) {
+//     *, ::before, ::after {
+//         animation-duration: 0.01ms !important;
+//         animation-iteration-count: 1 !important;
+//         transition-duration: 0.01ms !important;
+//         scroll-behavior: auto !important;
+//         background-attachment: initial; 
+//     }
+// }
+
+/* Browser and Document setup / nomalize */
+:where(body) {
+    min-height: 100%;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    z-index: 0; /* doesn't hurt to set this */
+}
+
+/* Html structure
+====================================================================== */
+:where(iframe, article, aside, figure, footer, header, nav, section, form, fieldset, legend){ margin: 0; padding: 0; }
+:where(div, section, article, aside, header, footer, nav, main){
+    position: relative;
+}
+:where(main, details){ display: block; }
+
+/* Clear fix */
+.cf:before, .cf:after   { content:""; display:table; }
+.cf:after               { clear:both; }
+
+/* Global Header Specific */
+.brand {
+    background-image: url('/assets/img/logos/d.svg');
+}
+
+
+/* General Typography - Headings - Links
+====================================================================== */
+/* location: typography.scss */
+
+
+/* Images, Media & Embedded content
+========================================================================== */
+/* location: media.scss */
+
+
+/* Max width 480px
+---------------------------------------------- */
+@mixin bp-480() { 
+
+}
+
+/* Max width 600px
+---------------------------------------------- */
+@mixin bp-600() { 
+
+}
+
+/* Max width 768px
+---------------------------------------------- */
+@mixin bp-768() { 
+
+}
+
+/* Max width 920px
+---------------------------------------------- */
+@mixin bp-920() { 
+
+}
+
+/* Max width 1024px
+---------------------------------------------- */
+@mixin bp-1024() { 
+
+}
+
+/* Max width 1280px
+---------------------------------------------- */
+@mixin bp-1280() { 
+
+}
+
+/* Max width 1440px
+---------------------------------------------- */
+@mixin bp-1440() { 
+
+}
+
+/* Max width 1600px
+---------------------------------------------- */
+@mixin bp-1600() { 
+
+}
+
+/* Max width 2100px
+---------------------------------------------- */
+@mixin bp-2100() { 
+
+}

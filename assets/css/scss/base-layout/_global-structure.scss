@@ -1,0 +1,115 @@
+/* $ Files includes: Only global structure styles - wrappers, body content padding, etc.
+====================================================================== */
+
+/* Fluid wrapper for main content - identical to site wrapper - fine grained adjustments for responsive breakpoints */
+.fluid{
+    padding-left: 5%;
+    padding-right: 5%;
+    }
+
+/* all purpose wrapper - used for blocks of content */
+.region{ width: 100%; }
+
+/* all purpose wrapper */
+.content-wrapper{
+    overflow: hidden;
+    padding-bottom: 1rem;
+    width: 100%;
+    }
+
+.content--region{
+    margin-bottom: 5vh;
+    }
+
+/* Body Content - enhanced selector dictates layout for when JS is enabled
+---------------------------------------------- */
+// pad the top to give room for the header
+.has--padding{
+    padding-top: 5rem;
+    }
+
+/* Min width 480px
+---------------------------------------------- */
+@mixin bp-480() { 
+
+}
+
+/* Min width 600px
+---------------------------------------------- */
+@mixin bp-600() { 
+    
+    
+}
+
+/* Min width 768px
+---------------------------------------------- */
+@mixin bp-768() { 
+    // min-width: 48em
+
+    /* Body Content
+    ---------------------------------------------- */
+    .has--padding{
+        padding-top: 5.5rem;
+        }
+
+}
+
+/* Min width 920px
+---------------------------------------------- */
+@mixin bp-920() { 
+    // min-width: 57.5em
+
+    /* Body Content
+    ---------------------------------------------- */
+    .has--padding{
+        padding-top: 6rem;
+        }
+        
+}
+
+/* Min width 1024px
+---------------------------------------------- */
+@mixin bp-1024() { 
+
+}
+
+/* Min width 1280px
+---------------------------------------------- */
+@mixin bp-1280() { 
+    // min-width: 80em
+
+    /* Body Content
+    ---------------------------------------------- */
+    .has--padding{
+        padding-top: 7.5rem;
+        }
+
+}
+
+/* Min width 1440px
+---------------------------------------------- */
+@mixin bp-1440() { 
+
+}
+
+/* Min width 1600px
+---------------------------------------------- */
+@mixin bp-1600() { 
+    // min-width: 100em
+
+    .fluid{
+        max-width: 95%;
+        }
+        
+}
+
+/* Min width 2100px
+---------------------------------------------- */
+@mixin bp-2100() { 
+    // min-width: 131.25em
+
+    .fluid{
+    max-width: 90%;
+
+    }
+}

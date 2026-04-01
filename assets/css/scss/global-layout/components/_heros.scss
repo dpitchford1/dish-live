@@ -1,0 +1,194 @@
+/* Global Hero Styles
+---------------------------------------------- */
+
+/* Hero structure */
+.global--hero{
+    position: relative;
+    width: 100%;
+    z-index: 1;
+    display: flex;
+    box-sizing: content-box;
+    margin-bottom: 6vh;
+
+    max-height: 100vh;
+    text-shadow: 0 3px 16px rgba(0, 0, 0, .9);
+    height: 100vh;
+    box-shadow: 0 6px 30px 10px rgba(0,0,0,0.35);
+
+    /* Text block inside hero - animated */
+    .hero--text-block{
+        position: absolute;
+        top: 40vh;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 5;
+        width: 90%;
+
+        animation-name: fade-in-down;
+        animation-duration: .7s;
+        animation-timing-function: ease-in;
+        animation-delay: .3s;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: both;
+        text-align: center;
+    }
+    p{
+        font-size: .9rem;
+        margin: 0 auto;
+        width: 80%;
+    }
+}
+
+.hero--wrapper{
+    width: 100%;
+}
+
+.hero--img{ 
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    object-position: center;
+}
+
+/* Primary Hero heading - used on full screen images and sliders */
+.hero--heading{
+    font-size: clamp(1.6rem, calc(2rem + 1vw), 5.5rem);
+    text-transform: uppercase;
+    line-height: 1.1;
+    letter-spacing: -1px;
+}
+
+.hero--content h3{
+    font-size: clamp(1.2rem, calc(1.2rem + 1vw), 1.5rem);
+    line-height: 1.25;
+}
+
+.home--hero .hero--heading{
+    width: 85%;
+    margin: 0 auto 4vh;
+
+    //font-size: clamp(1.5rem, calc(1.5rem + 1vw), 5.5rem);
+}
+
+.home--hero{
+
+    // h3{
+    //     font-size: calc(2vw + 1vh + 1vmin);
+    // }
+    /* the button */
+    .hero--content{
+        a{ margin-top: 3rem;}
+    }
+    h3 + h3{
+        //color: #abdefb;
+        //color: #26a8f4;
+        text-shadow: 3px 3px 9px rgba(0, 0, 0, .9);
+    }
+}
+
+/* Min width 480px
+---------------------------------------------- */
+@mixin bp-480() { 
+    // min-width: 30em;
+}
+
+/* Min width 600px
+---------------------------------------------- */
+@mixin bp-600() { 
+    // min-width: 37.5em;
+}
+
+/* Min width 768px
+---------------------------------------------- */
+@mixin bp-768() { 
+    // min-width: 48em;
+    
+    .global--hero::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 30%;
+        //background-color: rgba(0,0,0, 0.9);
+        background: linear-gradient(to bottom, rgba(0,0,0,0.75), transparent);
+        z-index: 2;
+    }
+    .hero--heading{
+        font-size: clamp(1.6rem, calc(2.4rem + 2vw), 5.5rem);
+    }
+
+    .global--hero{
+        p{
+            font-size: 1rem;
+        }
+    }
+
+}
+
+/* Min width 920px
+---------------------------------------------- */
+@mixin bp-920() { 
+    // min-width: 57.5em;
+}
+
+/* Min width 1024px
+---------------------------------------------- */
+@mixin bp-1024() { 
+    // min-width: 64em;
+}
+
+/* Min width 1280px
+---------------------------------------------- */
+@mixin bp-1280() { 
+    // min-width: 80em;
+    
+    .home--hero .hero--heading{
+        width: 80%;
+    }
+    .hero--heading{
+        font-size: clamp(1.6rem, calc(2.8rem + 2vw), 5.5rem);
+    }
+}
+
+/* Min width 1440px
+---------------------------------------------- */
+@mixin bp-1440() { 
+    // min-width: 90em;
+    
+    .global--hero{
+        p{
+            font-size: 1.1rem;
+        }
+    }
+
+}
+
+/* Min width 1600px
+---------------------------------------------- */
+@mixin bp-1600() { 
+    // min-width: 100em;
+    
+    .global--hero{
+        p{
+            font-size: 1.2rem;
+        }
+    }
+
+}
+
+/* Min width 2100px
+---------------------------------------------- */
+@mixin bp-2100() { 
+    // min-width: 131.25em;
+        
+    .global--hero{
+        p{
+            font-size: 1.4rem;
+        }
+    }
+
+}
+

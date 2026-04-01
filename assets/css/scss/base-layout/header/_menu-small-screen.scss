@@ -1,0 +1,90 @@
+/* Small screen Menu Controls
+---------------------------------------------- */
+// hamburger
+.menu-trigger { 
+    color: initial; 
+    height: 50px; 
+    margin: 10px 0; 
+    width: 50px;
+    position: absolute;
+    right: 15px;
+    //background-color: #000;
+}
+.menu-trigger:active, .menu-trigger:focus{ background: transparent; }
+
+.ico{ 
+    display: inline-block; 
+    text-indent: -999em;
+    text-align: left;
+    }
+
+.i--menu, .i--menu:hover, .i--menu:focus, .i--menu:active {
+    background-image: linear-gradient(transparent, transparent), url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20128%20102.4%22%20enable-background%3D%22new%200%200%20128%20102.4%22%3E%3Cg%20fill%3D%22%23ffffff%22%3E%3Cpath%20d%3D%22M0%200h128v12.8H0zM0%2044.8h128v12.801H0zM0%2089.601h128v12.8H0z%22/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+/* Menu Close */
+.i--close, .i--close:hover, .i--close:focus {
+    background-image: linear-gradient(transparent, transparent), url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDIxNiAyMTYiIHZpZXdCb3g9IjAgMCAyMTYgMjE2Ij48cGF0aCBkPSJNMjA1LjIgMjE1LjEgMTA4IDExNy45bC05Ny4yIDk3LjItOS45LTkuOUw5OC4xIDEwOCAuOSAxMC44IDEwLjguOSAxMDggOTguMSAyMDUuMi45bDkuOSA5LjktOTcuMiA5Ny4yIDk3LjIgOTcuMi05LjkgOS45eiIgc3R5bGU9ImZpbGw6I2ZmZiIvPjwvc3ZnPg==");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+// close icon
+.global-header--ss .i--menu{ background-size: 80% auto; height: 45px; width: 45px; }
+.global-header--ss .i--close{ background-size: 65% auto; height: 45px; width: 45px; }
+
+
+/* Min width 480px
+---------------------------------------------- */
+@mixin bp-480() { 
+    // min-width: 
+}
+
+/* Min width 600px
+---------------------------------------------- */
+@mixin bp-600() { 
+    // min-width: 37.5em;
+}
+
+/* Min width 768px
+---------------------------------------------- */
+@mixin bp-768() { 
+    // min-width: 
+}
+
+/* Min width 920px
+---------------------------------------------- */
+@mixin bp-920() { 
+    // min-width: 57.5em;
+}
+
+/* Min width 1024px
+---------------------------------------------- */
+@mixin bp-1024() { 
+    // min-width: 64em;
+}
+
+/* Min width 1280px
+---------------------------------------------- */
+@mixin bp-1280() { 
+    // min-width: 80em;
+}
+
+/* Min width 1440px
+---------------------------------------------- */
+@mixin bp-1440() { 
+    // min-width: 90em;
+}
+
+/* Min width 1600px
+---------------------------------------------- */
+@mixin bp-1600() { 
+    // min-width: 100em;
+}
+
+/* Min width 2100px
+---------------------------------------------- */
+@mixin bp-2100() { 
+    // min-width: 131.25em;
+}

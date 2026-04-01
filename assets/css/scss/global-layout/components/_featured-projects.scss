@@ -1,0 +1,106 @@
+/* couple of global styles */
+
+// feature card styles
+.is--standalone{
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 3.5rem;
+    //height: 60vh;
+}
+.is--inline{
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+.project--item{
+    //height: 60vh;
+    overflow: hidden;
+
+    .hero--heading{
+        margin-bottom: 3rem;
+    }
+
+    // a{
+    //     display: block;
+    //     width: 100%;
+    // }
+    a:hover{ color: #fff}
+}
+.project--item:after{
+    position: absolute; content: ''; display: block; top: 0; left: 0; height: 100%; width: 100%;
+    background: radial-gradient(ellipse at center,rgba(0, 0, 0, 0.6) 0%, rgba(255, 255, 255, 0.1) 100%);
+    mix-blend-mode: multiply;
+}
+
+.project--caption{
+    width: 90%;
+    h3, p{font-size: 1.2rem;}
+}
+.project--caption .hero--heading{
+    font-family: 'secondary', 'Helvetica', Arial, sans-serif;
+    // line-height: 1.1;
+    
+}
+.project-meta{
+    margin-top: 3rem;
+}
+
+/* Min width 480px
+---------------------------------------------- */
+@mixin bp-480() { 
+    // min-width: 30em;
+}
+
+/* Min width 600px
+---------------------------------------------- */
+@mixin bp-600() { 
+    // min-width: 37.5em;
+}
+
+/* Min width 768px
+---------------------------------------------- */
+@mixin bp-768() { 
+    // min-width: 48em;
+}
+
+/* Min width 920px
+---------------------------------------------- */
+@mixin bp-920() { 
+    // min-width: 57.5em;
+}
+
+/* Min width 1024px
+---------------------------------------------- */
+@mixin bp-1024() { 
+
+}
+
+/* Min width 1280px
+---------------------------------------------- */
+@mixin bp-1280() { 
+    // min-width: 80em;
+    .is--standalone{
+        height: 60vh;
+    }
+    .project--item{
+        height: 60vh;
+    }
+}
+
+/* Min width 1440px
+---------------------------------------------- */
+@mixin bp-1440() { 
+    // min-width: 90em;
+}
+
+/* Min width 1600px
+---------------------------------------------- */
+@mixin bp-1600() { 
+    // min-width: 100em;
+}
+
+/* Min width 2100px
+---------------------------------------------- */
+@mixin bp-2100() { 
+    // min-width: 100em;
+}
