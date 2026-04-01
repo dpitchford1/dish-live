@@ -36,8 +36,8 @@
 /wp-content/themes/basecamp/inc/development/
 /wp-content/themes/basecamp/inc/woocommerce/
 
-/wp-content/plugins/dish-events/
-/wp-content/themes/dish/dish-events/
+#/wp-content/plugins/dish-events/
+#/wp-content/themes/dish/dish-events/
 /wp-content/themes/dish/Docs/
 
 /wp-content/themes/dish/inc/admin/assets/scss/

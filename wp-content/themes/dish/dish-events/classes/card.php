@@ -1,0 +1,161 @@
+<?php
+/**
+ * Partial: class instance card.
+ *
+ * Displays a single upcoming dish_class as a card — date, title, price, and
+ * remaining spots. Used in the [dish_classes] archive grid.
+ *
+ * Variables in scope (injected by the archive loop):
+ *   $class  WP_Post  A dish_class post.
+ *
+ * Theme override: {theme}/dish-events/classes/card.php
+ *
+ * @package Dish\Events\Templates
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+if ( ! isset( $class ) || ! ( $class instanceof WP_Post ) ) {
+	return;
+}
+
+use Dish\Events\Admin\Settings;
+use Dish\Events\Data\ClassRepository;
+use Dish\Events\Data\ClassTemplateRepository;
+use Dish\Events\Helpers\DateHelper;
+use Dish\Events\Helpers\MoneyHelper;
+
+// ── Meta ──────────────────────────────────────────────────────────────────────
+$template_id   = (int) get_post_meta( $class->ID, 'dish_template_id', true );
+$template_post = $template_id ? get_post( $template_id ) : null;
+$start         = (int) get_post_meta( $class->ID, 'dish_start_datetime', true );
+
+// Card title/image → template page with ?class_id=N (shows class detail + instance panel).
+// "Book Now" button → checkout page with ?class_id=N.
+// Both fall back gracefully when the respective destination isn't configured.
+$booking_page = (int) Settings::get( 'booking_page', 0 );
+$book_url     = $booking_page
+	? add_query_arg( 'class_id', $class->ID, get_permalink( $booking_page ) )
+	: '';
+$card_url     = $template_post
+	? add_query_arg( 'class_id', $class->ID, get_permalink( $template_post->ID ) )
+	: $book_url;
+
+// ── Price & availability ──────────────────────────────────────────────────────
+// Use pre-loaded maps when available (archive batch load), otherwise fall back
+// to individual queries (e.g. when card.php is included standalone).
+/** @var array<int,int>         $booked_counts    Injected by archive.php */
+/** @var array<int,object|null> $ticket_types_map Injected by archive.php */
+$ticket_type = isset( $ticket_types_map ) && $template_id
+	? ( $ticket_types_map[ $template_id ] ?? null )
+	: ( $template_id ? ClassTemplateRepository::get_ticket_type( $template_id ) : null );
+$price_label = $ticket_type ? MoneyHelper::cents_to_display( (int) $ticket_type->price_cents ) : '';
+$capacity    = $ticket_type ? (int) $ticket_type->capacity : 0;
+$booked      = isset( $booked_counts )
+	? ( $booked_counts[ $class->ID ] ?? 0 )
+	: ClassRepository::get_booked_count( $class->ID );
+$remaining   = $capacity > 0 ? max( 0, $capacity - $booked ) : 0;
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+$title         = $template_post ? $template_post->post_title : get_the_title( $class->ID );
+$date_label    = $start ? DateHelper::to_display( $start ) : '';
+$thumb_id      = get_post_thumbnail_id( $class->ID ) ?: ( $template_post ? get_post_thumbnail_id( $template_post->ID ) : 0 );
+$thumb_html    = $thumb_id ? wp_get_attachment_image( (int) $thumb_id, 'medium', false, [ 'class' => 'dish-card__img' ] ) : '';
+
+$is_private   = (bool) get_post_meta( $class->ID, 'dish_is_private', true );
+$booking_type = $template_post ? ( (string) get_post_meta( $template_post->ID, 'dish_booking_type', true ) ?: 'online' ) : 'online';
+$is_enquiry   = ( $booking_type === 'enquiry' );
+
+// Format pill.
+$format_id    = $template_id ? (int) get_post_meta( $template_id, 'dish_format_id', true ) : 0;
+$format_post  = $format_id ? get_post( $format_id ) : null;
+$format_color = $format_post ? ( (string) get_post_meta( $format_id, 'dish_format_color', true ) ?: '#c0392b' ) : '';
+$format_url   = $format_post ? get_permalink( $format_post ) : '';
+
+// Spots label.
+$spots_class = '';
+$spots_label = '';
+if ( $is_private ) {
+	$spots_class = 'dish-card__spots--private';
+	$spots_label = __( 'Booked', 'dish-events' );
+} elseif ( $capacity > 0 ) {
+	if ( $remaining <= 0 ) {
+		$spots_class = 'dish-card__spots--sold-out';
+		$spots_label = __( 'Sold out', 'dish-events' );
+	} elseif ( $remaining <= 3 ) {
+		$spots_class = 'dish-card__spots--low';
+		/* translators: %d: number of spots left */
+		$spots_label = sprintf( _n( '%d spot left', '%d spots left', $remaining, 'dish-events' ), $remaining );
+	} else {
+		/* translators: %d: number of spots remaining */
+		$spots_label = sprintf( _n( '%d spot available', '%d spots available', $remaining, 'dish-events' ), $remaining );
+	}
+}
+?>
+<article class="dish-card dish-class-card" id="dish-class-<?php echo esc_attr( $class->ID ); ?>">
+
+	<?php if ( $thumb_html ) : ?>
+		<a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__image-link" tabindex="-1" aria-hidden="true">
+			<?php echo $thumb_html; // Already escaped by wp_get_attachment_image. ?>
+		</a>
+	<?php endif; ?>
+
+	<div class="dish-card__body">
+		<?php if ( $format_post && $format_color ) : ?>
+				<a href="<?php echo esc_url( $format_url ); ?>" class="dish-format-pill" style="--format-color:<?php echo esc_attr( $format_color ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Format: %s', 'dish-events' ), $format_post->post_title ) ); ?>">
+					<?php echo esc_html( $format_post->post_title ); ?>
+				</a>
+		<?php endif; ?>
+		<?php if ( $date_label ) : ?>
+			<time class="dish-card__date" datetime="<?php echo esc_attr( $start ? gmdate( 'c', $start ) : '' ); ?>">
+				<?php echo esc_html( $date_label ); ?>
+			</time>
+		<?php endif; ?>
+
+		<h3 class="dish-card__title">
+			<a href="<?php echo esc_url( $card_url ); ?>">
+				<?php echo esc_html( $title ); ?>
+			</a>
+		</h3>
+
+		<div class="dish-card__meta">
+			<?php if ( $price_label && $spots_class !== 'dish-card__spots--sold-out' && ! $is_enquiry ) : ?>
+				<span class="dish-card__price"><?php echo esc_html( $price_label ); ?></span>
+			<?php endif; ?>
+
+			<?php if ( $spots_label && ! $is_enquiry ) : ?>
+				<span class="dish-card__spots <?php echo esc_attr( $spots_class ); ?>">
+					<?php echo esc_html( $spots_label ); ?>
+				</span>
+			<?php endif; ?>
+
+			<?php if ( $spots_class === 'dish-card__spots--sold-out' && ! $is_enquiry ) : ?>
+				<span class="dish-waitlist-hint"><?php esc_html_e( 'Waitlist coming soon', 'dish-events' ); ?></span>
+			<?php endif; ?>
+		</div>
+
+		<?php if ( $is_private ) : ?>
+			<span class="dish-card__link dish-button dish-button--disabled" aria-disabled="true">
+				<?php esc_html_e( 'Private event', 'dish-events' ); ?>
+			</span>
+		<?php elseif ( $is_enquiry ) : ?>
+			<?php
+			$_eq_page = (int) Settings::get( 'enquiry_page', 0 );
+			$_eq_url  = $_eq_page
+				? get_permalink( $_eq_page )
+				: 'mailto:' . Settings::get( 'studio_email', (string) get_bloginfo( 'admin_email' ) );
+			?>
+			<a href="<?php echo esc_url( $_eq_url ); ?>" class="dish-card__link dish-button dish-button--secondary">
+				<?php esc_html_e( 'Enquire to Book', 'dish-events' ); ?>
+			</a>
+		<?php elseif ( $spots_class !== 'dish-card__spots--sold-out' && $book_url ) : ?>
+			<a href="<?php echo esc_url( $book_url ); ?>" class="dish-card__link dish-button dish-button--primary">
+				<?php esc_html_e( 'Book Now', 'dish-events' ); ?>
+			</a>
+		<?php endif; ?>
+
+	</div>
+
+</article>
