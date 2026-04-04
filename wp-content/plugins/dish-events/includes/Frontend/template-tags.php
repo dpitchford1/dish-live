@@ -1,23 +1,17 @@
 <?php
-
-declare(strict_types=1);
-
 /**
- * dish_the_breadcrumb()
+ * Dish Events — Template tags
  *
- * Global template tag — renders the schema.org breadcrumb nav for all dish CPT
- * single pages. Auto-detects the current post type and builds the full crumb
- * trail from the Classes archive root down to the current page.
+ * Global template functions for use in theme templates.
+ * Not autoloadable (no class) — loaded explicitly by dish-events.php.
  *
- * Supported trails:
- *   dish_format         → Classes › [Current Format]
- *   dish_class_template → Classes › [Format] › [Current Template]
- *   dish_class          → Classes › [Format] › [Template] › [Current Date]
+ * Functions defined here:
+ *   dish_the_breadcrumb()  — schema.org BreadcrumbList nav for dish CPT singles
  *
- * Called from: dish-events/{formats,class-templates,classes}/single.php
- *
- * @package basecamp
+ * @package Dish\Events
  */
+
+declare( strict_types=1 );
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -28,6 +22,13 @@ use Dish\Events\Helpers\DateHelper;
 
 /**
  * Output the breadcrumb nav for the current dish CPT single page.
+ *
+ * Builds a schema.org BreadcrumbList trail from the Classes archive root
+ * down to the current page. Supported trails:
+ *
+ *   dish_format         → Classes › [Current Format]
+ *   dish_class_template → Classes › [Format] › [Current Template]
+ *   dish_class          → Classes › [Format] › [Template] › [Current Date]
  *
  * @return void
  */

@@ -74,6 +74,12 @@ spl_autoload_register( static function ( string $class ): void {
 } );
 
 // ---------------------------------------------------------------------------
+// Global template functions (not autoloadable — no class)
+// ---------------------------------------------------------------------------
+
+require_once DISH_EVENTS_PATH . 'includes/Frontend/template-tags.php';
+
+// ---------------------------------------------------------------------------
 // Activation / Deactivation hooks
 // (must be registered before plugins_loaded fires)
 // ---------------------------------------------------------------------------
