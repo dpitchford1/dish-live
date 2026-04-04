@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Admin and sanitization helpers for Basecamp theme.
  *
@@ -14,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Miscellaneous admin helpers — sanitizers, timeouts, MIME-type allowlisting.
  */
-class AdminHelpers {
+final class AdminHelpers {
 
 	/**
 	 * Register all hooks managed by this class.

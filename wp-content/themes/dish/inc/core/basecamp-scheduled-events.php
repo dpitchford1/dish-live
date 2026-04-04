@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Scheduled events for Basecamp theme.
  *
@@ -29,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Manages WP-Cron schedules for the Basecamp theme.
  */
-class ScheduledEvents {
+final class ScheduledEvents {
 
 	// =============================================================================
 	// Bootstrap
@@ -120,11 +122,6 @@ class ScheduledEvents {
 	public static function daily_maintenance_callback(): void {
 		// Example: delete a specific transient that should refresh daily.
 		// delete_transient( 'basecamp_something_cached' );
-
-		// Log completion in debug mode so you can confirm the job ran.
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( '[basecamp] daily maintenance ran at ' . gmdate( 'Y-m-d H:i:s' ) );
-		}
 	}
 }
 

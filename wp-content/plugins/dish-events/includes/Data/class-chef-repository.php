@@ -117,4 +117,21 @@ final class ChefRepository {
 
 		return $q->posts;
 	}
+
+	// -------------------------------------------------------------------------
+	// Meta
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Read a single meta value for a chef post.
+	 *
+	 * @param int    $post_id Chef post ID.
+	 * @param string $key     Meta key.
+	 * @param mixed  $default Value when meta is absent or empty string.
+	 * @return mixed
+	 */
+	public static function get_meta( int $post_id, string $key, mixed $default = '' ): mixed {
+		$value = get_post_meta( $post_id, $key, true );
+		return ( '' === $value || false === $value ) ? $default : $value;
+	}
 }

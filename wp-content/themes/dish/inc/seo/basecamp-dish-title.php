@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Dish Events — hierarchical title extension for Basecamp\SEO\TitleManager.
  *
@@ -23,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class TitleDishEvents {
+final class TitleDishEvents {
 
 	/** Breadcrumb separator — standard typographic right-angle quotation mark. */
 	const SEP = ' › ';
@@ -41,7 +43,7 @@ class TitleDishEvents {
 		// ── dish_class_template single ────────────────────────────────────────
 		if ( is_singular( 'dish_class_template' ) ) {
 			$template_title = get_the_title();
-			$format_id      = (int) get_post_meta( get_the_ID(), 'dish_format_id', true );
+			$format_id      = (int) \Dish\Events\Data\ClassTemplateRepository::get_meta( get_the_ID(), 'dish_format_id', 0 );
 			$format_title   = $format_id ? get_the_title( $format_id ) : '';
 
 			return implode(

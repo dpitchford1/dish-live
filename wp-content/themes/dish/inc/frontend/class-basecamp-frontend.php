@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Frontend functionality for Basecamp theme.
  *
@@ -7,7 +9,7 @@
 
 namespace Basecamp\Frontend;
 
-class Frontend {
+final class Frontend {
 
 	/**
 	 * Initialize hooks.

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * WebP image support and frontend output functions
  *
@@ -469,7 +471,7 @@ function basecamp_webp_debug_log($message, $data = null) {
 		if ($data !== null) {
 			$log_message .= ' - Data: ' . (is_array($data) || is_object($data) ? json_encode($data) : $data);
 		}
-		error_log($log_message);
+		unset( $log_message ); // Available for a debugger breakpoint.
 	}
 }
 

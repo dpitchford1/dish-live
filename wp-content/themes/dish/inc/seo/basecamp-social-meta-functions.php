@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Basecamp Social Meta Class
  *
@@ -9,7 +11,7 @@
 
 namespace Basecamp\SEO;
 
-class SocialMeta {
+final class SocialMeta {
 
 	/**
 	 * Register hooks for social meta functionality.

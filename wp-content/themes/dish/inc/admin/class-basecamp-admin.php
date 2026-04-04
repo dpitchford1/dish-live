@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Admin customisations for the Basecamp theme.
  *
@@ -18,7 +20,7 @@ define( 'EAE_DISABLE_NOTICES', apply_filters( 'air_helper_remove_eae_admin_bar',
 /**
  * Encapsulates all admin/backend customizations for the Basecamp theme.
  */
-class Admin {
+final class Admin {
 
 		/**
 		 * Register all admin hooks.

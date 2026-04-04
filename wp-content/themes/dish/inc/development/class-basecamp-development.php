@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Development helpers for Basecamp theme.
  *
@@ -7,7 +9,7 @@
 
 namespace Basecamp\Development;
 
-class Development {
+final class Development {
 
 	public function __construct() {
 		if ( $this->is_local() ) {

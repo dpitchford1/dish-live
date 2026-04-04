@@ -111,7 +111,7 @@ if ( $is_private ) {
 				</a>
 		<?php endif; ?>
 		<?php if ( $date_label ) : ?>
-			<time class="dish-card__date" datetime="<?php echo esc_attr( $start ? gmdate( 'c', $start ) : '' ); ?>">
+			<time class="dish-card__date" datetime="<?php echo esc_attr( $start ? DateHelper::format( $start, 'c' ) : '' ); ?>">
 				<?php echo esc_html( $date_label ); ?>
 			</time>
 		<?php endif; ?>

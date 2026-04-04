@@ -37,7 +37,7 @@
 
 <?php /* COPYRIGHTS */ ?>
 <meta name="author" content="<?php bloginfo( 'name' ); ?>">
-<meta name="copyright" content="© <?php bloginfo( 'name' ); ?>. All right reserved. <?php echo date('Y'); ?>">
+<meta name="copyright" content="© <?php bloginfo( 'name' ); ?>. All right reserved. <?php echo esc_html( gmdate( 'Y' ) ); ?>">
 <?php /* SEARCH AND SEO */ ?>
 <meta name="robots" content="noindex, nofollow, NOODP, noydir">
 <?php if ( is_front_page() ) : ?><link rel="home" title="Home page" href="/"><?php endif ?>

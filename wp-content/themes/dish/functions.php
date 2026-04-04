@@ -3,7 +3,7 @@
  * Basecamp Theme — Bootstrap
  *
  * Loads all theme modules in dependency order:
- *   Core → Frontend → Admin → SEO → Theme Functions → Optimization → REST → Cron → Dev → Ecommerce
+ *   Core → Settings → Frontend → Admin → SEO → Theme Functions → WebP → REST → Cron → Dev → WooCommerce
  *
  * To disable a module, comment out its require_once line.
  *

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Basecamp Title System
  *
@@ -29,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Core — catch-all fallback. Always runs last.
 // =============================================================================
 
-class TitleCore {
+final class TitleCore {
 	public static function maybe_title( $title ) {
 		$site_name = get_bloginfo( 'name' );
 		if ( empty( $title ) && is_singular() ) {
@@ -97,7 +99,7 @@ class Basecamp_Title_Woo {
 // Manager — registers filters and runs extensions in order.
 // =============================================================================
 
-class TitleManager {
+final class TitleManager {
 
 	/**
 	 * Registered extension class names.

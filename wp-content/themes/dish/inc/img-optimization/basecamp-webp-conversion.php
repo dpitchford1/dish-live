@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * WebP image conversion functions
  *
@@ -152,7 +154,7 @@ function basecamp_convert_to_webp_imagick($source_path, $destination_path, $qual
 			return true;
 		}
 	} catch (Exception $e) {
-		error_log('WebP conversion error with ImageMagick: ' . $e->getMessage());
+		// Conversion failed silently — caller receives false.
 	}
 	return false;
 }
@@ -230,9 +232,6 @@ function basecamp_convert_to_webp($source_path, $destination_path, $quality = 80
 		global $pagenow;
 		if (in_array($pagenow, array('post.php', 'post-new.php', 'edit.php'))) {
 			if (isset($_REQUEST['action']) && in_array($_REQUEST['action'], array('editpost', 'edit', 'post', 'update'))) {
-				if (defined('WP_DEBUG') && WP_DEBUG) {
-					error_log('[WEBP-CONVERSION] Skipped core WebP conversion during post update for: ' . basename($source_path));
-				}
 				return false;
 			}
 		}
@@ -264,13 +263,7 @@ function basecamp_convert_to_webp($source_path, $destination_path, $quality = 80
 				$temp_source_path = $resized_path;
 				$use_temp = true;
 			} else {
-				error_log(sprintf(
-					'WebP conversion skipped for large image: %s (Estimated memory needed: %s MB, Available: %s MB)',
-					basename($source_path),
-					round($memory_needed / (1024 * 1024), 2),
-					round($available_memory / (1024 * 1024), 2)
-				));
-				return false;
+				return false; // Image too large to convert safely.
 			}
 		} else {
 			$temp_source_path = $source_path;
@@ -308,9 +301,6 @@ function basecamp_convert_uploaded_image( $metadata, $attachment_id ) {
 		global $pagenow;
 		if (in_array($pagenow, array('post.php', 'post-new.php', 'edit.php'))) {
 			if (isset($_REQUEST['action']) && in_array($_REQUEST['action'], array('editpost', 'edit', 'post', 'update'))) {
-				if (defined('WP_DEBUG') && WP_DEBUG) {
-					error_log('[WEBP-CONVERSION] Skipped WebP conversion during post update');
-				}
 				return $metadata;
 			}
 		}
@@ -356,9 +346,6 @@ function basecamp_mlp_handle_upload( $file_info ) {
 		global $pagenow;
 		if (in_array($pagenow, array('post.php', 'post-new.php', 'edit.php'))) {
 			if (isset($_REQUEST['action']) && in_array($_REQUEST['action'], array('editpost', 'edit', 'post', 'update'))) {
-				if (defined('WP_DEBUG') && WP_DEBUG) {
-					error_log('[WEBP-CONVERSION] Skipped MLP WebP conversion during post update');
-				}
 				return $file_info;
 			}
 		}

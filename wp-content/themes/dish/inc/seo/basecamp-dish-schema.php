@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Dish Events — Schema.org JSON-LD extension for Basecamp\SEO\Schema.
  *
@@ -34,11 +36,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Dish\Events\Data\ChefRepository;
 use Dish\Events\Data\ClassRepository;
 use Dish\Events\Data\ClassTemplateRepository;
 use Dish\Events\Helpers\MoneyHelper;
 
-class DishSchema {
+final class DishSchema {
 
 	/**
 	 * Register the graph filter.
@@ -94,19 +97,19 @@ class DishSchema {
 		$template_url = get_permalink( $template_id );
 		$description  = get_the_excerpt( $template_id ) ?: '';
 		$image_url    = self::post_image_url( $template_id );
-		$format_id    = (int) get_post_meta( $template_id, 'dish_format_id', true );
+		$format_id    = (int) ClassTemplateRepository::get_meta( $template_id, 'dish_format_id', 0 );
 		$format_name  = $format_id ? get_the_title( $format_id ) : '';
 
 		$graphs = [];
 
 		foreach ( $instances as $instance ) {
 			// Skip private instances.
-			if ( (string) get_post_meta( $instance->ID, 'dish_is_private', true ) === '1' ) {
+			if ( (string) ClassRepository::get_meta( $instance->ID, 'dish_is_private', '' ) === '1' ) {
 				continue;
 			}
 
-			$start_ts = (int) get_post_meta( $instance->ID, 'dish_start_datetime', true );
-			$end_ts   = (int) get_post_meta( $instance->ID, 'dish_end_datetime',   true );
+			$start_ts = (int) ClassRepository::get_meta( $instance->ID, 'dish_start_datetime', 0 );
+			$end_ts   = (int) ClassRepository::get_meta( $instance->ID, 'dish_end_datetime',   0 );
 
 			if ( ! $start_ts ) {
 				continue;
@@ -198,11 +201,11 @@ class DishSchema {
 	 * @return array
 	 */
 	private static function person_graph( int $chef_id ): array {
-		$role      = (string) get_post_meta( $chef_id, 'dish_chef_role',      true );
-		$instagram = (string) get_post_meta( $chef_id, 'dish_chef_instagram', true );
-		$linkedin  = (string) get_post_meta( $chef_id, 'dish_chef_linkedin',  true );
-		$tiktok    = (string) get_post_meta( $chef_id, 'dish_chef_tiktok',    true );
-		$website   = (string) get_post_meta( $chef_id, 'dish_chef_website',   true );
+		$role      = (string) ChefRepository::get_meta( $chef_id, 'dish_chef_role' );
+		$instagram = (string) ChefRepository::get_meta( $chef_id, 'dish_chef_instagram' );
+		$linkedin  = (string) ChefRepository::get_meta( $chef_id, 'dish_chef_linkedin' );
+		$tiktok    = (string) ChefRepository::get_meta( $chef_id, 'dish_chef_tiktok' );
+		$website   = (string) ChefRepository::get_meta( $chef_id, 'dish_chef_website' );
 
 		$person = [
 			'@context' => 'https://schema.org',

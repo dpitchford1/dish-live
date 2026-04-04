@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Basecamp Schema — JSON-LD Structured Data
  *
@@ -15,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Schema {
+final class Schema {
 
 	/**
 	 * Register hooks.

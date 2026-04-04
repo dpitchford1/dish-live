@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Dish\Events\Data\ClassRepository;
+use Dish\Events\Data\FormatRepository;
 
 get_header();
 
@@ -71,7 +72,7 @@ while ( have_posts() ) :
 
 			<?php
 			$archive_url   = get_post_type_archive_link( 'dish_format' );
-			$format_color  = (string) get_post_meta( $format_id, 'dish_format_color', true );
+			$format_color  = (string) FormatRepository::get_meta( $format_id, 'dish_format_color' );
 			?>
 			<nav class="dish-breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'dish-events' ); ?>">
 				<ol
