@@ -147,21 +147,73 @@ while ( have_posts() ) :
 
 			<?php if ( has_post_thumbnail() ) : ?>
 				<div class="dish-template-hero">
-					<?php the_post_thumbnail( 'large' ); ?>
+					<?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
+						'landscape_size' => 'basecamp-img-xl',
+						'loading'        => 'eager',
+						'fetchpriority'  => 'high',
+					] ); ?>
 				</div>
 			<?php endif; ?>
 
 			<header class="dish-template-header dish-container">
 
-				<?php if ( $format && 'publish' === $format->post_status ) : ?>
-					<nav class="dish-breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'dish-events' ); ?>">
-						<a href="<?php echo esc_url( get_permalink( $format ) ); ?>"<?php if ( $format_color ) : ?> class="dish-format-pill" style="--format-color:<?php echo esc_attr( $format_color ); ?>"<?php endif; ?>>
-							<?php echo esc_html( $format->post_title ); ?>
-						</a>
-						<span aria-hidden="true"> / </span>
-						<?php the_title( '<span>', '</span>' ); ?>
-					</nav>
-				<?php endif; ?>
+				<?php
+				$archive_url   = get_post_type_archive_link( 'dish_format' );
+				$archive_label = __( 'Classes', 'dish-events' );
+				?>
+				<nav class="dish-breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'dish-events' ); ?>">
+					<ol
+						itemscope
+						itemtype="https://schema.org/BreadcrumbList"
+						class="dish-breadcrumb__list"
+					>
+						<!-- Level 1: Classes archive -->
+						<li
+							class="dish-breadcrumb__item"
+							itemprop="itemListElement"
+							itemscope
+							itemtype="https://schema.org/ListItem"
+						>
+							<a itemprop="item" href="<?php echo esc_url( $archive_url ); ?>">
+								<span itemprop="name"><?php echo esc_html( $archive_label ); ?></span>
+							</a>
+							<meta itemprop="position" content="1">
+						</li>
+
+						<?php if ( $format && 'publish' === $format->post_status ) : ?>
+						<!-- Level 2: Format -->
+						<li
+							class="dish-breadcrumb__item"
+							itemprop="itemListElement"
+							itemscope
+							itemtype="https://schema.org/ListItem"
+						>
+							<a
+								itemprop="item"
+								href="<?php echo esc_url( get_permalink( $format ) ); ?>"
+								<?php if ( $format_color ) : ?>class="dish-format-pill" style="--format-color:<?php echo esc_attr( $format_color ); ?>"<?php endif; ?>
+							>
+								<span itemprop="name"><?php echo esc_html( $format->post_title ); ?></span>
+							</a>
+							<meta itemprop="position" content="2">
+						</li>
+						<?php endif; ?>
+
+						<!-- Level 3: Class template (current page) -->
+						<li
+							class="dish-breadcrumb__item dish-breadcrumb__item--current"
+							itemprop="itemListElement"
+							itemscope
+							itemtype="https://schema.org/ListItem"
+							aria-current="page"
+						>
+							<span itemprop="item">
+								<span itemprop="name"><?php the_title(); ?></span>
+							</span>
+							<meta itemprop="position" content="<?php echo $format && 'publish' === $format->post_status ? '3' : '2'; ?>">
+						</li>
+					</ol>
+				</nav>
 
 				<h1 class="dish-template-title"><?php the_title(); ?></h1>
 
@@ -169,7 +221,7 @@ while ( have_posts() ) :
 					<p class="dish-template-excerpt"><?php the_excerpt(); ?></p>
 				<?php endif; ?>
 
-			<?php if ( ( ! $is_enquiry && $price_cents ) || $duration_label || $capacity ) : ?>
+			<?php if ( $first && ( ( ! $is_enquiry && $price_cents ) || $duration_label || $capacity ) ) : ?>
 				<ul class="dish-template-meta" aria-label="<?php esc_attr_e( 'Class overview', 'dish-events' ); ?>">
 
 					<?php if ( $price_cents && ! $is_enquiry ) : ?>
@@ -351,20 +403,46 @@ while ( have_posts() ) :
 			</section>
 		<?php endif; ?>
 		<?php /* ── Gallery ──────────────────────────────────────────────────────────────── */ ?>
-			<?php if ( ! empty( $gallery_ids ) ) : ?>
+			<?php if ( ! empty( $gallery_ids ) ) :
+				// Lazy-enqueue Swiper — only fires when the gallery actually renders.
+				wp_enqueue_style( 'dish-swiper', site_url( '/assets/css/resources/swiper.min.css' ), [], '11.2.7' );
+				wp_enqueue_script( 'dish-swiper', site_url( '/assets/js/resources/swiper.min.js' ), [], '11.2.7', true );
+				wp_add_inline_script( 'dish-swiper', '(function () {
+	"use strict";
+	function initGallery() {
+		var el = document.querySelector( ".dish-template-swiper" );
+		if ( ! el ) { return; }
+		new Swiper( el, {
+			loop:        el.querySelectorAll( ".swiper-slide" ).length > 1,
+			slidesPerView: 1,
+			spaceBetween:  0,
+			pagination:  { el: el.querySelector( ".swiper-pagination" ), clickable: true },
+			navigation:  { nextEl: el.querySelector( ".swiper-button-next" ), prevEl: el.querySelector( ".swiper-button-prev" ) },
+		} );
+	}
+	if ( document.readyState === "loading" ) {
+		document.addEventListener( "DOMContentLoaded", initGallery );
+	} else {
+		initGallery();
+	}
+}() );' );
+			?>
 				<section class="dish-template-gallery dish-container" aria-label="<?php esc_attr_e( 'Class gallery', 'dish-events' ); ?>">
-					<div class="dish-gallery-grid">
-						<?php foreach ( $gallery_ids as $gid ) :
-							$src = wp_get_attachment_image_src( $gid, 'large' );
-							if ( ! $src ) continue;
+					<div class="swiper dish-template-swiper">
+						<div class="swiper-wrapper">
+							<?php foreach ( $gallery_ids as $gid ) :
 							$alt = (string) get_post_meta( $gid, '_wp_attachment_image_alt', true );
 						?>
-							<figure class="dish-gallery-grid__item">
-								<a href="<?php echo esc_url( $src[0] ); ?>" target="_blank" rel="noopener noreferrer">
-									<?php echo wp_get_attachment_image( $gid, 'medium', false, [ 'alt' => $alt ] ); ?>
-								</a>
-							</figure>
-						<?php endforeach; ?>
+							<div class="swiper-slide">
+								<figure class="dish-template-swiper__item">
+									<?php echo wp_get_attachment_image( $gid, 'basecamp-img-xl', false, [ 'alt' => $alt, 'loading' => 'lazy', 'sizes' => '100vw' ] ); ?>
+									</figure>
+								</div>
+							<?php endforeach; ?>
+						</div>
+						<div class="swiper-pagination"></div>
+						<button type="button" class="swiper-button-prev" aria-label="<?php esc_attr_e( 'Previous image', 'dish-events' ); ?>"></button>
+						<button type="button" class="swiper-button-next" aria-label="<?php esc_attr_e( 'Next image', 'dish-events' ); ?>"></button>
 					</div>
 				</section>
 			<?php endif; ?>
@@ -395,7 +473,7 @@ while ( have_posts() ) :
 						?>
 							<a href="<?php echo esc_url( get_permalink( $chef->ID ) ); ?>" class="dish-chef-mini">
 								<?php if ( has_post_thumbnail( $chef->ID ) ) : ?>
-									<?php echo get_the_post_thumbnail( $chef->ID, [ 80, 80 ], [ 'class' => 'dish-chef-mini__photo' ] ); ?>
+								<?php echo wp_get_attachment_image( get_post_thumbnail_id( $chef->ID ), 'thumbnail', false, [ 'class' => 'dish-chef-mini__photo', 'sizes' => '40px', 'loading' => 'lazy' ] ); ?>
 								<?php endif; ?>
 								<div class="dish-chef-mini__info">
 									<strong class="dish-chef-mini__name"><?php echo esc_html( $chef->post_title ); ?></strong>

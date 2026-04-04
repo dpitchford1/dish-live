@@ -70,11 +70,11 @@ if ( ! empty( $next_arr ) ) {
 
 	<?php if ( has_post_thumbnail( $template->ID ) ) : ?>
 		<a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__image-link" tabindex="-1" aria-hidden="true">
-			<?php echo get_the_post_thumbnail( $template->ID, 'medium' ); ?>
+			<?php echo wp_get_attachment_image( get_post_thumbnail_id( $template->ID ), 'basecamp-img-s', false, [ 'class' => 'dish-card__img', 'loading' => 'lazy' ] ); ?>
 		</a>
 	<?php endif; ?>
 
-	<div class="dish-card__body">
+	<div class="dish-card__body"> 
 		<?php if ( $format_post && $format_color ) : ?>
 			<a href="<?php echo esc_url( $format_url ); ?>" class="dish-format-pill" style="--format-color:<?php echo esc_attr( $format_color ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Format: %s', 'dish-events' ), $format_post->post_title ) ); ?>">
 				<?php echo esc_html( $format_post->post_title ); ?>
@@ -92,7 +92,7 @@ if ( ! empty( $next_arr ) ) {
 		<?php endif; ?>
 
 		<div class="dish-card__meta">
-			<?php if ( $price_label ) : ?>
+			<?php if ( $price_label && ! empty( $next_arr ) ) : ?>
 				<span class="dish-card__price"><?php echo esc_html( $price_label ); ?></span>
 			<?php endif; ?>
 			<?php if ( $next_date ) : ?>

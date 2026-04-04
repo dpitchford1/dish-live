@@ -112,7 +112,7 @@ class Admin {
 		 * @return void
 		 */
 		public function custom_admin_footer(): void {
-			_e( '<span id="footer-thankyou">Built with <a href="https://github.com/joshuaiz/basecamp" target="_blank">Basecamp</a>.', 'basecamp' );
+			_e( '<span id="footer-thankyou">Built with <a href="https://kaneism.com" target="_blank">Basecamp</a>.', 'basecamp' );
 		}
 
 		/**

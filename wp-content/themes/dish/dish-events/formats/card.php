@@ -27,7 +27,7 @@ $card_color  = (string) get_post_meta( $format->ID, 'dish_format_color', true ) 
 
 	<?php if ( $card_thumb ) : ?>
 		<a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__image-link" tabindex="-1" aria-hidden="true">
-			<?php echo get_the_post_thumbnail( $format->ID, 'medium' ); ?>
+			<?php echo wp_get_attachment_image( get_post_thumbnail_id( $format->ID ), 'basecamp-img-s', false, [ 'class' => 'dish-card__img', 'loading' => 'lazy' ] ); ?>
 		</a>
 	<?php endif; ?>
 

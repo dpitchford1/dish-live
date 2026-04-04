@@ -62,7 +62,9 @@ $remaining   = $capacity > 0 ? max( 0, $capacity - $booked ) : 0;
 $title         = $template_post ? $template_post->post_title : get_the_title( $class->ID );
 $date_label    = $start ? DateHelper::to_display( $start ) : '';
 $thumb_id      = get_post_thumbnail_id( $class->ID ) ?: ( $template_post ? get_post_thumbnail_id( $template_post->ID ) : 0 );
-$thumb_html    = $thumb_id ? wp_get_attachment_image( (int) $thumb_id, 'medium', false, [ 'class' => 'dish-card__img' ] ) : '';
+$thumb_html = $thumb_id
+	? wp_get_attachment_image( (int) $thumb_id, 'basecamp-img-s', false, [ 'class' => 'dish-card__img', 'loading' => 'lazy' ] )
+	: '';
 
 $is_private   = (bool) get_post_meta( $class->ID, 'dish_is_private', true );
 $booking_type = $template_post ? ( (string) get_post_meta( $template_post->ID, 'dish_booking_type', true ) ?: 'online' ) : 'online';

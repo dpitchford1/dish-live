@@ -77,7 +77,7 @@ while ( have_posts() ) :
 
             <?php if ( has_post_thumbnail() ) : ?>
                 <div class="dish-chef-photo-wrap">
-                    <?php the_post_thumbnail( 'medium', [ 'class' => 'dish-chef-photo' ] ); ?>
+                    <?php echo wp_get_attachment_image( get_post_thumbnail_id(), 'portait-m', false, [ 'class' => 'dish-chef-photo', 'loading' => 'eager', 'sizes' => '160px' ] ); ?>
                 </div>
             <?php endif; ?>
 
@@ -122,13 +122,13 @@ while ( have_posts() ) :
 				<section class="dish-chef-gallery dish-container" aria-label="<?php esc_attr_e( 'Chef gallery', 'dish-events' ); ?>">
 					<div class="dish-gallery-grid">
 						<?php foreach ( $chef_gallery as $gid ) :
-							$src = wp_get_attachment_image_src( $gid, 'large' );
+							$src = wp_get_attachment_image_src( $gid, 'basecamp-img-xl' );
 							if ( ! $src ) continue;
 							$alt = (string) get_post_meta( $gid, '_wp_attachment_image_alt', true );
 						?>
 							<figure class="dish-gallery-grid__item">
 								<a href="<?php echo esc_url( $src[0] ); ?>" target="_blank" rel="noopener noreferrer">
-									<?php echo wp_get_attachment_image( $gid, 'medium', false, [ 'alt' => $alt ] ); ?>
+									<?php echo wp_get_attachment_image( $gid, 'basecamp-img-sm', false, [ 'alt' => $alt, 'loading' => 'lazy', 'sizes' => '(max-width: 600px) 100vw, 50vw' ] ); ?>
 								</a>
 							</figure>
 						<?php endforeach; ?>

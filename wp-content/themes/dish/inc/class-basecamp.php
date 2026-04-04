@@ -28,7 +28,6 @@ if ( ! class_exists( __NAMESPACE__ . '\\Theme' ) ) :
 			add_action( 'after_setup_theme', array( $this, 'setup' ) );
             add_filter( 'body_class', array( $this, 'body_classes' ) );
 
-			//add_action( 'widgets_init', array( $this, 'widgets_init' ) );
 			add_filter( 'wp_page_menu_args', array( $this, 'page_menu_args' ) );
 		}
 
@@ -147,7 +146,7 @@ add_filter( 'image_size_names_choose', function( $sizes ) {
 			/**
 			 * Add support for responsive embedded content.
 			 */
-			//add_theme_support( 'responsive-embeds' );
+			add_theme_support( 'responsive-embeds' );
 
             remove_theme_support( 'widgets-block-editor' );
 
@@ -203,84 +202,6 @@ add_filter( 'image_size_names_choose', function( $sizes ) {
 			}
 
 			return $classes;
-		}
-
-		/**
-		 * Register widget area.
-		 *
-		 * @link https://codex.wordpress.org/Function_Reference/register_sidebar
-		 */
-		public function widgets_init() {
-			$sidebar_args['sidebar'] = array(
-				'name'        => __( 'Sidebar', 'basecamp' ),
-				'id'          => 'sidebar-1',
-				'description' => '',
-			);
-
-			$sidebar_args['header'] = array(
-				'name'        => __( 'Below Header', 'basecamp' ),
-				'id'          => 'header-1',
-				'description' => __( 'Widgets added to this region will appear beneath the header and above the main content.', 'basecamp' ),
-			);
-
-			$rows    = intval( apply_filters( 'basecamp_footer_widget_rows', 1 ) );
-			$regions = intval( apply_filters( 'basecamp_footer_widget_columns', 4 ) );
-
-			for ( $row = 1; $row <= $rows; $row++ ) {
-				for ( $region = 1; $region <= $regions; $region++ ) {
-					$footer_n = $region + $regions * ( $row - 1 ); // Defines footer sidebar ID.
-					$footer   = sprintf( 'footer_%d', $footer_n );
-
-					if ( 1 === $rows ) {
-						/* translators: 1: column number */
-						$footer_region_name = sprintf( __( 'Footer Column %1$d', 'basecamp' ), $region );
-
-						/* translators: 1: column number */
-						$footer_region_description = sprintf( __( 'Widgets added here will appear in column %1$d of the footer.', 'basecamp' ), $region );
-					} else {
-						/* translators: 1: row number, 2: column number */
-						$footer_region_name = sprintf( __( 'Footer Row %1$d - Column %2$d', 'basecamp' ), $row, $region );
-
-						/* translators: 1: column number, 2: row number */
-						$footer_region_description = sprintf( __( 'Widgets added here will appear in column %1$d of footer row %2$d.', 'basecamp' ), $region, $row );
-					}
-
-					$sidebar_args[ $footer ] = array(
-						'name'        => $footer_region_name,
-						'id'          => sprintf( 'footer-%d', $footer_n ),
-						'description' => $footer_region_description,
-					);
-				}
-			}
-
-			$sidebar_args = apply_filters( 'basecamp_sidebar_args', $sidebar_args );
-
-			foreach ( $sidebar_args as $sidebar => $args ) {
-				$widget_tags = array(
-					'before_widget' => '<div id="%1$s" class="widget %2$s">',
-					'after_widget'  => '</div>',
-					'before_title'  => '<span class="gamma widget-title">',
-					'after_title'   => '</span>',
-				);
-
-				/**
-				 * Dynamically generated filter hooks. Allow changing widget wrapper and title tags. See the list below.
-				 *
-				 * 'basecamp_header_widget_tags'
-				 * 'basecamp_sidebar_widget_tags'
-				 *
-				 * 'basecamp_footer_1_widget_tags'
-				 * 'basecamp_footer_2_widget_tags'
-				 * 'basecamp_footer_3_widget_tags'
-				 * 'basecamp_footer_4_widget_tags'
-				 */
-				$filter_hook = sprintf( 'basecamp_%s_widget_tags', $sidebar );
-				$widget_tags = apply_filters( $filter_hook, $widget_tags );
-
-				if ( is_array( $widget_tags ) ) {
-					register_sidebar( $args + $widget_tags );
-				}
-			}
 		}
 
 		/**

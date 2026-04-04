@@ -116,10 +116,12 @@
 /* Reversed anchors (ra) - underlines -- anchors you want no underline, hover underline e.g. subnav */
 :where(.ra a) {
     text-decoration: none;
+    color: #f7f7f7;
 }
 
-:where(.ra a:hover) {
+:where(.ra a:hover, .ra a:focus) {
     text-decoration: underline;
+    color: #ff7824;
 }
 
 /* Width control */
@@ -160,6 +162,8 @@
 }
 
 // Callout Colour - Change the colour of the text
-.cc{
+.cc, .menu--selected{
     color: #ff7824;
 }
+
+

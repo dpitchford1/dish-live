@@ -12,12 +12,243 @@
  *
 */
 ?>
+<?php
+use Dish\Events\Data\ChefRepository;
+use Dish\Events\Data\ClassRepository;
+use Dish\Events\Frontend\Frontend;
+?>
 
 <?php get_header(); ?>
 <div class="fluid has--aside">
 <main id="main-content" class="main--content">
 
     <h2 class="page-title"><?php the_title(); ?></h2>
+
+    <div class="sg--content-wrapper">
+
+        <p class="intro">A living reference for all Dish Events components and CSS helpers. Each entry shows a live render alongside the code to produce it and all available options &mdash; no digging through docs required.</p>
+
+        <hr />
+
+        <!-- ── 1. Chef Cards ──────────────────────────────────────────────── -->
+        <div class="sg--component">
+            <header class="sg--component__header">
+                <h2 class="sg--component__title">Chef Cards Grid</h2>
+                <p>Displays published chefs in a responsive card grid. Each card shows photo, name, role, excerpt, and a profile link. Rendered via <code>chefs/card.php</code>.</p>
+            </header>
+
+            <?php $chefs = ChefRepository::query( [ 'exclude_team' => true ] ); ?>
+            <?php if ( ! empty( $chefs ) ) : ?>
+            <div class="sg--component__demo">
+                <section class="dish-home-section dish-home-chefs">
+                    <h2 class="dish-home-section__heading"><?php esc_html_e( 'Meet the Chefs', 'dish-events' ); ?></h2>
+                    <div class="grid-general grid--4col">
+                        <?php foreach ( $chefs as $chef ) : ?>
+                            <?php include Frontend::locate( 'chefs/card.php' ); ?>
+                        <?php endforeach; ?>
+                    </div>
+                    <p class="dish-home-section__more">
+                        <a href="<?php echo esc_url( get_post_type_archive_link( 'dish_chef' ) ); ?>" class="button">
+                            <?php esc_html_e( 'Meet All Chefs', 'dish-events' ); ?>
+                        </a>
+                    </p>
+                </section>
+            </div>
+            <?php endif; ?>
+
+            <details class="sg--component__code">
+                <summary>Code &amp; Options</summary>
+                <pre><code><?php echo htmlspecialchars( <<<'CODE'
+use Dish\Events\Data\ChefRepository;
+use Dish\Events\Frontend\Frontend;
+
+$chefs = ChefRepository::query( [
+    'exclude_team' => true,       // bool   — exclude team members (chefs only)
+    // 'team_only'  => true,      // bool   — show team members only
+    // 'limit'      => 4,         // int    — max results; default -1 (all)
+    // 'orderby'    => 'title',   // string — default 'title'
+    // 'order'      => 'ASC',     // string — 'ASC' | 'DESC'
+    // 'status'     => 'publish', // string — default 'publish'
+] );
+
+if ( ! empty( $chefs ) ) : ?>
+<div class="grid-general grid--4col">
+    <?php foreach ( $chefs as $chef ) : ?>
+        <?php include Frontend::locate( 'chefs/card.php' ); ?>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
+CODE
+                ); ?></code></pre>
+            </details>
+        </div>
+
+        <hr />
+
+        <!-- ── 2. Format Cards ────────────────────────────────────────────── -->
+        <div class="sg--component">
+            <header class="sg--component__header">
+                <h2 class="sg--component__title">Format Cards Grid</h2>
+                <p>Displays class formats in a card grid. Each card shows the format image, title, excerpt, and a link to the format page. Rendered via <code>formats/card.php</code>.</p>
+            </header>
+
+            <?php
+            $formats = get_posts( [
+                'post_type'      => 'dish_format',
+                'post_status'    => 'publish',
+                'posts_per_page' => -1,
+                'orderby'        => 'menu_order',
+                'order'          => 'ASC',
+            ] );
+            ?>
+            <?php if ( ! empty( $formats ) ) : ?>
+            <div class="sg--component__demo">
+                <section class="dish-home-section dish-home-formats">
+                    <h2 class="dish-home-section__heading"><?php esc_html_e( 'Browse by Format', 'dish-events' ); ?></h2>
+                    <div class="grid-general grid--3col">
+                        <?php foreach ( $formats as $format ) : ?>
+                            <?php include Frontend::locate( 'formats/card.php' ); ?>
+                        <?php endforeach; ?>
+                    </div>
+                    <p class="dish-home-section__more">
+                        <a href="<?php echo esc_url( get_post_type_archive_link( 'dish_format' ) ); ?>" class="button">
+                            <?php esc_html_e( 'View All Formats', 'dish-events' ); ?>
+                        </a>
+                    </p>
+                </section>
+            </div>
+            <?php endif; ?>
+
+            <details class="sg--component__code">
+                <summary>Code &amp; Options</summary>
+                <pre><code><?php echo htmlspecialchars( <<<'CODE'
+use Dish\Events\Frontend\Frontend;
+
+$formats = get_posts( [
+    'post_type'      => 'dish_format',
+    'post_status'    => 'publish',
+    'posts_per_page' => -1,            // int — cap results, or -1 for all
+    'orderby'        => 'menu_order',  // drag-drop order set in WP admin
+    'order'          => 'ASC',
+] );
+
+if ( ! empty( $formats ) ) : ?>
+<div class="grid-general grid--3col">
+    <?php foreach ( $formats as $format ) : ?>
+        <?php include Frontend::locate( 'formats/card.php' ); ?>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
+CODE
+                ); ?></code></pre>
+            </details>
+        </div>
+
+        <hr />
+
+        <!-- ── 3. Upcoming Classes ───────────────────────────────────────── -->
+        <div class="sg--component">
+            <header class="sg--component__header">
+                <h2 class="sg--component__title">Upcoming Classes Grid</h2>
+                <p>Displays upcoming class instances ordered by start date. Each card shows date, title, price, spots remaining, and a booking link. Rendered via <code>classes/card.php</code>.</p>
+            </header>
+
+            <?php $upcoming = ClassRepository::get_upcoming( 6 ); ?>
+            <?php if ( ! empty( $upcoming ) ) : ?>
+            <div class="sg--component__demo">
+                <section class="dish-home-section dish-home-upcoming">
+                    <h2 class="dish-home-section__heading"><?php esc_html_e( 'Upcoming Classes', 'dish-events' ); ?></h2>
+                    <div class="grid-general grid--3col">
+                        <?php foreach ( $upcoming as $class ) : ?>
+                            <?php include Frontend::locate( 'classes/card.php' ); ?>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
+            </div>
+            <?php else : ?>
+            <p class="sg--component__empty"><em>No upcoming classes found.</em></p>
+            <?php endif; ?>
+
+            <details class="sg--component__code">
+                <summary>Code &amp; Options</summary>
+                <pre><code><?php echo htmlspecialchars( <<<'CODE'
+use Dish\Events\Data\ClassRepository;
+use Dish\Events\Frontend\Frontend;
+
+// Simple: next N upcoming public classes ordered by date.
+$upcoming = ClassRepository::get_upcoming( 6 ); // int $limit, default 10
+
+// Full query — all args optional:
+$upcoming = ClassRepository::query( [
+    'limit'        => 6,                        // int    — max results; default -1 (all)
+    'start_after'  => time(),                   // int    — UTC timestamp lower bound
+    'start_before' => strtotime( '+30 days' ),  // int    — UTC timestamp upper bound
+    'template_id'  => 42,                       // int    — single template only
+    'template_ids' => [42, 43],                 // int[]  — multiple templates
+    'is_private'   => false,                    // bool   — true = private/corporate only
+    'order'        => 'ASC',                    // string — 'ASC' | 'DESC'
+    'status'       => 'publish',                // string — default 'publish'
+    'offset'       => 0,                        // int    — for pagination
+] );
+
+if ( ! empty( $upcoming ) ) : ?>
+<div class="grid-general grid--3col">
+    <?php foreach ( $upcoming as $class ) : ?>
+        <?php include Frontend::locate( 'classes/card.php' ); ?>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
+CODE
+                ); ?></code></pre>
+            </details>
+        </div>
+
+        <hr />
+
+        <!-- ── 4. Shortcodes ─────────────────────────────────────────────── -->
+        <div class="sg--component">
+            <header class="sg--component__header">
+                <h2 class="sg--component__title">Shortcodes</h2>
+                <p>Drop these into any WP page content area, or call <code>do_shortcode()</code> from a template. Each renders its full archive grid with no arguments required.</p>
+            </header>
+
+            <details class="sg--component__code" open>
+                <summary>All available shortcodes</summary>
+                <pre><code><?php echo htmlspecialchars( <<<'CODE'
+[dish_classes]         — upcoming class instances archive grid
+[dish_chefs]           — chefs archive grid
+[dish_formats]         — class formats archive grid
+[dish_upcoming_menus]  — upcoming menus listing
+
+[dish_login]           — login form (redirects if already logged in)
+[dish_register]        — registration form
+[dish_profile]         — logged-in user profile & booking history
+CODE
+                ); ?></code></pre>
+            </details>
+        </div>
+
+        <hr />
+
+        <!-- ── 5. Grid helpers ───────────────────────────────────────────── -->
+        <div class="sg--component">
+            <header class="sg--component__header">
+                <h2 class="sg--component__title">Grid CSS Helpers</h2>
+                <p>All grids use the <code>grid-general</code> base class with a column-count modifier. Columns collapse responsively at small viewports.</p>
+            </header>
+
+            <details class="sg--component__code" open>
+                <summary>Column modifiers</summary>
+                <pre><code><?php echo htmlspecialchars( <<<'CODE'
+<div class="grid-general grid--2col"> ... </div>
+<div class="grid-general grid--3col"> ... </div>
+<div class="grid-general grid--4col"> ... </div>
+CODE
+                ); ?></code></pre>
+            </details>
+        </div>
+
+    </div>
 
 	<div id="post-<?php the_ID(); ?>" <?php post_class( '' ); ?>>
 
@@ -31,37 +262,21 @@
             <h2>Second header h2</h2>
             <p class="test-class">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
             </p>
             <h3>Third header h3</h3>
             <p class="test-class">
-                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
-                praesentium voluptatum deleniti atque corrupti quos dolores et quas
-                molestias excepturi sint occaecati cupiditate non provident, similique sunt
-                in culpa qui officia deserunt mollitia animi, id est laborum et dolorum
-                fuga. Et harum quidem rerum facilis est et expedita distinctio.
+                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis.
             </p>
             <h4>Fourth header h4</h4>
             <p class="test-class">
                 Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet,
-                consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt
-                ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima
-                veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi
-                ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit
-                qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum
-                qui dolorem eum fugiat quo voluptas nulla pariatur?"
+                consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt.
             </p>
             <h5>Fifth header h5</h5>
             <p class="test-class">
                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
-                doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
-                veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
-                ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
-                consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+                doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.
             </p>
             <h6>Sixth header h6</h6>
             <p class="test-class">
@@ -439,29 +654,7 @@
     </div> 
 </main>
 
-<aside class="aside">
-    <h2>Sidebar</h2>
-    <p>This is a sidebar. It should be styled differently than the main content.</p>
-     <section>
-        <h2 class="other-class">Links</h2>
-        <h3 class="other-class"><a href="#">Link Heading</a></h3>
-        <p><a href="#">Sample text link</a></p>
-        <p><a class="blue-btn" href="#">Button class link</a></p>
-    </section>
-
-    <hr />
-
-    <section>
-        <figure>
-            <img src="https://placehold.co/600x400" alt="Figure Example">
-            <figcaption>
-                Photo of the sky at night.
-            </figcaption>
-        </figure>
-    </section>
-</aside>
+<?php get_sidebar(''); ?>
 
 </div>
-<?php // get_sidebar(); ?>
-
 <?php get_footer(); ?>

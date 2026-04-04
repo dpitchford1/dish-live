@@ -83,7 +83,12 @@ while ( have_posts() ) :
 			if ( $thumb_id ) :
 			?>
 				<div class="dish-class-hero">
-					<?php echo wp_get_attachment_image( (int) $thumb_id, 'large', false, [ 'class' => 'dish-hero__img' ] ); ?>
+					<?php Basecamp_Frontend::picture( (int) $thumb_id, [
+						'landscape_size' => 'basecamp-img-xl',
+						'img_class'      => 'dish-hero__img',
+						'loading'        => 'eager',
+						'fetchpriority'  => 'high',
+					] ); ?>
 				</div>
 			<?php endif; ?>
 

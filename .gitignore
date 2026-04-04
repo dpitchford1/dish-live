@@ -49,7 +49,18 @@ wp-config.php
 /wp-content/themes/twenty*/
 
 # Example plugin
-/wp-content/plugins/
+/wp-content/plugins/advanced-custom-fields-pro-main/
+/wp-content/plugins/classic-editor/
+/wp-content/plugins/contact-form-7/
+/wp-content/plugins/contact-form-7-honeypot/
+/wp-content/plugins/dev-maintenance/
+/wp-content/plugins/google-sitemap-generator/
+/wp-content/plugins/layout-tester/
+/wp-content/plugins/media-library-plus/
+/wp-content/plugins/widget-google-reviews/
+/wp-content/plugins/wp-sweep/
+/wp-content/plugins/faqs/
+/wp-content/plugins/_dish-events/
 
 # Uploads
 /wp-content/uploads/

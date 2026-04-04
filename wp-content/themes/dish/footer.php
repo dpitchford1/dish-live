@@ -1,5 +1,5 @@
 
-<div class="region global-footer cf" id="global-footer">
+<div class="region global-footer ra" id="global-footer">
     <footer class="fluid">    
         <h2 class="hide-text">Additional Information</h2>
         <div class="footer-grid ra">
