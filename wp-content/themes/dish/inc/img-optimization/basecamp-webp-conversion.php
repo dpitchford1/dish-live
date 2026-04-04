@@ -453,14 +453,16 @@ function basecamp_webp_conversion_page() {
 		<div class="conversion-progress">
 			<h2>Conversion Progress</h2>
 			
-			<?php if ($total_images > 0): ?>
+			<?php if ( $total_images > 0 ):
+				$progress_pct = ( $processed_images / $total_images ) * 100;
+			?>
 			<div class="progress-bar">
-				<div class="progress" style="width: <?php echo esc_attr( ($processed_images / $total_images) * 100 ); ?>%;"></div>
+				<div class="progress" style="width: <?php echo esc_attr( $progress_pct ); ?>%;"></div>
 			</div>
 			
 			<p class="progress-text">
 				<strong>Progress:</strong> <?php echo esc_html( $processed_images ); ?> of <?php echo esc_html( $total_images ); ?> images processed
-				(<?php echo esc_html( round( ($processed_images / $total_images) * 100, 1 ) ); ?>%)
+				(<?php echo esc_html( round( $progress_pct, 1 ) ); ?>%)
 			</p>
 			
 			<?php if ($processed_images > 0 && isset($progress['space_saved'])): ?>
@@ -483,9 +485,11 @@ function basecamp_webp_conversion_page() {
 					<?php if (isset($progress['successful']) && isset($progress['failed'])): ?>
 					<div class="stat-card">
 						<h4>Success Rate</h4>
-						<div class="stat-value"><?php 
-							$success_rate = $processed_images > 0 ? round(($progress['successful'] / $processed_images) * 100, 1) : 0;
-							echo esc_html($success_rate) . '%'; 
+						<div class="stat-value"><?php
+							$success_rate = $processed_images > 0
+								? (string) round( ( $progress['successful'] / $processed_images ) * 100, 1 )
+								: '0';
+							echo esc_html( $success_rate ) . '%';
 						?></div>
 						<p class="stat-description"><?php echo esc_html($progress['successful']); ?> succeeded, <?php echo esc_html($progress['failed']); ?> failed</p>
 					</div>
