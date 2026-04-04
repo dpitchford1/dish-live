@@ -13,10 +13,10 @@ final class Development {
 
 	public function __construct() {
 		if ( $this->is_local() ) {
+			require_once __DIR__ . '/template.php';
 			add_action( 'wp_footer', [ $this, 'render_devpilot' ] );
 			add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_dev_assets' ] );
 		}
-		require_once __DIR__ . '/template.php'; // Load template helpers if needed
 	}
 
 	/**

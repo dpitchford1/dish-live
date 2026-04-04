@@ -455,29 +455,6 @@ add_filter('the_content', function($content) {
 	);
 }, 999);
 
-/**
- * Debug function to log WebP conversion activity.
- * Only active when WP_DEBUG is true.
- *
- * @param string $message The message to log.
- * @param mixed $data Additional data to log.
- */
-function basecamp_webp_debug_log($message, $data = null) {
-	if (defined('WP_DEBUG') && WP_DEBUG) {
-		$context = is_admin() ? 'ADMIN' : 'FRONTEND';
-		global $pagenow;
-		$page = isset($pagenow) ? $pagenow : 'unknown';
-		$log_message = sprintf('[WEBP-%s/%s] %s', $context, $page, $message);
-		if ($data !== null) {
-			$log_message .= ' - Data: ' . (is_array($data) || is_object($data) ? json_encode($data) : $data);
-		}
-		unset( $log_message ); // Available for a debugger breakpoint.
-	}
-}
 
-// Uncomment this to debug WebP conversion activity
-// add_action('init', function() {
-//     basecamp_webp_debug_log('WebP module initialized');
-// });
 
 
