@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * RemoveBloat — frontend cleanup for Basecamp theme.
  *
@@ -14,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class RemoveBloat {
+final class RemoveBloat {
 
 	/**
 	 * Register all cleanup hooks.

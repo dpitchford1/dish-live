@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Cookie Consent
  *
@@ -23,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class CookieConsent {
+final class CookieConsent {
 
 	const OPTION_KEY = 'basecamp_cookie_settings';
 

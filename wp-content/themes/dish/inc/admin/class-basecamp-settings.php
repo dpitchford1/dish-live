@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Theme Settings
  *
@@ -21,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Settings {
+final class Settings {
 
 	const OPTION_KEY = 'basecamp_theme_settings';
 

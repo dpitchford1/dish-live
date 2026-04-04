@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * WooCommerce integration for Basecamp theme.
  *
@@ -22,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * WooCommerce theme integration.
  */
-class WooCommerceIntegration {
+final class WooCommerceIntegration {
 
 	/**
 	 * Register hooks. Bails silently if WooCommerce is not active.

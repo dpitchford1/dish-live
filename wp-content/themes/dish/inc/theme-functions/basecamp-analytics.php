@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Conditional Google Analytics loader.
  *
@@ -27,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Manages conditional Google Analytics loading.
  */
-class Analytics {
+final class Analytics {
 
 	/**
 	 * Register hooks.

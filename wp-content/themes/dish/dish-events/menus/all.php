@@ -55,7 +55,7 @@ $_friendly_labels = MenuMetaBox::FRIENDLY_FOR;
 		<header class="dish-menu-entry__header">
 			<?php if ( $_next_date ) : ?>
 				<time class="dish-menu-entry__date"
-				      datetime="<?php echo esc_attr( gmdate( 'c', $_next_date ) ); ?>">
+				      datetime="<?php echo esc_attr( DateHelper::format( $_next_date, 'c' ) ); ?>">
 					<?php
 					/* translators: %s: human-readable date */
 					printf( esc_html__( 'Next class: %s', 'dish-events' ), esc_html( DateHelper::to_display( $_next_date ) ) );

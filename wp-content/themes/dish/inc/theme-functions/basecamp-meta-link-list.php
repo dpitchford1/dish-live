@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Meta box for a customizable repeater link list.
  *
@@ -17,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Manages the repeater link-list meta box and its data.
  */
-class MetaLinkList {
+final class MetaLinkList {
 
 	/**
 	 * Register hooks (admin-only).

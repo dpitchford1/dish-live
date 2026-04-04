@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Dish Docs — Admin Documentation Viewer
  *
@@ -18,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/lib/Parsedown.php';
 
-class Docs {
+final class Docs {
 
 	const MENU_SLUG = 'dish-docs';
 	const DOCS_DIR  = 'Docs';

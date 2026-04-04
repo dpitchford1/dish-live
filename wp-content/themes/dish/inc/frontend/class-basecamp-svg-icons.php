@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * SVG Icons class for Basecamp theme.
  *
@@ -7,7 +9,7 @@
 
 namespace Basecamp\Frontend;
 
-class SVGIcons {
+final class SVGIcons {
 
 	/**
 	 * User Interface icons – svg sources.

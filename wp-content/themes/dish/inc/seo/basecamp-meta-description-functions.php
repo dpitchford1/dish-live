@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Basecamp Meta Description Class
  *
@@ -9,7 +11,7 @@
 
 namespace Basecamp\SEO;
 
-class MetaDescription {
+final class MetaDescription {
 
 	/**
 	 * Register hooks for meta description functionality.
@@ -81,11 +83,8 @@ class MetaDescription {
 			echo '<meta name="description" content="' . esc_attr($description) . '">' . PHP_EOL;
 			echo '<meta property="og:description" content="' . esc_attr($description) . '">' . PHP_EOL;
 			echo '<meta name="twitter:description" content="' . esc_attr($description) . '">' . PHP_EOL;
-		} catch (Exception $e) {
-			if (function_exists('error_log')) {
-				error_log('Basecamp Theme - Error generating meta descriptions: ' . $e->getMessage());
-			}
-			$fallback = esc_attr(get_bloginfo('description'));
+		} catch ( \Exception $e ) {
+			$fallback = esc_attr( get_bloginfo( 'description' ) );
 			echo '<meta name="description" content="' . $fallback . '">' . PHP_EOL;
 			echo '<meta property="og:description" content="' . $fallback . '">' . PHP_EOL;
 			echo '<meta name="twitter:description" content="' . $fallback . '">' . PHP_EOL;
@@ -95,30 +94,30 @@ class MetaDescription {
 	/**
 	 * Get meta description for a specific post/page/term.
 	 *
-	 * @param int|WP_Post|WP_Term|null $object Post, term or ID to get description for
+	 * @param int|\WP_Post|\WP_Term|null $object Post, term or ID to get description for
 	 * @param int $word_count Maximum number of words (default 30)
 	 * @return string The meta description
 	 */
-	public static function get_meta_description($object = null, $word_count = 30) {
-		$description = get_bloginfo('description');
+	public static function get_meta_description( $object = null, int $word_count = 30 ): string {
+		$description = get_bloginfo( 'description' );
 
-		if ($object instanceof WP_Post || (is_numeric($object) && get_post($object))) {
-			$post = $object instanceof WP_Post ? $object : get_post($object);
-			if (has_excerpt($post->ID)) {
-				$description = strip_tags(get_the_excerpt($post->ID));
+		if ( $object instanceof \WP_Post || ( is_numeric( $object ) && get_post( $object ) ) ) {
+			$post = $object instanceof \WP_Post ? $object : get_post( $object );
+			if ( has_excerpt( $post->ID ) ) {
+				$description = strip_tags( get_the_excerpt( $post->ID ) );
 			} else {
-				$excerpt = strip_tags($post->post_content);
-				$excerpt = strip_shortcodes($excerpt);
-				$excerpt = wp_trim_words($excerpt, $word_count, '...');
-				if (!empty($excerpt)) {
+				$excerpt = strip_tags( $post->post_content );
+				$excerpt = strip_shortcodes( $excerpt );
+				$excerpt = wp_trim_words( $excerpt, $word_count, '...' );
+				if ( ! empty( $excerpt ) ) {
 					$description = $excerpt;
 				}
 			}
-		} elseif ($object instanceof WP_Term) {
-			if (!empty($object->description)) {
-				$description = strip_tags($object->description);
+		} elseif ( $object instanceof \WP_Term ) {
+			if ( ! empty( $object->description ) ) {
+				$description = strip_tags( $object->description );
 			} else {
-				$description = sprintf(__('Browse all %s content', 'basecamp'), $object->name);
+				$description = sprintf( __( 'Browse all %s content', 'basecamp' ), $object->name );
 			}
 		}
 

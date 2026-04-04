@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Core theme bootstrap.
  *
@@ -17,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( __NAMESPACE__ . '\\Theme' ) ) :
 
-	class Theme {
+	final class Theme {
 
 		/**
 		 * Setup class.
