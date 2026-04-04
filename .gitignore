@@ -17,7 +17,7 @@
 /wp-*.php
 /xmlrpc.php
 
-.github/
+#.github/
 /assets/css/build/
 /assets/css/core/
 /assets/css/resources/

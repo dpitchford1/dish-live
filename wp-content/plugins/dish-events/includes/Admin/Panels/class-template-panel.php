@@ -21,6 +21,8 @@ namespace Dish\Events\Admin\Panels;
  */
 final class TemplatePanel {
 
+	use MetaBoxHelpers;
+
 	/**
 	 * Render the Template panel.
 	 *
