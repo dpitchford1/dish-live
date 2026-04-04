@@ -74,217 +74,202 @@ while ( have_posts() ) :
 	$format_color = $format_post ? ( (string) get_post_meta( $format_id, 'dish_format_color', true ) ?: '#c0392b' ) : '';
 	?>
 
-	<main id="main-content" class="">
-		<article id="post-<?php the_ID(); ?>" <?php post_class( 'dish-class' ); ?>>
+<main id="main-content" class="main--content">
+    <article id="post-<?php the_ID(); ?>">
 
-			<?php
-			// Hero image: prefer class thumbnail, fall back to template.
-			$thumb_id = get_post_thumbnail_id( $class_id ) ?: ( $template ? get_post_thumbnail_id( $template->ID ) : 0 );
-			if ( $thumb_id ) :
-			?>
-				<div class="dish-class-hero">
-					<?php Basecamp_Frontend::picture( (int) $thumb_id, [
-						'landscape_size' => 'basecamp-img-xl',
-						'img_class'      => 'dish-hero__img',
-						'loading'        => 'eager',
-						'fetchpriority'  => 'high',
-					] ); ?>
-				</div>
-			<?php endif; ?>
+        <?php
+        // Hero image: prefer class thumbnail, fall back to template.
+        $thumb_id = get_post_thumbnail_id( $class_id ) ?: ( $template ? get_post_thumbnail_id( $template->ID ) : 0 );
+        if ( $thumb_id ) :
+        ?>
+            <div class="dish-class-hero">
+                <?php Basecamp_Frontend::picture( (int) $thumb_id, [
+                    'landscape_size' => 'basecamp-img-xl',
+                    'img_class'      => 'dish-hero__img',
+                    'loading'        => 'eager',
+                    'fetchpriority'  => 'high',
+                ] ); ?>
+            </div>
+        <?php endif; ?>
 
-			<header class="dish-class-header dish-container">
+        <header class="dish-class-header dish-container">
 
-				<?php // Breadcrumb. ?>
-				<nav class="dish-breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'dish-events' ); ?>">
-					<?php if ( $format_post && 'publish' === $format_post->post_status ) : ?>
-					<a href="<?php echo esc_url( get_permalink( $format_post ) ); ?>"<?php if ( $format_color ) : ?> class="dish-format-pill" style="--format-color:<?php echo esc_attr( $format_color ); ?>"<?php endif; ?>>
-							<?php echo esc_html( $format_post->post_title ); ?>
-						</a>
-						<span aria-hidden="true"> / </span>
-					<?php endif; ?>
-					<?php if ( $template && 'publish' === $template->post_status ) : ?>
-						<a href="<?php echo esc_url( get_permalink( $template ) ); ?>">
-							<?php echo esc_html( $template->post_title ); ?>
-						</a>
-						<span aria-hidden="true"> / </span>
-					<?php endif; ?>
-					<span><?php echo $start ? esc_html( DateHelper::to_display( $start ) ) : esc_html( get_the_title() ); ?></span>
-				</nav>
+			<?php dish_the_breadcrumb(); ?>
 
-				<h1 class="dish-class-title">
-					<?php echo esc_html( $template ? $template->post_title : get_the_title() ); ?>
-				</h1>
+            <h1 class="dish-class-title">
+                <?php echo esc_html( $template ? $template->post_title : get_the_title() ); ?>
+            </h1>
 
-				<?php // Meta row: date, duration, price, spots. ?>
-				<div class="dish-class-meta">
+            <?php // Meta row: date, duration, price, spots. ?>
+            <div class="dish-class-meta">
 
-					<?php if ( $start ) : ?>
-						<div class="dish-class-meta__item">
-							<span class="dish-class-meta__label"><?php esc_html_e( 'Date & Time', 'dish-events' ); ?></span>
-							<time class="dish-class-meta__value" datetime="<?php echo esc_attr( DateHelper::format( $start, 'c' ) ); ?>">
-								<?php echo esc_html( DateHelper::to_display( $start ) ); ?>
-							</time>
-						</div>
-					<?php endif; ?>
+                <?php if ( $start ) : ?>
+                    <div class="dish-class-meta__item">
+                        <span class="dish-class-meta__label"><?php esc_html_e( 'Date & Time', 'dish-events' ); ?></span>
+                        <time class="dish-class-meta__value" datetime="<?php echo esc_attr( DateHelper::format( $start, 'c' ) ); ?>">
+                            <?php echo esc_html( DateHelper::to_display( $start ) ); ?>
+                        </time>
+                    </div>
+                <?php endif; ?>
 
-					<?php if ( $end && $end > $start ) : ?>
-						<div class="dish-class-meta__item">
-							<span class="dish-class-meta__label"><?php esc_html_e( 'Ends', 'dish-events' ); ?></span>
-							<time class="dish-class-meta__value" datetime="<?php echo esc_attr( DateHelper::format( $end, 'c' ) ); ?>">
-								<?php echo esc_html( DateHelper::to_display( $end ) ); ?>
-							</time>
-						</div>
-					<?php endif; ?>
+                <?php if ( $end && $end > $start ) : ?>
+                    <div class="dish-class-meta__item">
+                        <span class="dish-class-meta__label"><?php esc_html_e( 'Ends', 'dish-events' ); ?></span>
+                        <time class="dish-class-meta__value" datetime="<?php echo esc_attr( DateHelper::format( $end, 'c' ) ); ?>">
+                            <?php echo esc_html( DateHelper::to_display( $end ) ); ?>
+                        </time>
+                    </div>
+                <?php endif; ?>
 
-					<?php if ( $price_label ) : ?>
-						<div class="dish-class-meta__item">
-							<span class="dish-class-meta__label"><?php esc_html_e( 'Price', 'dish-events' ); ?></span>
-							<span class="dish-class-meta__value dish-class-meta__price">
-								<?php echo esc_html( $price_label ); ?><?php esc_html_e( ' per person', 'dish-events' ); ?>
-							</span>
-						</div>
-					<?php endif; ?>
+                <?php if ( $price_label ) : ?>
+                    <div class="dish-class-meta__item">
+                        <span class="dish-class-meta__label"><?php esc_html_e( 'Price', 'dish-events' ); ?></span>
+                        <span class="dish-class-meta__value dish-class-meta__price">
+                            <?php echo esc_html( $price_label ); ?><?php esc_html_e( ' per person', 'dish-events' ); ?>
+                        </span>
+                    </div>
+                <?php endif; ?>
 
-					<?php if ( $capacity > 0 ) : ?>
-						<div class="dish-class-meta__item">
-							<span class="dish-class-meta__label"><?php esc_html_e( 'Availability', 'dish-events' ); ?></span>
-							<?php if ( $is_sold_out ) : ?>
-								<span class="dish-class-meta__value dish-class-meta__spots--sold-out">
-									<?php esc_html_e( 'Sold out', 'dish-events' ); ?>
-								</span>
-							<?php else : ?>
-								<span class="dish-class-meta__value">
-									<?php
-									/* translators: %d: spots remaining */
-									printf( esc_html( _n( '%d spot remaining', '%d spots remaining', $remaining, 'dish-events' ) ), (int) $remaining );
-									?>
-								</span>
-							<?php endif; ?>
-						</div>
-					<?php endif; ?>
+                <?php if ( $capacity > 0 ) : ?>
+                    <div class="dish-class-meta__item">
+                        <span class="dish-class-meta__label"><?php esc_html_e( 'Availability', 'dish-events' ); ?></span>
+                        <?php if ( $is_sold_out ) : ?>
+                            <span class="dish-class-meta__value dish-class-meta__spots--sold-out">
+                                <?php esc_html_e( 'Sold out', 'dish-events' ); ?>
+                            </span>
+                        <?php else : ?>
+                            <span class="dish-class-meta__value">
+                                <?php
+                                /* translators: %d: spots remaining */
+                                printf( esc_html( _n( '%d spot remaining', '%d spots remaining', $remaining, 'dish-events' ) ), (int) $remaining );
+                                ?>
+                            </span>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
 
-				</div><!-- .dish-class-meta -->
+            </div><!-- .dish-class-meta -->
 
-				<?php if ( ! empty( $chefs ) ) : ?>
-					<div class="dish-class-chefs">
-						<span class="dish-class-chefs__label">
-							<?php echo $is_guest_chef ? esc_html__( 'Guest Chef', 'dish-events' ) : esc_html__( 'With', 'dish-events' ); ?>
-						</span>
-						<ul class="dish-class-chefs__list">
-							<?php foreach ( $chefs as $chef ) : ?>
-								<li>
-									<a href="<?php echo esc_url( get_permalink( $chef->ID ) ); ?>">
-										<?php echo esc_html( $chef->post_title ); ?>
-									</a>
-								</li>
-							<?php endforeach; ?>
-						</ul>
-					</div>
-				<?php endif; ?>
+            <?php if ( ! empty( $chefs ) ) : ?>
+                <div class="dish-class-chefs">
+                    <span class="dish-class-chefs__label">
+                        <?php echo $is_guest_chef ? esc_html__( 'Guest Chef', 'dish-events' ) : esc_html__( 'With', 'dish-events' ); ?>
+                    </span>
+                    <ul class="dish-class-chefs__list">
+                        <?php foreach ( $chefs as $chef ) : ?>
+                            <li>
+                                <a href="<?php echo esc_url( get_permalink( $chef->ID ) ); ?>">
+                                    <?php echo esc_html( $chef->post_title ); ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
 
-			</header>
+        </header>
 
-			<?php if ( $display_content ) : ?>
-				<div class="dish-class-content dish-content dish-container">
-					<?php echo wp_kses_post( $display_content ); ?>
-				</div>
-			<?php endif; ?>
+        <?php if ( $display_content ) : ?>
+            <div class="dish-class-content dish-content dish-container">
+                <?php echo wp_kses_post( $display_content ); ?>
+            </div>
+        <?php endif; ?>
 
-			<?php /* Menu — items + dietary flags from the linked class template. */ ?>
-			<?php
-				$_m_menu_items    = $template_id ? (string) get_post_meta( $template_id, 'dish_menu_items',           true ) : '';
-				$_m_menu_dietary  = $template_id ? (array)  json_decode( get_post_meta( $template_id, 'dish_menu_dietary_flags', true ) ?: '[]', true ) : [];
-				$_m_menu_friendly = $template_id ? (array)  json_decode( get_post_meta( $template_id, 'dish_menu_friendly_for',  true ) ?: '[]', true ) : [];
-			?>
-			<?php if ( $_m_menu_items || $_m_menu_dietary ) : ?>
-				<section class="dish-class-menu dish-container" aria-label="<?php esc_attr_e( 'Class menu', 'dish-events' ); ?>">
-					<h2 class="dish-class-menu__heading"><?php esc_html_e( 'The Menu', 'dish-events' ); ?></h2>
+        <?php /* Menu — items + dietary flags from the linked class template. */ ?>
+        <?php
+            $_m_menu_items    = $template_id ? (string) get_post_meta( $template_id, 'dish_menu_items',           true ) : '';
+            $_m_menu_dietary  = $template_id ? (array)  json_decode( get_post_meta( $template_id, 'dish_menu_dietary_flags', true ) ?: '[]', true ) : [];
+            $_m_menu_friendly = $template_id ? (array)  json_decode( get_post_meta( $template_id, 'dish_menu_friendly_for',  true ) ?: '[]', true ) : [];
+        ?>
+        <?php if ( $_m_menu_items || $_m_menu_dietary ) : ?>
+            <section class="dish-class-menu dish-container" aria-label="<?php esc_attr_e( 'Class menu', 'dish-events' ); ?>">
+                <h2 class="dish-class-menu__heading"><?php esc_html_e( 'The Menu', 'dish-events' ); ?></h2>
 
-					<?php if ( $_m_menu_items ) :
-						$_m_items = array_filter( array_map( 'trim', explode( "\n", $_m_menu_items ) ) );
-					?>
-						<ul class="dish-menu-list">
-							<?php foreach ( $_m_items as $_m_item ) : ?>
-								<li class="dish-menu-list__item"><?php echo esc_html( $_m_item ); ?></li>
-							<?php endforeach; ?>
-						</ul>
-					<?php endif; ?>
+                <?php if ( $_m_menu_items ) :
+                    $_m_items = array_filter( array_map( 'trim', explode( "\n", $_m_menu_items ) ) );
+                ?>
+                    <ul class="dish-menu-list">
+                        <?php foreach ( $_m_items as $_m_item ) : ?>
+                            <li class="dish-menu-list__item"><?php echo esc_html( $_m_item ); ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
 
-					<?php if ( $_m_menu_dietary || $_m_menu_friendly ) :
-						$_m_flag_labels     = \Dish\Events\Admin\MenuMetaBox::DIETARY_FLAGS;
-						$_m_friendly_labels = \Dish\Events\Admin\MenuMetaBox::FRIENDLY_FOR;
-					?>
-						<div class="dish-menu-dietary">
-							<?php if ( $_m_menu_dietary ) :
-								$_m_flag_display = array_map(
-									fn( $k ) => $_m_flag_labels[ $k ] ?? ucfirst( str_replace( '_', ' ', $k ) ),
-									$_m_menu_dietary
-								);
-							?>
-								<p class="dish-menu-dietary__flags">
-									<strong><?php esc_html_e( 'Dietary Flags:', 'dish-events' ); ?></strong>
-									<?php echo esc_html( implode( ', ', $_m_flag_display ) ); ?>
-								</p>
-							<?php endif; ?>
-							<?php if ( $_m_menu_friendly ) :
-								$_m_friendly_display = array_map(
-									fn( $k ) => $_m_friendly_labels[ $k ] ?? ucfirst( str_replace( '_', ' ', $k ) ),
-									$_m_menu_friendly
-								);
-							?>
-								<p class="dish-menu-dietary__friendly">
-									<?php echo esc_html( implode( '/', $_m_friendly_display ) . ' ' . __( 'Friendly', 'dish-events' ) ); ?>
-								</p>
-							<?php endif; ?>
-							<?php if ( $_m_menu_dietary ) : ?>
-								<p class="dish-menu-dietary__disclaimer">
-									<?php esc_html_e( 'Please contact us if any of the above dietary flags apply to you to ensure we can accommodate your dietary requirements.', 'dish-events' ); ?>
-								</p>
-							<?php endif; ?>
-						</div>
-					<?php endif; ?>
+                <?php if ( $_m_menu_dietary || $_m_menu_friendly ) :
+                    $_m_flag_labels     = \Dish\Events\Admin\MenuMetaBox::DIETARY_FLAGS;
+                    $_m_friendly_labels = \Dish\Events\Admin\MenuMetaBox::FRIENDLY_FOR;
+                ?>
+                    <div class="dish-menu-dietary">
+                        <?php if ( $_m_menu_dietary ) :
+                            $_m_flag_display = array_map(
+                                fn( $k ) => $_m_flag_labels[ $k ] ?? ucfirst( str_replace( '_', ' ', $k ) ),
+                                $_m_menu_dietary
+                            );
+                        ?>
+                            <p class="dish-menu-dietary__flags">
+                                <strong><?php esc_html_e( 'Dietary Flags:', 'dish-events' ); ?></strong>
+                                <?php echo esc_html( implode( ', ', $_m_flag_display ) ); ?>
+                            </p>
+                        <?php endif; ?>
+                        <?php if ( $_m_menu_friendly ) :
+                            $_m_friendly_display = array_map(
+                                fn( $k ) => $_m_friendly_labels[ $k ] ?? ucfirst( str_replace( '_', ' ', $k ) ),
+                                $_m_menu_friendly
+                            );
+                        ?>
+                            <p class="dish-menu-dietary__friendly">
+                                <?php echo esc_html( implode( '/', $_m_friendly_display ) . ' ' . __( 'Friendly', 'dish-events' ) ); ?>
+                            </p>
+                        <?php endif; ?>
+                        <?php if ( $_m_menu_dietary ) : ?>
+                            <p class="dish-menu-dietary__disclaimer">
+                                <?php esc_html_e( 'Please contact us if any of the above dietary flags apply to you to ensure we can accommodate your dietary requirements.', 'dish-events' ); ?>
+                            </p>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
 
-				</section>
-			<?php endif; ?>
+            </section>
+        <?php endif; ?>
 
-			<?php if ( $my_seats > 0 ) : ?>
-				<div class="dish-class-my-booking dish-container">
-					<p class="dish-class-my-booking__notice">
-						<?php
-						printf(
-							esc_html(
-								/* translators: %d: number of seats booked by this user */
-								_n( "You've already booked %d seat for this class.", "You've already booked %d seats for this class.", $my_seats, 'dish-events' )
-							),
-							(int) $my_seats
-						);
-						?>
-					</p>
-				</div>
-			<?php endif; ?>
+        <?php if ( $my_seats > 0 ) : ?>
+            <div class="dish-class-my-booking dish-container">
+                <p class="dish-class-my-booking__notice">
+                    <?php
+                    printf(
+                        esc_html(
+                            /* translators: %d: number of seats booked by this user */
+                            _n( "You've already booked %d seat for this class.", "You've already booked %d seats for this class.", $my_seats, 'dish-events' )
+                        ),
+                        (int) $my_seats
+                    );
+                    ?>
+                </p>
+            </div>
+        <?php endif; ?>
 
-			<?php // Booking CTA ?>
-			<div class="dish-class-booking dish-container">
-				<?php if ( $is_private ) : ?>
-					<p class="dish-booking-private">
-						<?php esc_html_e( 'Private event', 'dish-events' ); ?>
-					</p>
-				<?php elseif ( $is_sold_out ) : ?>
-					<p class="dish-booking-sold-out">
-						<?php esc_html_e( 'This class is sold out.', 'dish-events' ); ?>
-					</p>
-					<p class="dish-waitlist-hint">
-						<?php esc_html_e( 'Waitlist coming soon — check back or contact us to be notified.', 'dish-events' ); ?>
-					</p>
-				<?php else : ?>
-					<p class="dish-booking-cta-notice">
-						<?php esc_html_e( 'Online booking coming soon — please contact us to reserve your spot.', 'dish-events' ); ?>
-					</p>
-				<?php endif; ?>
-			</div>
+        <?php // Booking CTA ?>
+        <div class="dish-class-booking dish-container">
+            <?php if ( $is_private ) : ?>
+                <p class="dish-booking-private">
+                    <?php esc_html_e( 'Private event', 'dish-events' ); ?>
+                </p>
+            <?php elseif ( $is_sold_out ) : ?>
+                <p class="dish-booking-sold-out">
+                    <?php esc_html_e( 'This class is sold out.', 'dish-events' ); ?>
+                </p>
+                <p class="dish-waitlist-hint">
+                    <?php esc_html_e( 'Waitlist coming soon — check back or contact us to be notified.', 'dish-events' ); ?>
+                </p>
+            <?php else : ?>
+                <p class="dish-booking-cta-notice">
+                    <?php esc_html_e( 'Online booking coming soon — please contact us to reserve your spot.', 'dish-events' ); ?>
+                </p>
+            <?php endif; ?>
+        </div>
 
-		</article>
-	</main>
+    </article>
+</main>
 
 <?php endwhile; ?>
 

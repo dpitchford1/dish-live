@@ -80,6 +80,11 @@ function basecamp_get_link_list( ?int $post_id = null ): array {
 }
 require_once __DIR__ . '/inc/theme-functions/basecamp-analytics.php';
 
+// Dish CPT breadcrumb template tag — dish_the_breadcrumb()
+if ( class_exists( 'Dish\Events\Plugin' ) ) {
+	require_once __DIR__ . '/dish-events/partials/breadcrumb.php';
+}
+
 // CPT scaffold — copy/rename for each project CPT, then uncomment and call ::init()
 // require_once __DIR__ . '/inc/theme-functions/basecamp-cpt-scaffold.php';
 // Basecamp_CPT_Scaffold::init();

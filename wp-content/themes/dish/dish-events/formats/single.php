@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Dish\Events\Data\ClassRepository;
-use Dish\Events\Data\FormatRepository;
 
 get_header();
 
@@ -55,120 +54,80 @@ while ( have_posts() ) :
 	}
 	?>
 
-	<main id="main-content" class="">
-		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+<main id="main-content" class="main--content">
+    <article id="post-<?php the_ID(); ?>">
 
-			<?php if ( has_post_thumbnail() ) : ?>
-				<div class="dish-format-hero">
-					<?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
-						'landscape_size' => 'basecamp-img-xl',
-						'loading'        => 'eager',
-						'fetchpriority'  => 'high',
-					] ); ?>
-				</div>
-			<?php endif; ?>
+        <?php if ( has_post_thumbnail() ) : ?>
+            <div class="dish-format-hero">
+                <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
+                    'landscape_size' => 'basecamp-img-xl',
+                    'loading'        => 'eager',
+                    'fetchpriority'  => 'high',
+                ] ); ?>
+            </div>
+        <?php endif; ?>
 
-			<header class="dish-format-header">
+        <header class="dish-format-header">
 
-			<?php
-			$archive_url   = get_post_type_archive_link( 'dish_format' );
-			$format_color  = (string) FormatRepository::get_meta( $format_id, 'dish_format_color' );
-			?>
-			<nav class="dish-breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'dish-events' ); ?>">
-				<ol
-					itemscope
-					itemtype="https://schema.org/BreadcrumbList"
-					class="dish-breadcrumb__list"
-				>
-					<!-- Level 1: Classes archive -->
-					<li
-						class="dish-breadcrumb__item"
-						itemprop="itemListElement"
-						itemscope
-						itemtype="https://schema.org/ListItem"
-					>
-						<a itemprop="item" href="<?php echo esc_url( $archive_url ); ?>">
-							<span itemprop="name"><?php esc_html_e( 'Classes', 'dish-events' ); ?></span>
-						</a>
-						<meta itemprop="position" content="1">
-					</li>
+		<?php dish_the_breadcrumb(); ?>
 
-					<!-- Level 2: Format (current page) -->
-					<li
-						class="dish-breadcrumb__item dish-breadcrumb__item--current"
-						itemprop="itemListElement"
-						itemscope
-						itemtype="https://schema.org/ListItem"
-						aria-current="page"
-					>
-						<span
-							itemprop="item"
-							<?php if ( $format_color ) : ?>class="dish-format-pill" style="--format-color:<?php echo esc_attr( $format_color ); ?>"<?php endif; ?>
-						>
-							<span itemprop="name"><?php the_title(); ?></span>
-						</span>
-						<meta itemprop="position" content="2">
-					</li>
-				</ol>
-			</nav>
+        <h1 class="dish-format-title"><?php the_title(); ?></h1>
 
-<h1 class="dish-format-title"><?php the_title(); ?></h1>
+        <?php if ( has_excerpt() ) : ?>
+                <p class="dish-format-excerpt"><?php the_excerpt(); ?></p>
+            <?php endif; ?>
+        </header>
 
-			<?php if ( has_excerpt() ) : ?>
-					<p class="dish-format-excerpt"><?php the_excerpt(); ?></p>
-				<?php endif; ?>
-			</header>
+        <?php if ( get_the_content() ) : ?>
+            <div class="dish-format-content dish-content">
+                <?php the_content(); ?>
+            </div>
+        <?php endif; ?>
 
-			<?php if ( get_the_content() ) : ?>
-				<div class="dish-format-content dish-content">
-					<?php the_content(); ?>
-				</div>
-			<?php endif; ?>
+        <?php if ( ! empty( $upcoming_classes ) ) : ?>
+            <section class="dish-upcoming-listing">
+                <h2 class="dish-upcoming-listing__heading">
+                    <?php
+                    echo esc_html( sprintf(
+                        /* translators: %s: format name e.g. "Hands On" */
+                        __( 'Upcoming %s Classes', 'dish-events' ),
+                        $format_title
+                    ) );
+                    ?>
+                </h2>
+                <div class="dish-class-grid">
+                    <?php foreach ( $upcoming_classes as $class ) : ?>
+                        <?php include locate_template( 'dish-events/classes/card.php' ); ?>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endif; ?>
 
-			<?php if ( ! empty( $upcoming_classes ) ) : ?>
-				<section class="dish-upcoming-listing">
-					<h2 class="dish-upcoming-listing__heading">
-						<?php
-						echo esc_html( sprintf(
-							/* translators: %s: format name e.g. "Hands On" */
-							__( 'Upcoming %s Classes', 'dish-events' ),
-							$format_title
-						) );
-						?>
-					</h2>
-					<div class="dish-class-grid">
-						<?php foreach ( $upcoming_classes as $class ) : ?>
-							<?php include locate_template( 'dish-events/classes/card.php' ); ?>
-						<?php endforeach; ?>
-					</div>
-				</section>
-			<?php endif; ?>
+        <?php if ( ! empty( $templates ) ) : ?>
+            <section class="dish-template-listing">
+                <h2 class="dish-template-listing__heading">
+                    <?php
+                    echo esc_html( sprintf(
+                        /* translators: %s: format name e.g. "Hands On" */
+                        __( 'Our %s Class Types', 'dish-events' ),
+                        $format_title
+                    ) );
+                    ?>
+                </h2>
+                <div class="dish-template-grid">
+                    <?php foreach ( $templates as $template ) : ?>
+                        <?php include locate_template( 'dish-events/class-templates/card.php' ); ?>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php else : ?>
+            <p class="dish-no-classes">
+                <?php esc_html_e( 'No classes currently available in this format.', 'dish-events' ); ?>
+            </p>
+        <?php endif; ?>
 
-			<?php if ( ! empty( $templates ) ) : ?>
-				<section class="dish-template-listing">
-					<h2 class="dish-template-listing__heading">
-						<?php
-						echo esc_html( sprintf(
-							/* translators: %s: format name e.g. "Hands On" */
-							__( 'Our %s Class Types', 'dish-events' ),
-							$format_title
-						) );
-						?>
-					</h2>
-					<div class="dish-template-grid">
-						<?php foreach ( $templates as $template ) : ?>
-							<?php include locate_template( 'dish-events/class-templates/card.php' ); ?>
-						<?php endforeach; ?>
-					</div>
-				</section>
-			<?php else : ?>
-				<p class="dish-no-classes">
-					<?php esc_html_e( 'No classes currently available in this format.', 'dish-events' ); ?>
-				</p>
-			<?php endif; ?>
-
-		</article>
-	</main>
+    </article>
+</main>
 
 <?php endwhile; ?>
 
