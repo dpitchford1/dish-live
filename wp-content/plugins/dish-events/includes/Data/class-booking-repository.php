@@ -358,4 +358,133 @@ final class BookingRepository {
 		return (int) $wpdb->get_var( $sql );
 		// phpcs:enable
 	}
+
+	// -------------------------------------------------------------------------
+	// Meta accessors
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Read a single meta value for a dish_booking post.
+	 *
+	 * Centralises all get_post_meta() calls so no other class reaches into
+	 * wp_postmeta directly for booking records.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param string $key     Meta key.
+	 * @param mixed  $default Returned when the meta key is absent or empty.
+	 * @return mixed
+	 */
+	public static function get_meta( int $post_id, string $key, mixed $default = '' ): mixed {
+		$value = get_post_meta( $post_id, $key, true );
+		return ( $value !== '' && $value !== false ) ? $value : $default;
+	}
+
+	/**
+	 * Write a single meta value for a dish_booking post.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param string $key     Meta key.
+	 * @param mixed  $value   Value to store.
+	 * @return bool
+	 */
+	public static function set_meta( int $post_id, string $key, mixed $value ): bool {
+		return (bool) update_post_meta( $post_id, $key, $value );
+	}
+
+	// -------------------------------------------------------------------------
+	// Account / user management
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Link a WP user account to a booking after checkout account creation.
+	 *
+	 * @param int $booking_id dish_booking post ID.
+	 * @param int $user_id    WP user ID.
+	 */
+	public static function link_user( int $booking_id, int $user_id ): void {
+		update_post_meta( $booking_id, 'dish_customer_user_id', $user_id );
+	}
+
+	/**
+	 * Anonymise all bookings for a user who is deleting their account.
+	 *
+	 * Clears PII (name, phone, user link) from every booking linked to the
+	 * account — by user ID or by email. The customer email is intentionally
+	 * preserved on each booking post as a payment-reconciliation reference.
+	 *
+	 * @param int    $user_id    WP user ID.
+	 * @param string $email      Registered email address of the account.
+	 */
+	public static function anonymise_for_user( int $user_id, string $email ): void {
+		global $wpdb;
+
+		// Collect booking IDs linked by user ID.
+		$uid_booking_ids = $wpdb->get_col( $wpdb->prepare(
+			"SELECT post_id FROM {$wpdb->postmeta}
+			 WHERE meta_key = 'dish_customer_user_id'
+			   AND meta_value = %d",
+			$user_id
+		) );
+
+		// Collect booking IDs linked by email (captures pre-account guest bookings).
+		$email_booking_ids = $wpdb->get_col( $wpdb->prepare(
+			"SELECT post_id FROM {$wpdb->postmeta}
+			 WHERE meta_key = 'dish_customer_email'
+			   AND meta_value = %s",
+			$email
+		) );
+
+		$all_ids = array_unique( array_merge(
+			array_map( 'intval', (array) $uid_booking_ids ),
+			array_map( 'intval', (array) $email_booking_ids )
+		) );
+
+		foreach ( $all_ids as $booking_id ) {
+			update_post_meta( $booking_id, 'dish_customer_name',    '' );
+			update_post_meta( $booking_id, 'dish_customer_phone',   '' );
+			update_post_meta( $booking_id, 'dish_customer_user_id', 0  );
+		}
+	}
+
+	// -------------------------------------------------------------------------
+	// Booking key helpers
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Return (and lazily create) the URL-safe verification key for a booking.
+	 *
+	 * Stored as `dish_booking_key` post meta. Generated once on first call.
+	 *
+	 * @param int $booking_id dish_booking post ID.
+	 * @return string 12-character hex key.
+	 */
+	public static function ensure_booking_key( int $booking_id ): string {
+		$key = (string) get_post_meta( $booking_id, 'dish_booking_key', true );
+
+		if ( '' === $key ) {
+			$key = substr( bin2hex( random_bytes( 8 ) ), 0, 12 );
+			update_post_meta( $booking_id, 'dish_booking_key', $key );
+		}
+
+		return $key;
+	}
+
+	/**
+	 * Verify a booking key matches the one stored for the given booking.
+	 *
+	 * Uses hash_equals() to prevent timing attacks.
+	 *
+	 * @param int    $booking_id dish_booking post ID.
+	 * @param string $key        Key to verify.
+	 * @return bool
+	 */
+	public static function verify_booking_key( int $booking_id, string $key ): bool {
+		if ( ! $booking_id || '' === $key ) {
+			return false;
+		}
+
+		$stored = (string) get_post_meta( $booking_id, 'dish_booking_key', true );
+
+		return '' !== $stored && hash_equals( $stored, $key );
+	}
 }

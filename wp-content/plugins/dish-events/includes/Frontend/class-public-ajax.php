@@ -27,6 +27,7 @@ use Dish\Events\Admin\Settings;
 use Dish\Events\Booking\BookingManager;
 use Dish\Events\Booking\CheckoutTimer;
 use Dish\Events\Core\Loader;
+use Dish\Events\Data\BookingRepository;
 
 /**
  * Class PublicAjax
@@ -199,8 +200,7 @@ final class PublicAjax {
 				// Store the customer name as the display name.
 				wp_update_user( [ 'ID' => $user_id, 'display_name' => $name, 'first_name' => $name ] );
 
-				// Link the booking to the new account.
-				update_post_meta( $booking_id, 'dish_customer_user_id', $user_id );
+				BookingRepository::link_user( $booking_id, $user_id );
 
 				// Log them in immediately.
 				wp_set_auth_cookie( $user_id, false );
@@ -208,7 +208,7 @@ final class PublicAjax {
 			// Non-fatal: if account creation fails we still have a valid booking.
 		}
 
-		$booking_key = self::ensure_booking_key( $booking_id );
+		$booking_key = BookingRepository::ensure_booking_key( $booking_id );
 
 		// Build confirmation URL.
 		$details_pid = (int) Settings::get( 'booking_details_page', 0 );
@@ -352,36 +352,8 @@ final class PublicAjax {
 			);
 		}
 
-		global $wpdb;
-
-		// ── Collect booking IDs linked by user ID ────────────────────────────
-		$uid_booking_ids = $wpdb->get_col( $wpdb->prepare(
-			"SELECT post_id FROM {$wpdb->postmeta}
-			 WHERE meta_key = 'dish_customer_user_id'
-			   AND meta_value = %d",
-			$user->ID
-		) );
-
-		// ── Collect booking IDs linked by email (catches pre-account guest bookings) ──
-		$email_booking_ids = $wpdb->get_col( $wpdb->prepare(
-			"SELECT post_id FROM {$wpdb->postmeta}
-			 WHERE meta_key = 'dish_customer_email'
-			   AND meta_value = %s",
-			$user->user_email
-		) );
-
-		$all_booking_ids = array_unique( array_merge(
-			array_map( 'intval', (array) $uid_booking_ids ),
-			array_map( 'intval', (array) $email_booking_ids )
-		) );
-
-		// ── Anonymise each booking ───────────────────────────────────────────
-		// dish_customer_email is intentionally left intact for payment records.
-		foreach ( $all_booking_ids as $booking_id ) {
-			update_post_meta( $booking_id, 'dish_customer_name',    '' );
-			update_post_meta( $booking_id, 'dish_customer_phone',   '' );
-			update_post_meta( $booking_id, 'dish_customer_user_id', 0  );
-		}
+		// ── Anonymise all bookings linked to this user ──────────────────────────
+		BookingRepository::anonymise_for_user( $user->ID, $user->user_email );
 
 		// ── Delete the WordPress user ────────────────────────────────────────
 		// wp_delete_user() lives in the admin includes.
@@ -406,45 +378,34 @@ final class PublicAjax {
 		] );
 	}
 
+	// -------------------------------------------------------------------------
+	// Booking key helpers (delegates to BookingRepository — canonical location)
+	// -------------------------------------------------------------------------
+
 	/**
 	 * Return (and lazily create) the URL-safe verification key for a booking.
 	 *
-	 * Stored as `dish_booking_key` post meta on the dish_booking post.
+	 * Delegates to BookingRepository::ensure_booking_key(). Kept here for
+	 * template backward-compatibility.
 	 *
 	 * @param int $booking_id dish_booking post ID.
 	 * @return string 12-character hex key.
 	 */
-	// -------------------------------------------------------------------------
-	// Booking key helpers (used by template for URL verification)
-	// -------------------------------------------------------------------------
-
 	public static function ensure_booking_key( int $booking_id ): string {
-		$key = (string) get_post_meta( $booking_id, 'dish_booking_key', true );
-
-		if ( '' === $key ) {
-			$key = substr( bin2hex( random_bytes( 8 ) ), 0, 12 );
-			update_post_meta( $booking_id, 'dish_booking_key', $key );
-		}
-
-		return $key;
+		return BookingRepository::ensure_booking_key( $booking_id );
 	}
 
 	/**
 	 * Verify a booking key matches the one stored for the given booking.
 	 *
-	 * Uses hash_equals() to prevent timing attacks.
+	 * Delegates to BookingRepository::verify_booking_key(). Kept here for
+	 * template backward-compatibility.
 	 *
 	 * @param int    $booking_id
 	 * @param string $key
 	 * @return bool
 	 */
 	public static function verify_booking_key( int $booking_id, string $key ): bool {
-		if ( ! $booking_id || '' === $key ) {
-			return false;
-		}
-
-		$stored = (string) get_post_meta( $booking_id, 'dish_booking_key', true );
-
-		return '' !== $stored && hash_equals( $stored, $key );
+		return BookingRepository::verify_booking_key( $booking_id, $key );
 	}
 }

@@ -239,7 +239,7 @@ get_header();
 						<?php if ( $date_label ) : ?>
 							<li class="dish-checkout__meta-item">
 								<span class="dish-checkout__meta-icon" aria-hidden="true">📅</span>
-								<time datetime="<?php echo esc_attr( gmdate( 'c', $start_epoch ) ); ?>">
+								<time datetime="<?php echo esc_attr( DateHelper::format( $start_epoch, 'c' ) ); ?>">
 									<?php echo esc_html( $date_label ); ?>
 								</time>
 							</li>

@@ -46,7 +46,7 @@ final class NotificationService {
 	 * @param Loader $loader
 	 */
 	public function register_hooks( Loader $loader ): void {
-		$loader->add_action( 'dish_booking_created',    $this, 'on_booking_created' );
+		$loader->add_action( 'dish_booking_created',    $this, 'on_booking_created', 10, 4 );
 		$loader->add_action( 'transition_post_status',  $this, 'on_status_transition', 10, 3 );
 	}
 
@@ -57,10 +57,16 @@ final class NotificationService {
 	/**
 	 * Fires when a new booking record is created (status: dish_pending, pre-payment).
 	 * Sends the studio notification immediately so they know a checkout started.
-	 *
-	 * @param int $booking_id
-	 */
-	public function on_booking_created( int $booking_id ): void {
+	 /**
+	  * Fires immediately after a booking is created (dish_pending).
+	  * Sends the studio copy of the new-booking notification.
+	  *
+	  * @param int $booking_id  dish_booking post ID.
+	  * @param int $class_id    dish_class post ID.
+	  * @param int $qty         Number of tickets booked.
+	  * @param int $total_cents Total charged in integer cents.
+	  */
+	public function on_booking_created( int $booking_id, int $class_id = 0, int $qty = 0, int $total_cents = 0 ): void {
 		$this->dispatch( 'email_admin_new_booking', $booking_id );
 	}
 

@@ -88,11 +88,32 @@ final class ClassesEndpoint {
 				],
 			]
 		);
+
+		register_rest_route(
+			'dish/v1',
+			'/ping',
+			[
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'ping' ],
+				'permission_callback' => '__return_true',
+			]
+		);
 	}
 
 	// -------------------------------------------------------------------------
-	// Endpoint handler
+	// Endpoint handlers
 	// -------------------------------------------------------------------------
+
+	/**
+	 * Health-check endpoint. Returns {"status":"ok"}.
+	 *
+	 * GET /wp-json/dish/v1/ping
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function ping(): WP_REST_Response {
+		return new WP_REST_Response( [ 'status' => 'ok' ], 200 );
+	}
 
 	/**
 	 * Return FullCalendar event objects for the requested date range.

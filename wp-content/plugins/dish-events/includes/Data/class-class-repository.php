@@ -153,6 +153,26 @@ final class ClassRepository {
 	}
 
 	/**
+	 * Return the most recently created class instances, ordered by post date
+	 * descending. Useful for selectors and reports dropdowns.
+	 *
+	 * @param int      $limit    Maximum number of results. Default 200.
+	 * @param string[] $statuses Post statuses to include. Default publish + future.
+	 * @return WP_Post[]
+	 */
+	public static function get_recent( int $limit = 200, array $statuses = [ 'publish', 'future' ] ): array {
+		$posts = get_posts( [
+			'post_type'      => 'dish_class',
+			'post_status'    => $statuses,
+			'posts_per_page' => $limit,
+			'orderby'        => 'date',
+			'order'          => 'DESC',
+		] );
+
+		return is_array( $posts ) ? $posts : [];
+	}
+
+	/**
 	 * Return all instances belonging to a given template.
 	 *
 	 * @param int    $template_id  dish_class_template post ID.
@@ -262,5 +282,45 @@ final class ClassRepository {
 		}
 
 		return $counts;
+	}
+
+	// -------------------------------------------------------------------------
+	// Meta accessors
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Read a single meta value for a dish_class post.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param string $key     Meta key.
+	 * @param mixed  $default Returned when the meta key is absent or empty.
+	 * @return mixed
+	 */
+	public static function get_meta( int $post_id, string $key, mixed $default = '' ): mixed {
+		$value = get_post_meta( $post_id, $key, true );
+		return ( $value !== '' && $value !== false ) ? $value : $default;
+	}
+
+	/**
+	 * Write a single meta value for a dish_class post.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param string $key     Meta key.
+	 * @param mixed  $value   Value to store.
+	 * @return bool
+	 */
+	public static function set_meta( int $post_id, string $key, mixed $value ): bool {
+		return (bool) update_post_meta( $post_id, $key, $value );
+	}
+
+	/**
+	 * Read all meta for a dish_class post (used by ClassColumns::duplicate()).
+	 *
+	 * @param int $post_id Post ID.
+	 * @return array<string, array<int, mixed>>
+	 */
+	public static function get_all_meta( int $post_id ): array {
+		$meta = get_post_meta( $post_id );
+		return is_array( $meta ) ? $meta : [];
 	}
 }

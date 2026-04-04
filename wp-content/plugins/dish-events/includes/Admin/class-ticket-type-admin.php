@@ -16,6 +16,9 @@ declare( strict_types=1 );
 
 namespace Dish\Events\Admin;
 
+use Dish\Events\Data\ClassTemplateRepository;
+use Dish\Events\Data\FormatRepository;
+
 // =============================================================================
 // Admin Controller
 // =============================================================================
@@ -129,13 +132,7 @@ final class TicketTypeAdmin {
 		$base = admin_url( 'edit.php?post_type=dish_class&page=' . self::PAGE_SLUG );
 
 		// All published formats, ordered by menu_order then title.
-		$formats = get_posts( [
-			'post_type'      => 'dish_format',
-			'post_status'    => 'publish',
-			'numberposts'    => -1,
-			'orderby'        => [ 'menu_order' => 'ASC', 'title' => 'ASC' ],
-		] );
-
+			$formats = FormatRepository::get_all_published();
 		// All ticket types — one query, grouped in PHP.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$all_rows = $wpdb->get_results(
@@ -182,7 +179,7 @@ final class TicketTypeAdmin {
 			if ( empty( $rows ) ) {
 				continue;
 			}
-			$color = (string) get_post_meta( $format->ID, 'dish_format_color', true ) ?: '#c0392b';
+				$color = (string) FormatRepository::get_meta( $format->ID, 'dish_format_color' ) ?: '#c0392b';
 			foreach ( $rows as $r ) {
 				$rendered_ids[] = (int) $r->id;
 			}
@@ -306,14 +303,7 @@ final class TicketTypeAdmin {
 		$booking_fees = is_array( $decoded ) ? $decoded : [];
 
 		// Published dish_format posts for the dropdown.
-		$categories = get_posts( [
-			'post_type'      => 'dish_format',
-			'post_status'    => 'publish',
-			'numberposts'    => -1,
-			'orderby'        => 'title',
-			'order'          => 'ASC',
-		] );
-
+			$categories = FormatRepository::get_all_published();
 		$base     = admin_url( 'edit.php?post_type=dish_class&page=' . self::PAGE_SLUG );
 		$list_url = $base;
 		$currency = Settings::get( 'currency_symbol', '$' );
@@ -350,7 +340,7 @@ final class TicketTypeAdmin {
 						<select id="type_category_id" name="type_category_id" required>
 						<option value=""><?php esc_html_e( '— Select format —', 'dish-events' ); ?></option>
 					<?php foreach ( $categories as $cat ) :
-						$default_cap = (int) get_post_meta( $cat->ID, 'dish_default_capacity', true );
+						$default_cap = (int) FormatRepository::get_meta( $cat->ID, 'dish_default_capacity', 0 );
 					?>
 						<option
 							value="<?php echo absint( $cat->ID ); ?>"
@@ -722,8 +712,8 @@ final class TicketTypeAdmin {
 					] );
 
 					if ( $template_id && ! is_wp_error( $template_id ) ) {
-						update_post_meta( $template_id, 'dish_ticket_type_id', $id );
-						update_post_meta( $template_id, 'dish_format_id',      $format_term_id );
+						ClassTemplateRepository::set_meta( $template_id, 'dish_ticket_type_id', $id );
+						ClassTemplateRepository::set_meta( $template_id, 'dish_format_id', $format_term_id );
 
 						wp_safe_redirect( add_query_arg( 'dish_from_ticket_type', '1', get_edit_post_link( $template_id, 'url' ) ) );
 						exit;
@@ -759,8 +749,8 @@ final class TicketTypeAdmin {
 					] );
 
 					if ( $template_id && ! is_wp_error( $template_id ) ) {
-						update_post_meta( $template_id, 'dish_ticket_type_id', $new_type_id );
-						update_post_meta( $template_id, 'dish_format_id',      $format_term_id );
+						ClassTemplateRepository::set_meta( $template_id, 'dish_ticket_type_id', $new_type_id );
+						ClassTemplateRepository::set_meta( $template_id, 'dish_format_id', $format_term_id );
 
 						// Drop straight into the new template so the admin can complete it.
 						wp_safe_redirect( add_query_arg( 'dish_from_ticket_type', '1', get_edit_post_link( $template_id, 'url' ) ) );

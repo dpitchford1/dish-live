@@ -20,7 +20,9 @@ declare( strict_types=1 );
 namespace Dish\Events\Admin;
 
 use Dish\Events\Core\Loader;
+use Dish\Events\Data\ClassRepository;
 use Dish\Events\Data\ReportsRepository;
+use Dish\Events\Helpers\DateHelper;
 use Dish\Events\Helpers\MoneyHelper;
 
 /**
@@ -85,14 +87,14 @@ final class Reports {
 			$status    = sanitize_key( $_GET['status'] ?? '' ); // phpcs:ignore WordPress.Security.NonceVerification
 			$search    = sanitize_text_field( wp_unslash( $_GET['search'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification
 			$rows      = ReportsRepository::export_bookings_csv( $date_from, $date_to, $status, $search );
-			$filename  = 'bookings-' . gmdate( 'Y-m-d' ) . '.csv';
+			$filename  = 'bookings-' . DateHelper::format( DateHelper::now(), 'Y-m-d' ) . '.csv';
 		} else {
 			$class_id = absint( $_GET['class_id'] ?? 0 ); // phpcs:ignore WordPress.Security.NonceVerification
 			if ( ! $class_id ) {
 				wp_die( esc_html__( 'No class selected for export.', 'dish-events' ) );
 			}
 			$rows     = ReportsRepository::export_attendees_csv( $class_id );
-			$filename = 'attendees-class-' . $class_id . '-' . gmdate( 'Y-m-d' ) . '.csv';
+			$filename = 'attendees-class-' . $class_id . '-' . DateHelper::format( DateHelper::now(), 'Y-m-d' ) . '.csv';
 		}
 
 		header( 'Content-Type: text/csv; charset=utf-8' );
@@ -296,7 +298,7 @@ final class Reports {
 				<?php foreach ( $rows as $row ) : ?>
 					<?php
 					$class_id    = (int) $row['class_id'];
-					$template_id = $class_id ? (int) get_post_meta( $class_id, 'dish_template_id', true ) : 0;
+					$template_id = $class_id ? (int) ClassRepository::get_meta( $class_id, 'dish_template_id', 0 ) : 0;
 					$class_title = $template_id ? get_the_title( $template_id ) : ( $class_id ? get_the_title( $class_id ) : '—' );
 					$edit_link   = get_edit_post_link( (int) $row['ID'] );
 					$total_disp  = MoneyHelper::cents_to_display( (int) $row['total_cents'] );
@@ -421,7 +423,7 @@ final class Reports {
 				foreach ( $rows as $row ) :
 					$grand_total += (int) $row['revenue'];
 					$class_id     = (int) $row['class_id'];
-					$template_id  = $class_id ? (int) get_post_meta( $class_id, 'dish_template_id', true ) : 0;
+					$template_id  = $class_id ? (int) ClassRepository::get_meta( $class_id, 'dish_template_id', 0 ) : 0;
 					$edit_link    = $template_id ? get_edit_post_link( $template_id ) : get_edit_post_link( $class_id );
 					?>
 					<tr>
@@ -470,16 +472,9 @@ final class Reports {
 				<select name="class_id" style="height:30px;width:100%;max-width:400px">
 					<option value=""><?php esc_html_e( '— choose a class —', 'dish-events' ); ?></option>
 					<?php
-					$classes = get_posts( [
-						'post_type'      => 'dish_class',
-						'post_status'    => [ 'publish', 'future' ],
-						'posts_per_page' => 200,
-						'orderby'        => 'date',
-						'order'          => 'DESC',
-						'fields'         => 'all',
-					] );
+					$classes = ClassRepository::get_recent( 200 );
 					foreach ( $classes as $cls ) :
-						$tpl_id = (int) get_post_meta( $cls->ID, 'dish_template_id', true );
+						$tpl_id = (int) ClassRepository::get_meta( $cls->ID, 'dish_template_id', 0 );
 						$label  = $tpl_id ? get_the_title( $tpl_id ) . ' — ' . wp_date( 'M j, Y', strtotime( $cls->post_date ) ) : $cls->post_title;
 						?>
 						<option value="<?php echo esc_attr( (string) $cls->ID ); ?>" <?php selected( $class_id, $cls->ID ); ?>>
@@ -501,9 +496,9 @@ final class Reports {
 		$attendees = ReportsRepository::get_attendees_for_class( $class_id );
 
 		// Class heading.
-		$tpl_id      = (int) get_post_meta( $class_id, 'dish_template_id', true );
+		$tpl_id      = (int) ClassRepository::get_meta( $class_id, 'dish_template_id', 0 );
 		$class_title = $tpl_id ? get_the_title( $tpl_id ) : get_the_title( $class_id );
-		$class_date  = wp_date( 'l, F j, Y', (int) get_post_meta( $class_id, 'dish_start_datetime', true ) );
+		$class_date  = wp_date( 'l, F j, Y', (int) ClassRepository::get_meta( $class_id, 'dish_start_datetime', 0 ) );
 		?>
 		<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap">
 			<div>

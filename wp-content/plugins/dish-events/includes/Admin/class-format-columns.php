@@ -16,6 +16,7 @@ declare( strict_types=1 );
 namespace Dish\Events\Admin;
 
 use Dish\Events\Core\Loader;
+use Dish\Events\Data\FormatRepository;
 
 /**
  * Class FormatColumns
@@ -72,7 +73,7 @@ final class FormatColumns {
 				break;
 
 			case 'dish_color':
-				$color = (string) get_post_meta( $post_id, 'dish_format_color', true );
+					$color = (string) FormatRepository::get_meta( $post_id, 'dish_format_color' );
 				if ( $color ) {
 					printf(
 						'<span style="display:inline-block;width:24px;height:24px;border-radius:50%%;background:%s;border:1px solid rgba(0,0,0,.15);vertical-align:middle" title="%s"></span> <code style="font-size:11px">%s</code>',

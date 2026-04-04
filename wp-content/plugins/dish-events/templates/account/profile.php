@@ -20,7 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Dish\Events\Data\BookingRepository;
-use Dish\Events\Frontend\PublicAjax;
 use Dish\Events\Helpers\DateHelper;
 use Dish\Events\Helpers\MoneyHelper;
 
@@ -98,7 +97,7 @@ $bookings = BookingRepository::get_for_customer( $email, 'any', (int) $user->ID 
 
 					// Build the booking details URL.
 					$details_page_id = (int) ( $dish_settings['booking_details_page'] ?? 0 );
-					$booking_key     = PublicAjax::ensure_booking_key( $booking->ID );
+					$booking_key     = BookingRepository::ensure_booking_key( $booking->ID );
 					$details_url     = $details_page_id
 						? add_query_arg(
 							[ 'booking_id' => $booking->ID, 'key' => $booking_key ],
@@ -123,7 +122,7 @@ $bookings = BookingRepository::get_for_customer( $email, 'any', (int) $user->ID 
 						</span>
 
 						<?php if ( $start ) : ?>
-							<time class="dish-booking-list__date" datetime="<?php echo esc_attr( gmdate( 'c', $start ) ); ?>">
+							<time class="dish-booking-list__date" datetime="<?php echo esc_attr( DateHelper::format( $start, 'c' ) ); ?>">
 								<?php echo esc_html( DateHelper::to_display( $start ) ); ?>
 							</time>
 						<?php endif; ?>

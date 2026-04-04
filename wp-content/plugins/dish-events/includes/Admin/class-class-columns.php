@@ -25,6 +25,7 @@ declare( strict_types=1 );
 namespace Dish\Events\Admin;
 
 use Dish\Events\Data\ClassRepository;
+use Dish\Events\Data\ClassTemplateRepository;
 use Dish\Events\Data\TicketTypeRepository;
 use Dish\Events\Helpers\MoneyHelper;
 
@@ -96,8 +97,8 @@ final class ClassColumns {
 		 switch ( $column ) {
 
 			case 'dish_series':
-				$parent_id   = (int) get_post_meta( $post_id, 'dish_recurrence_parent_id', true );
-				$rule        = json_decode( (string) get_post_meta( $post_id, 'dish_recurrence', true ), true );
+				$parent_id   = (int) ClassRepository::get_meta( $post_id, 'dish_recurrence_parent_id', 0 );
+				$rule        = json_decode( (string) ClassRepository::get_meta( $post_id, 'dish_recurrence' ), true );
 				$child_ids   = is_array( $rule['child_ids'] ?? null ) ? $rule['child_ids'] : [];
 				if ( $parent_id ) {
 					printf(
@@ -129,8 +130,8 @@ final class ClassColumns {
 			break;
 
 		case 'dish_date':
-				$start = (int) get_post_meta( $post_id, 'dish_start_datetime', true );
-				$end   = (int) get_post_meta( $post_id, 'dish_end_datetime', true );
+					$start = (int) ClassRepository::get_meta( $post_id, 'dish_start_datetime', 0 );
+					$end   = (int) ClassRepository::get_meta( $post_id, 'dish_end_datetime', 0 );
 				if ( $start > 0 ) {
 					$tz  = new \DateTimeZone( wp_timezone_string() );
 					$dt  = ( new \DateTimeImmutable( '@' . $start ) )->setTimezone( $tz );
@@ -147,7 +148,7 @@ final class ClassColumns {
 				break;
 
 			case 'dish_chefs':
-				$ids  = json_decode( (string) get_post_meta( $post_id, 'dish_chef_ids', true ), true );
+				$ids  = json_decode( (string) ClassRepository::get_meta( $post_id, 'dish_chef_ids' ), true );
 				$ids  = is_array( $ids ) ? array_filter( array_map( 'intval', $ids ) ) : [];
 				if ( empty( $ids ) ) {
 					echo '<span style="color:#999">—</span>';
@@ -165,8 +166,8 @@ final class ClassColumns {
 				break;
 
 			case 'dish_price':
-				$tpl_id  = (int) get_post_meta( $post_id, 'dish_template_id', true );
-				$type_id = $tpl_id ? (int) get_post_meta( $tpl_id, 'dish_ticket_type_id', true ) : 0;
+				$tpl_id  = (int) ClassRepository::get_meta( $post_id, 'dish_template_id', 0 );
+				$type_id = $tpl_id ? (int) ClassTemplateRepository::get_meta( $tpl_id, 'dish_ticket_type_id', 0 ) : 0;
 				if ( $type_id ) {
 					$ticket = TicketTypeRepository::get( $type_id );
 					if ( $ticket && isset( $ticket->price_cents ) ) {
@@ -179,8 +180,8 @@ final class ClassColumns {
 
 			case 'dish_format':
 				// Format lives on the template, not directly on the class instance.
-				$tpl_id    = (int) get_post_meta( $post_id, 'dish_template_id', true );
-				$fmt_id    = $tpl_id ? (int) get_post_meta( $tpl_id, 'dish_format_id', true ) : 0;
+				$tpl_id    = (int) ClassRepository::get_meta( $post_id, 'dish_template_id', 0 );
+				$fmt_id    = $tpl_id ? (int) ClassTemplateRepository::get_meta( $tpl_id, 'dish_format_id', 0 ) : 0;
 				$fmt_post  = $fmt_id ? get_post( $fmt_id ) : null;
 				if ( $fmt_post instanceof \WP_Post ) {
 					echo esc_html( $fmt_post->post_title );
@@ -208,7 +209,7 @@ final class ClassColumns {
 				break;
 
 			case 'dish_visibility':
-				$is_private = (bool) get_post_meta( $post_id, 'dish_is_private', true );
+				$is_private = (bool) ClassRepository::get_meta( $post_id, 'dish_is_private' );
 				if ( $is_private ) {
 					echo '<span style="color:#8b0000;background:#fff0f0;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap;">'
 						. esc_html__( 'Private', 'dish-events' )
@@ -222,8 +223,8 @@ final class ClassColumns {
 
 			case 'dish_capacity':
 				// dish_ticket_type_id lives on the template, not the class instance.
-				$tpl_id   = (int) get_post_meta( $post_id, 'dish_template_id', true );
-				$type_id  = $tpl_id ? (int) get_post_meta( $tpl_id, 'dish_ticket_type_id', true ) : 0;
+				$tpl_id   = (int) ClassRepository::get_meta( $post_id, 'dish_template_id', 0 );
+				$type_id  = $tpl_id ? (int) ClassTemplateRepository::get_meta( $tpl_id, 'dish_ticket_type_id', 0 ) : 0;
 				$booked   = ClassRepository::get_booked_count( $post_id );
 				$capacity = null;
 				if ( $type_id ) {
@@ -404,7 +405,7 @@ final class ClassColumns {
 
 		// Copy all meta except recurrence parent/child links.
 		$skip_meta = [ 'dish_recurrence_parent_id' ];
-		$all_meta  = get_post_meta( $post_id );
+		$all_meta  = ClassRepository::get_all_meta( $post_id );
 
 		foreach ( $all_meta as $key => $values ) {
 			if ( in_array( $key, $skip_meta, true ) ) {
@@ -415,7 +416,7 @@ final class ClassColumns {
 				$rule = json_decode( (string) ( $values[0] ?? '' ), true );
 				if ( is_array( $rule ) ) {
 					$rule['child_ids'] = [];
-					update_post_meta( $new_id, $key, wp_json_encode( $rule ) );
+					ClassRepository::set_meta( $new_id, $key, wp_json_encode( $rule ) );
 				}
 				continue;
 			}

@@ -28,7 +28,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Dish\Events\Data\BookingRepository;
 use Dish\Events\Data\ClassRepository;
 use Dish\Events\Admin\Settings;
-use Dish\Events\Frontend\PublicAjax;
 use Dish\Events\Helpers\DateHelper;
 use Dish\Events\Helpers\MoneyHelper;
 
@@ -36,7 +35,7 @@ use Dish\Events\Helpers\MoneyHelper;
 $booking_id = absint( $_GET['booking_id'] ?? 0 );
 $key        = preg_replace( '/[^a-f0-9]/', '', (string) ( $_GET['key'] ?? '' ) );
 
-if ( ! $booking_id || ! PublicAjax::verify_booking_key( $booking_id, $key ) ) {
+if ( ! $booking_id || ! BookingRepository::verify_booking_key( $booking_id, $key ) ) {
 	wp_redirect( home_url( '/' ) );
 	exit;
 }
@@ -154,7 +153,7 @@ get_header();
 				<?php if ( $date_label ) : ?>
 					<li class="dish-confirmation__meta-item">
 						<span class="dish-confirmation__meta-icon" aria-hidden="true">📅</span>
-						<time datetime="<?php echo esc_attr( gmdate( 'c', $start_epoch ) ); ?>">
+										<time datetime="<?php echo esc_attr( DateHelper::format( $start_epoch, 'c' ) ); ?>">
 							<?php echo esc_html( $date_label ); ?>
 						</time>
 					</li>

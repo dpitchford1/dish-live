@@ -223,9 +223,12 @@ final class BookingManager {
 		 * Fires after a new booking has been created successfully.
 		 *
 		 * @param int $booking_id  dish_booking post ID.
+		 * @param int $class_id    dish_class post ID.
+		 * @param int $qty         Number of tickets booked.
+		 * @param int $total_cents Total charged in integer cents.
 		 * @since 1.0.2
 		 */
-		do_action( 'dish_booking_created', $booking_id );
+		do_action( 'dish_booking_created', $booking_id, $class_id, $qty, $total_cents );
 
 		return $booking_id;
 	}

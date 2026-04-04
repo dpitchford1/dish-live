@@ -79,16 +79,17 @@ final class Plugin {
 		ThemeIntegration::init();
 
 		// Register custom cron schedule intervals.
-		add_filter( 'cron_schedules', [ $this, 'register_cron_schedules' ] );
+		$this->loader->add_filter( 'cron_schedules', $this, 'register_cron_schedules' );
 
 		// Extend post-thumbnail support to plugin CPTs.
 		// The Basecamp theme limits thumbnails to 'post' and 'page' only;
 		// WP merges arrays on repeated add_theme_support() calls, so this
 		// correctly appends our types without clobbering the theme's list.
-		add_action( 'after_setup_theme', [ $this, 'add_thumbnail_support' ], 11 );
+		$this->loader->add_action( 'after_setup_theme', $this, 'add_thumbnail_support', 11 );
 
 		// Phase 9: checkout-timer cleanup cron — fires every 15 minutes.
-		add_action( 'dish_cleanup_expired_bookings', [ 'Dish\\Events\\Booking\\CheckoutTimer', 'cleanup_expired' ] );
+		$checkout_timer = new \Dish\Events\Booking\CheckoutTimer();
+		$this->loader->add_action( 'dish_cleanup_expired_bookings', $checkout_timer, 'cleanup_expired' );
 
 		// Flush rewrite rules once after activation (when CPTs are registered in Phase 2+).
 		$this->loader->add_action( 'admin_init', $this, 'maybe_flush_rewrite_rules' );
@@ -126,18 +127,18 @@ final class Plugin {
 		$this->loader->add_filter( 'post_type_link', $ct_permalink, 'filter_post_type_link', 10, 2 );
 
 		// -------------------------------------------------------------------------
+		// Phase 2.5 — Frontend template loader
+		// -------------------------------------------------------------------------
+		$frontend = new \Dish\Events\Frontend\Frontend();
+		$frontend->register_hooks( $this->loader );
+
+		// -------------------------------------------------------------------------
 		// Phase 3 — Settings + Admin
 		// -------------------------------------------------------------------------
 		if ( is_admin() ) {
 			$admin = new \Dish\Events\Admin\Admin( $this->loader );
 			$admin->register_hooks();
 		}
-
-		// -------------------------------------------------------------------------
-		// Phase 2.5 — Frontend template loader
-		// -------------------------------------------------------------------------
-		$frontend = new \Dish\Events\Frontend\Frontend();
-		$frontend->register_hooks( $this->loader );
 
 		// -------------------------------------------------------------------------
 		// Phase 7 — Frontend Templates & Shortcodes

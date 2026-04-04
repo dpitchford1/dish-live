@@ -2,7 +2,7 @@
 /**
  * Plugin settings page + WP Settings API registration.
  *
- * All 9 tabs are rendered via query-param tab switching (?tab=<slug>).
+ * All 10 tabs are rendered via query-param tab switching (?tab=<slug>).
  * No JavaScript is required for tab navigation.
  *
  * All values live in a single serialised option: `dish_settings`.

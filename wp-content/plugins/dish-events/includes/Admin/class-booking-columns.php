@@ -27,6 +27,8 @@ declare( strict_types=1 );
 namespace Dish\Events\Admin;
 
 use Dish\Events\Core\Loader;
+use Dish\Events\Data\BookingRepository;
+use Dish\Events\Data\ClassRepository;
 use Dish\Events\Helpers\MoneyHelper;
 
 /**
@@ -89,7 +91,7 @@ final class BookingColumns {
 		switch ( $column ) {
 
 			case 'dish_bk_class':
-				$class_id = (int) get_post_meta( $post_id, 'dish_class_id', true );
+				$class_id = (int) BookingRepository::get_meta( $post_id, 'dish_class_id', 0 );
 				if ( $class_id ) {
 					$link = get_edit_post_link( $class_id );
 					printf(
@@ -103,8 +105,8 @@ final class BookingColumns {
 				break;
 
 			case 'dish_bk_customer':
-				$name  = (string) get_post_meta( $post_id, 'dish_customer_name',  true );
-				$email = (string) get_post_meta( $post_id, 'dish_customer_email', true );
+				$name  = (string) BookingRepository::get_meta( $post_id, 'dish_customer_name' );
+				$email = (string) BookingRepository::get_meta( $post_id, 'dish_customer_email' );
 				if ( $name || $email ) {
 					if ( $name ) {
 						echo esc_html( $name ) . '<br>';
@@ -122,8 +124,8 @@ final class BookingColumns {
 				break;
 
 			case 'dish_bk_ticket':
-				$type_id     = (int) get_post_meta( $post_id, 'dish_ticket_type_id', true );
-				$qty         = (int) get_post_meta( $post_id, 'dish_ticket_qty',     true );
+				$type_id = (int) BookingRepository::get_meta( $post_id, 'dish_ticket_type_id', 0 );
+				$qty     = (int) BookingRepository::get_meta( $post_id, 'dish_ticket_qty', 0 );
 				$ticket_type = $type_id ? \Dish\Events\Data\TicketTypeRepository::get( $type_id ) : null;
 				$name        = $ticket_type ? $ticket_type->name : '—';
 				if ( $name || $qty ) {
@@ -142,8 +144,8 @@ final class BookingColumns {
 				break;
 
 			case 'dish_bk_visibility':
-				$class_id   = (int) get_post_meta( $post_id, 'dish_class_id', true );
-				$is_private = $class_id && get_post_meta( $class_id, 'dish_is_private', true );
+				$class_id   = (int) BookingRepository::get_meta( $post_id, 'dish_class_id', 0 );
+				$is_private = $class_id && ClassRepository::get_meta( $class_id, 'dish_is_private' );
 				if ( $is_private ) {
 					echo '<span style="color:#8b0000;background:#fff0f0;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap;">'
 						. esc_html__( 'Private', 'dish-events' )

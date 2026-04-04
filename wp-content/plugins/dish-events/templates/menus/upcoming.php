@@ -50,7 +50,7 @@ $_friendly_labels = MenuMetaBox::FRIENDLY_FOR;
 		<header class="dish-menu-entry__header">
 			<?php if ( $_date_label ) : ?>
 				<time class="dish-menu-entry__date"
-				      datetime="<?php echo esc_attr( $_start ? gmdate( 'c', $_start ) : '' ); ?>">
+				      datetime="<?php echo esc_attr( $_start ? DateHelper::format( $_start, 'c' ) : '' ); ?>">
 					<?php echo esc_html( $_date_label ); ?>
 				</time>
 			<?php endif; ?>

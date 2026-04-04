@@ -121,7 +121,7 @@ final class TemplatePanel {
 					</th>
 					<td>
 						<input type="datetime-local" id="dish_booking_opens" name="dish_booking_opens"
-						       value="<?php echo $booking_opens ? esc_attr( gmdate( 'Y-m-d\TH:i', $booking_opens ) ) : ''; ?>"
+					       value="<?php echo esc_attr( $this->epoch_to_local( $booking_opens ) ); ?>"
 						       class="regular-text">
 						<p class="description">
 							<?php esc_html_e( 'Leave blank to use the ticket type\'s booking window rule.', 'dish-events' ); ?>

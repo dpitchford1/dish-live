@@ -116,7 +116,7 @@ while ( have_posts() ) :
 					<?php if ( $start ) : ?>
 						<div class="dish-class-meta__item">
 							<span class="dish-class-meta__label"><?php esc_html_e( 'Date & Time', 'dish-events' ); ?></span>
-							<time class="dish-class-meta__value" datetime="<?php echo esc_attr( gmdate( 'c', $start ) ); ?>">
+											<time class="dish-class-meta__value" datetime="<?php echo esc_attr( DateHelper::format( $start, 'c' ) ); ?>">
 								<?php echo esc_html( DateHelper::to_display( $start ) ); ?>
 							</time>
 						</div>
@@ -125,7 +125,7 @@ while ( have_posts() ) :
 					<?php if ( $end && $end > $start ) : ?>
 						<div class="dish-class-meta__item">
 							<span class="dish-class-meta__label"><?php esc_html_e( 'Ends', 'dish-events' ); ?></span>
-							<time class="dish-class-meta__value" datetime="<?php echo esc_attr( gmdate( 'c', $end ) ); ?>">
+											<time class="dish-class-meta__value" datetime="<?php echo esc_attr( DateHelper::format( $end, 'c' ) ); ?>">
 								<?php echo esc_html( DateHelper::to_display( $end ) ); ?>
 							</time>
 						</div>

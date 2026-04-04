@@ -207,4 +207,33 @@ final class ClassTemplateRepository {
 
 		return $result;
 	}
+
+	// -------------------------------------------------------------------------
+	// Meta accessors
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Read a single meta value for a dish_class_template post.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param string $key     Meta key.
+	 * @param mixed  $default Returned when the meta key is absent or empty.
+	 * @return mixed
+	 */
+	public static function get_meta( int $post_id, string $key, mixed $default = '' ): mixed {
+		$value = get_post_meta( $post_id, $key, true );
+		return ( $value !== '' && $value !== false ) ? $value : $default;
+	}
+
+	/**
+	 * Write a single meta value for a dish_class_template post.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param string $key     Meta key.
+	 * @param mixed  $value   Value to store.
+	 * @return bool
+	 */
+	public static function set_meta( int $post_id, string $key, mixed $value ): bool {
+		return (bool) update_post_meta( $post_id, $key, $value );
+	}
 }

@@ -27,6 +27,8 @@ declare( strict_types=1 );
 
 namespace Dish\Events\Admin;
 
+use Dish\Events\Data\ClassRepository;
+
 /**
  * Class ClassDetailsMetaBox
  */
@@ -65,7 +67,7 @@ final class ClassDetailsMetaBox {
 	 */
 	public function render( \WP_Post $post ): void {
 		wp_nonce_field( self::NONCE_ACTION, self::NONCE_FIELD );
-		$attendee_note = (string) get_post_meta( $post->ID, 'dish_attendee_note', true );
+		$attendee_note = (string) ClassRepository::get_meta( $post->ID, 'dish_attendee_note' );
 		?>
 		<div class="dish-class-details">
 			<?php foreach ( $this->sections() as $config ) : ?>
@@ -89,7 +91,7 @@ final class ClassDetailsMetaBox {
 	 * @param array<string,mixed>  $config
 	 */
 	private function render_section( int $post_id, array $config ): void {
-		$saved = get_post_meta( $post_id, $config['meta_key'], true );
+$saved = ClassRepository::get_meta( $post_id, $config['meta_key'] );
 
 		// Decode saved JSON, or fall back to defaults on new/empty post.
 		$items = [];
@@ -184,7 +186,7 @@ final class ClassDetailsMetaBox {
 			$this->save_section( $post_id, $config['prefix'], $config['meta_key'] );
 		}
 
-		update_post_meta( $post_id, 'dish_attendee_note', sanitize_textarea_field( $_POST['dish_attendee_note'] ?? '' ) );
+		ClassRepository::set_meta( $post_id, 'dish_attendee_note', sanitize_textarea_field( $_POST['dish_attendee_note'] ?? '' ) );
 	}
 
 	/**
@@ -217,7 +219,7 @@ final class ClassDetailsMetaBox {
 			];
 		}
 
-		update_post_meta( $post_id, $meta_key, wp_json_encode( $items ) );
+		ClassRepository::set_meta( $post_id, $meta_key, wp_json_encode( $items ) );
 	}
 
 	// -------------------------------------------------------------------------
