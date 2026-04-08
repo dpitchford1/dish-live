@@ -50,7 +50,7 @@
     // font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 /** HEADINGS - adjust which go where according to project specific html outline **/
-:where(h1, h2) {
+:where(h1, h2, h3) {
     font-family: "secondary", "Helvetica", Arial, sans-serif;
     font-weight: normal;
 }
@@ -58,7 +58,7 @@
 //     font-family: "tertiary", "Helvetica", Arial, sans-serif;
 //     font-weight: normal;
 // }
-:where(h3, h4, h5, h6) {
+:where(h4, h5, h6) {
     font-weight: normal;
 }
 
@@ -109,7 +109,7 @@ html:focus-within {
 *,
 ::before,
 ::after {
-    box-sizing: inherit; /* 1 */
+    box-sizing: border-box; /* 1 */
     background-repeat: no-repeat; /* 2 */
     text-decoration: none; /* 1 */
 }
@@ -133,6 +133,7 @@ html:focus-within {
     padding: 0;
     margin: 0;
     z-index: 0; /* doesn't hurt to set this */
+    color: #555;
 }
 
 /* Html structure

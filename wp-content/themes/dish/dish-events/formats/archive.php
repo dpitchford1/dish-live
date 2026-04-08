@@ -27,12 +27,11 @@ $formats = get_posts( [
 ] );
 ?>
 
-<main id="main-content" class="">
+<main id="main-content" class="main--content fluid-content">
+    <h1 class="dish-archive-title"><?php esc_html_e( 'Class Formats', 'dish-events' ); ?></h1>
 
 	<header class="dish-archive-header dish-container">
-		<h1 class="dish-archive-title">
-			<?php esc_html_e( 'Class Formats', 'dish-events' ); ?>
-		</h1>
+		
 		<?php if ( get_the_archive_description() ) : ?>
 			<div class="dish-archive-description">
 				<?php the_archive_description(); ?>
@@ -50,7 +49,7 @@ $formats = get_posts( [
 
 	<?php else : ?>
 
-		<div class="dish-card-grid dish-format-grid dish-container">
+		<div class="grid-general grid--3col">
 			<?php foreach ( $formats as $format ) : ?>
 				<?php include Frontend::locate( 'formats/card.php' ); ?>
 			<?php endforeach; ?>

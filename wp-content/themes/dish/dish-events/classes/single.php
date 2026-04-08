@@ -73,32 +73,27 @@ while ( have_posts() ) :
 	$format_post  = $format_id   ? get_post( $format_id ) : null;
 	$format_color = $format_post ? ( (string) get_post_meta( $format_id, 'dish_format_color', true ) ?: '#c0392b' ) : '';
 	?>
-
-<main id="main-content" class="main--content">
-    <article id="post-<?php the_ID(); ?>">
-
-        <?php
+<?php
         // Hero image: prefer class thumbnail, fall back to template.
         $thumb_id = get_post_thumbnail_id( $class_id ) ?: ( $template ? get_post_thumbnail_id( $template->ID ) : 0 );
         if ( $thumb_id ) :
         ?>
-            <div class="dish-class-hero">
+            <div class="hero">
                 <?php Basecamp_Frontend::picture( (int) $thumb_id, [
                     'landscape_size' => 'basecamp-img-xl',
-                    'img_class'      => 'dish-hero__img',
                     'loading'        => 'eager',
                     'fetchpriority'  => 'high',
                 ] ); ?>
             </div>
         <?php endif; ?>
+<main id="main-content" class="main--content">
+    <article id="post-<?php the_ID(); ?>">
+
+        
 
         <header class="dish-class-header dish-container">
-
 			<?php dish_the_breadcrumb(); ?>
-
-            <h1 class="dish-class-title">
-                <?php echo esc_html( $template ? $template->post_title : get_the_title() ); ?>
-            </h1>
+            <h2 class="dish-class-title"><?php echo esc_html( $template ? $template->post_title : get_the_title() ); ?></h2>
 
             <?php // Meta row: date, duration, price, spots. ?>
             <div class="dish-class-meta">
@@ -176,61 +171,7 @@ while ( have_posts() ) :
         <?php endif; ?>
 
         <?php /* Menu — items + dietary flags from the linked class template. */ ?>
-        <?php
-            $_m_menu_items    = $template_id ? (string) get_post_meta( $template_id, 'dish_menu_items',           true ) : '';
-            $_m_menu_dietary  = $template_id ? (array)  json_decode( get_post_meta( $template_id, 'dish_menu_dietary_flags', true ) ?: '[]', true ) : [];
-            $_m_menu_friendly = $template_id ? (array)  json_decode( get_post_meta( $template_id, 'dish_menu_friendly_for',  true ) ?: '[]', true ) : [];
-        ?>
-        <?php if ( $_m_menu_items || $_m_menu_dietary ) : ?>
-            <section class="dish-class-menu dish-container" aria-label="<?php esc_attr_e( 'Class menu', 'dish-events' ); ?>">
-                <h2 class="dish-class-menu__heading"><?php esc_html_e( 'The Menu', 'dish-events' ); ?></h2>
-
-                <?php if ( $_m_menu_items ) :
-                    $_m_items = array_filter( array_map( 'trim', explode( "\n", $_m_menu_items ) ) );
-                ?>
-                    <ul class="dish-menu-list">
-                        <?php foreach ( $_m_items as $_m_item ) : ?>
-                            <li class="dish-menu-list__item"><?php echo esc_html( $_m_item ); ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php endif; ?>
-
-                <?php if ( $_m_menu_dietary || $_m_menu_friendly ) :
-                    $_m_flag_labels     = \Dish\Events\Admin\MenuMetaBox::DIETARY_FLAGS;
-                    $_m_friendly_labels = \Dish\Events\Admin\MenuMetaBox::FRIENDLY_FOR;
-                ?>
-                    <div class="dish-menu-dietary">
-                        <?php if ( $_m_menu_dietary ) :
-                            $_m_flag_display = array_map(
-                                fn( $k ) => $_m_flag_labels[ $k ] ?? ucfirst( str_replace( '_', ' ', $k ) ),
-                                $_m_menu_dietary
-                            );
-                        ?>
-                            <p class="dish-menu-dietary__flags">
-                                <strong><?php esc_html_e( 'Dietary Flags:', 'dish-events' ); ?></strong>
-                                <?php echo esc_html( implode( ', ', $_m_flag_display ) ); ?>
-                            </p>
-                        <?php endif; ?>
-                        <?php if ( $_m_menu_friendly ) :
-                            $_m_friendly_display = array_map(
-                                fn( $k ) => $_m_friendly_labels[ $k ] ?? ucfirst( str_replace( '_', ' ', $k ) ),
-                                $_m_menu_friendly
-                            );
-                        ?>
-                            <p class="dish-menu-dietary__friendly">
-                                <?php echo esc_html( implode( '/', $_m_friendly_display ) . ' ' . __( 'Friendly', 'dish-events' ) ); ?>
-                            </p>
-                        <?php endif; ?>
-                        <?php if ( $_m_menu_dietary ) : ?>
-                            <p class="dish-menu-dietary__disclaimer">
-                                <?php esc_html_e( 'Please contact us if any of the above dietary flags apply to you to ensure we can accommodate your dietary requirements.', 'dish-events' ); ?>
-                            </p>
-                        <?php endif; ?>
-                    </div>
-                <?php endif; ?>
-
-            </section>
-        <?php endif; ?>
+        <?php dish_the_menu( $template_id ); ?>
 
         <?php if ( $my_seats > 0 ) : ?>
             <div class="dish-class-my-booking dish-container">

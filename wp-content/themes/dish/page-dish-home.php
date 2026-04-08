@@ -15,27 +15,65 @@
 
 use Dish\Events\Data\ChefRepository;
 use Dish\Events\Frontend\Frontend;
-use Dish\Events\Helpers\DateHelper;
-use Dish\Events\Helpers\MoneyHelper;
-use Dish\Events\Data\ClassTemplateRepository;
 
 get_header();
 ?>
-<main id="main-content" class="main--content">
-<?php /* ── 1. Hero ─────────────────────────────────────────────────────── */ ?>
 <?php if ( have_posts() ) : the_post(); ?>
-<section class="dish-home-hero fluid">
 
-    <h2 class="dish-home-hero__title"><?php the_title(); ?></h2>
+<?php /* ── Hero ─────────────────────────────────────────── */ ?>
+<?php if ( has_post_thumbnail() ) : ?>
+<div class="hero has--feature-content">
+    <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
+        'landscape_size' => 'basecamp-img-xl',
+        'loading'        => 'eager',
+        'fetchpriority'  => 'high',
+        'img_class'      => 'hero-img size-basecamp-img-xl',
+    ] ); ?>
+    <div class="hero-feature--content">
+        <h1 class="hero-title"><?php the_title(); ?></h1>
+        <?php if ( has_excerpt() ) : ?>
+            <p class="hero-excerpt"><?php the_excerpt(); ?></p>
+        <?php endif; ?>
+        <div class="hero-buttons">
+            <a href="/classes/calendar/" class="button button--primary"><?php esc_html_e( 'View Calendar', 'dish-events' ); ?></a>
+            <a href="<?php echo esc_url( get_post_type_archive_link( 'dish_format' ) ); ?>" class="button button--primary"><?php esc_html_e( 'Class Formats', 'dish-events' ); ?></a>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+<main id="main-content" class="main--content">
 
-    <div><?php the_content(); ?></div>
+<?php /* ── 1. Hero ─────────────────────────────────────────────────────── */ ?>
+
+<section class="content-region fluid-content">
+
+    <!-- <h1 class="page--heading"><?php the_title(); ?></h1> -->
+
+    <article class="entry--content text--centered"><?php the_content(); ?></article>
 
     <?php if ( has_excerpt() ) : ?>
-        <p class="dish-home-hero__lead"><?php the_excerpt(); ?></p>
+        <p class="excerpt"><?php the_excerpt(); ?></p>
     <?php endif; ?>
 
 </section>
-<?php endif; ?>
+
+<?php endif; ?><?php /* ── end while have_posts */ ?>
+
+<section class="content-region spotlight-wrapper fluid-content">
+    <div class="grid-general grid--3col">
+        <div class="region">
+            <h2>Cooking with Confidence</h2>
+            <p>Our classes are designed for home cooks of all skill levels. Whether you're a beginner looking to learn the basics or an experienced cook aiming to refine your techniques, we have something for everyone.</p>
+        </div>
+        <div class="region">
+            <h2>World-Class Chefs</h2>
+            <p>Learn from the best in the industry. Our chefs bring a wealth of experience and a passion for teaching, ensuring that you receive top-notch instruction in every class.</p>
+        </div>
+        <div class="region">
+            <h2>Community & Connection</h2>
+            <p>Join a vibrant community of food enthusiasts. Share your culinary journey, exchange tips, and connect with fellow home cooks who share your passion for great food.</p>
+        </div>
+</section>
 
 <?php /* ── 2. Class Formats ────────────────────────────────────────────── */ ?>
 <?php
@@ -48,100 +86,65 @@ $formats = get_posts( [
 ] );
 ?>
 <?php if ( ! empty( $formats ) ) : ?>
-<section class="dish-home-section dish-home-formats fluid">
-
-    <h2 class="dish-home-section__heading"><?php esc_html_e( 'Browse by Format', 'dish-events' ); ?></h2>
+<section class="content-region fluid-content">
+    <h2 class=""><?php esc_html_e( 'Class Formats', 'dish-events' ); ?></h2>
     <div class="grid-general grid--3col">
         <?php foreach ( $formats as $format ) : ?>
             <?php include Frontend::locate( 'formats/card.php' ); ?>
         <?php endforeach; ?>
     </div>
-    <p class="dish-home-section__more">
-        <a href="<?php echo esc_url( get_post_type_archive_link( 'dish_format' ) ); ?>" class="button">
-            <?php esc_html_e( 'View All Formats', 'dish-events' ); ?>
-        </a>
+    <p class="region">
+        <a href="<?php echo esc_url( get_post_type_archive_link( 'dish_format' ) ); ?>" class="button"><?php esc_html_e( 'View All Formats', 'dish-events' ); ?></a>
     </p>
 
 </section>
 <?php endif; ?>
 
-<?php /* ── 3. Upcoming Classes ─────────────────────────────────────────── */ ?>
 <?php
-$upcoming = get_posts( [
-	'post_type'      => 'dish_class',
-	'post_status'    => 'publish',
-	'posts_per_page' => 6,
-	'orderby'        => 'meta_value_num',
-	'meta_key'       => 'dish_start_datetime',
-	'order'          => 'ASC',
-	'meta_query'     => [
-		'relation' => 'AND',
-		[
-			'key'     => 'dish_start_datetime',
-			'value'   => time(),
-			'compare' => '>=',
-			'type'    => 'NUMERIC',
-		],
-		[
-			'relation' => 'OR',
-			[ 'key' => 'dish_is_private', 'compare' => 'NOT EXISTS' ],
-			[ 'key' => 'dish_is_private', 'value' => '1', 'compare' => '!=' ],
-		],
-	],
+/* ── Promo Pages — Gift Cards + Our Store ───────────────────────────── */
+// Slugs must match the page slugs set in WP Admin.
+$promo_pages = array_filter( [
+	get_page_by_path( 'gift-cards' ),
+	get_page_by_path( 'our-store' ),
 ] );
 ?>
-<?php if ( ! empty( $upcoming ) ) : ?>
-<section class="dish-home-section dish-home-upcoming fluid">
-
-    <h2 class="dish-home-section__heading"><?php esc_html_e( 'Upcoming Classes', 'dish-events' ); ?></h2>
-    <div class="grid-general grid--3col">
-        <?php foreach ( $upcoming as $class ) : ?>
-            <?php
-            $template_id  = (int) get_post_meta( $class->ID, 'dish_template_id', true );
-            $start        = (int) get_post_meta( $class->ID, 'dish_start_datetime', true );
-            $ticket_type  = $template_id ? ClassTemplateRepository::get_ticket_type( $template_id ) : null;
-            $price_label  = $ticket_type ? MoneyHelper::cents_to_display( (int) $ticket_type->price_cents ) : '';
-            $card_url     = $template_id ? get_permalink( $template_id ) . '?class_id=' . $class->ID : '#';
-            $date_str     = $start ? DateHelper::format( $start, 'j M Y · g:i a' ) : '';
-            $thumb        = $template_id && has_post_thumbnail( $template_id )
-                ? get_the_post_thumbnail( $template_id, 'medium' )
-                : '';
-            ?>
-            <article class="dish-card dish-class-card" id="class-<?php echo esc_attr( $class->ID ); ?>">
-                <?php if ( $thumb ) : ?>
-                    <a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__image-link" tabindex="-1" aria-hidden="true">
-                        <?php echo $thumb; ?>
-                    </a>
-                <?php endif; ?>
-                <div class="dish-card__body">
-                    <h3 class="dish-card__title">
-                        <a href="<?php echo esc_url( $card_url ); ?>">
-                            <?php echo esc_html( get_the_title( $template_id ?: $class->ID ) ); ?>
-                        </a>
-                    </h3>
-                    <?php if ( $date_str ) : ?>
-                        <p class="dish-card__date"><?php echo esc_html( $date_str ); ?></p>
-                    <?php endif; ?>
-                    <?php if ( $price_label ) : ?>
-                        <p class="dish-card__price"><?php echo esc_html( $price_label ); ?></p>
-                    <?php endif; ?>
-                    <a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__link button">
-                        <?php esc_html_e( 'Book Now', 'dish-events' ); ?>
-                    </a>
-                </div>
-            </article>
+<?php if ( ! empty( $promo_pages ) ) : ?>
+<section class="content-region spotlight-wrapper fluid-content">
+    <div class="grid-general grid--2col">
+        <?php foreach ( $promo_pages as $promo_page ) : ?>
+        <div class="region">
+            <?php if ( has_post_thumbnail( $promo_page->ID ) ) : ?>
+                <?php echo wp_get_attachment_image( get_post_thumbnail_id( $promo_page->ID ), 'basecamp-img-sq', false, [ 'loading' => 'lazy' ] ); ?>
+            <?php endif; ?>
+            <h3><a href="<?php echo esc_url( get_permalink( $promo_page->ID ) ); ?>"><?php echo esc_html( get_the_title( $promo_page->ID ) ); ?></a></h3>
+            <?php $excerpt = get_the_excerpt( $promo_page ); ?>
+            <?php if ( $excerpt ) : ?>
+                <p><?php echo esc_html( $excerpt ); ?></p>
+            <?php endif; ?>
+            <a href="<?php echo esc_url( get_permalink( $promo_page->ID ) ); ?>" class="button"><?php esc_html_e( 'Read More', 'basecamp' ); ?></a>
+        </div>
         <?php endforeach; ?>
     </div>
-
 </section>
 <?php endif; ?>
+
+<?php /* ── 3. Upcoming Classes ─────────────────────────────────────────── */ ?>
+<?php dish_the_upcoming_classes( [
+	'limit'         => 6,
+	'section_class' => 'dish-home-upcoming fluid-content',
+	'grid_class'    => 'grid-general grid--3col',
+    'dedupe_by_template'   => true,
+] ); ?>
+
+<?php /* ── 3.5. Class in the Spotlight ────────────────────────────────── */ ?>
+<?php dish_the_spotlight_class(); ?>
 
 <?php /* ── 4. Meet the Chefs ────────────────────────────────────────────── */ ?>
 <?php $chefs = ChefRepository::query( [ 'exclude_team' => true ] ); ?>
 <?php if ( ! empty( $chefs ) ) : ?>
-<section class="dish-home-section dish-home-chefs fluid">
+<section class="content-region fluid-content">
 
-    <h2 class="dish-home-section__heading"><?php esc_html_e( 'Meet the Chefs', 'dish-events' ); ?></h2>
+    <h2 class=""><?php esc_html_e( 'Meet the Chefs', 'dish-events' ); ?></h2>
 
     <div class="grid-general grid--4col">
         <?php foreach ( $chefs as $chef ) : ?>
@@ -149,11 +152,7 @@ $upcoming = get_posts( [
         <?php endforeach; ?>
     </div>
 
-    <p class="dish-home-section__more">
-        <a href="<?php echo esc_url( get_post_type_archive_link( 'dish_chef' ) ); ?>" class="button">
-            <?php esc_html_e( 'Meet All Chefs', 'dish-events' ); ?>
-        </a>
-    </p>
+    <p class="region"><a href="<?php echo esc_url( get_post_type_archive_link( 'dish_chef' ) ); ?>" class="button"><?php esc_html_e( 'Meet The Whole Team', 'dish-events' ); ?></a></p>
 
 </section>
 <?php endif; ?>

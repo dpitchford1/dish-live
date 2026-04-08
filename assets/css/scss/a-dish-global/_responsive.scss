@@ -1,76 +1,120 @@
 @use '../toolbox' as *;
 @use 'components/heros';
+@use 'components/breadcrumb';
+@use 'components/toast';
+@use 'components/faq';
 @use 'components/carousels';
-@use 'components/cards';
-@use 'components/content-menus';
-@use 'news';
-@use 'components/forms';
-@use 'components/featured-projects';
+@use 'components/buttons';
+
+@use 'pages/article-content';
+
+@use 'plugins/swiper';
+
 
 @mixin all() {
 
 @include respond-to(480) {
     @include heros.bp-480();
     @include carousels.bp-480();
-    @include content-menus.bp-480();
-    @include news.bp-480();
-    @include forms.bp-480();
-    @include featured-projects.bp-480();
-  }
-  @include respond-to(768) {
+    @include breadcrumb.bp-480();
+    @include toast.bp-480();
+    @include faq.bp-480();
+    @include buttons.bp-480();
+
+    @include article-content.bp-480();
+
+    @include swiper.bp-480();
+}
+
+@include respond-to(600) {
+    @include heros.bp-600();
+    @include carousels.bp-600();
+    @include breadcrumb.bp-600();
+    @include toast.bp-600();
+    @include faq.bp-600();
+    @include buttons.bp-600();
+
+    @include article-content.bp-600();
+
+    @include swiper.bp-600();
+}
+
+@include respond-to(768) {
     @include heros.bp-768();
     @include carousels.bp-768();
-    @include content-menus.bp-768();
-    @include news.bp-768();
-    @include forms.bp-768();
-    @include featured-projects.bp-768();
-  }
+    @include breadcrumb.bp-768();
+    @include toast.bp-768();
+    @include faq.bp-768();
+    @include buttons.bp-768();
 
-  @include respond-to(1024) {
+    @include article-content.bp-768();
+
+    @include swiper.bp-768();
+}
+
+@include respond-to(1024) {
     @include heros.bp-1024();
     @include carousels.bp-1024();
-    @include cards.bp-1024();
-    @include content-menus.bp-1024();
-    @include news.bp-1024();
-    @include forms.bp-1024();
-    @include featured-projects.bp-1024();
-  }
+    @include breadcrumb.bp-1024();
+    @include toast.bp-1024();
+    @include faq.bp-1024();
+    @include buttons.bp-1024();
 
-  @include respond-to(1280) {
-    @include carousels.bp-1280();
+    @include article-content.bp-1024();
+
+    @include swiper.bp-1024();
+}
+
+@include respond-to(1280) {
     @include heros.bp-1280();
-    @include cards.bp-1280();
-    @include content-menus.bp-1280();
-    @include news.bp-1280();
-    @include forms.bp-1280();
-    @include featured-projects.bp-1280();
-  }
+    @include carousels.bp-1280();
+    @include breadcrumb.bp-1280();
+    @include toast.bp-1280();
+    @include faq.bp-1280();
+    @include buttons.bp-1280();
 
-  @include respond-to(1440) {
+    @include article-content.bp-1280();
+
+    @include swiper.bp-1280();
+}
+
+@include respond-to(1440) {
     @include heros.bp-1440();
     @include carousels.bp-1440();
-    @include cards.bp-1440();
-    @include content-menus.bp-1440();
-    @include news.bp-1440();
-    @include forms.bp-1440();
-    @include featured-projects.bp-1440();
-  }
+    @include breadcrumb.bp-1440();
+    @include toast.bp-1440();
+    @include faq.bp-1440();
+    @include buttons.bp-1440();
 
-  @include respond-to(1600) {
+    @include article-content.bp-1440();
+
+    @include swiper.bp-1440();
+}
+
+@include respond-to(1600) {
     @include heros.bp-1600();
     @include carousels.bp-1600();
-    @include cards.bp-1600();
-    @include content-menus.bp-1600();
-    @include news.bp-1600();
-    @include forms.bp-1600();
-    @include featured-projects.bp-1600();
-  }
+    @include breadcrumb.bp-1600();
+    @include toast.bp-1600();
+    @include faq.bp-1600();
+    @include buttons.bp-1600();
 
-  @include respond-to(2100) {
+    @include article-content.bp-1600();
+
+    @include swiper.bp-1600();
+}
+
+@include respond-to(2100) {
     @include heros.bp-2100();
-    @include news.bp-2100();
-    @include forms.bp-2100();
-    @include featured-projects.bp-2100();
-  }
+    @include carousels.bp-2100();
+    @include breadcrumb.bp-2100();
+    @include toast.bp-2100();
+    @include faq.bp-2100();
+    @include buttons.bp-2100();
+
+    @include article-content.bp-2100();
+
+    @include swiper.bp-2100();
+}
 
 }

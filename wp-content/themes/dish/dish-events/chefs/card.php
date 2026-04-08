@@ -49,7 +49,7 @@ $has_thumb = has_post_thumbnail( $chef->ID );
 			<p class="dish-card__excerpt"><?php echo esc_html( $chef->post_excerpt ); ?></p>
 		<?php endif; ?>
 
-		<a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__link dish-button dish-button--secondary"><?php esc_html_e( 'View Profile', 'dish-events' ); ?></a>
+		<a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__link button button--secondary"><?php esc_html_e( 'View Profile', 'dish-events' ); ?></a>
 
 	</div>
 </article>

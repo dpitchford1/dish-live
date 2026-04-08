@@ -12,7 +12,17 @@
 ?>
 
 <?php get_header(); ?>
-<div class="fluid has--aside">
+<?php /* ── Hero ─────────────────────────────────────────── */ ?>
+<?php if ( has_post_thumbnail() ) : ?>
+<div class="hero has--feature-content">
+    <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
+        'landscape_size' => 'basecamp-img-xl',
+        'loading'        => 'eager',
+        'fetchpriority'  => 'high',
+    ] ); ?>
+</div>
+<?php endif; ?>
+<div class="fluid-content has--aside">
 
 <main id="main-content" class="main--content">
 

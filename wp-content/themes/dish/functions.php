@@ -41,6 +41,17 @@ require_once __DIR__ . '/inc/frontend/class-basecamp-frontend.php';
 class_alias( 'Basecamp\Frontend\Frontend', 'Basecamp_Frontend' );
 require_once __DIR__ . '/inc/frontend/remove-bloat.php';
 require_once __DIR__ . '/inc/frontend/class-basecamp-cookie-consent.php';
+require_once __DIR__ . '/inc/frontend/class-basecamp-toast.php';
+
+/**
+ * Template tag — output the announcement toast bar.
+ * Exits silently when disabled or unconfigured.
+ * Drop <?php the_toast(); ?> anywhere in a template.
+ */
+function the_toast(): void {
+	\Basecamp\Frontend\Toast::render();
+}
+
 require_once __DIR__ . '/inc/frontend/basecamp-page-helpers.php';
 //require_once __DIR__ . '/inc/frontend/class-basecamp-video-carousel-metabox.php';
 $basecamp_frontend = new Basecamp_Frontend();

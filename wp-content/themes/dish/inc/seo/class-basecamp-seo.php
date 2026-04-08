@@ -16,7 +16,7 @@ use Basecamp\SEO\Schema;
 require_once __DIR__ . '/basecamp-title-functions.php';
 
 // Dish Events SEO extensions — only load when the plugin is active.
-if ( class_exists( 'Dish\\Events\\Plugin' ) ) {
+if ( defined( 'DISH_EVENTS_VERSION' ) ) {
 	require_once __DIR__ . '/basecamp-dish-title.php';
 	require_once __DIR__ . '/basecamp-dish-schema.php';
 }

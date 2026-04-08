@@ -16,6 +16,8 @@
 <link rel="stylesheet" href="/assets/css/build/a-dish-base.min.css" media="screen">
 <link rel="stylesheet" href="/assets/css/build/a-dish-global.min.css" media="screen">
 
+<link rel="stylesheet" href="/assets/css/resources/dish-events.min.css" media="screen">
+
 <?php /* css files 
 <link rel="stylesheet" href="/assets/css/build/normalize.min.css" media="screen"> */ ?>
 <!-- <link rel="stylesheet" href="/assets/css/build/kaneism-base-layout.min.css" media="screen"> -->
@@ -57,9 +59,9 @@
 <div class="region is--fixed global-header" data-nav-slide="slide" id="global-header">
 	<header class="brand-header fluid ov cf">
         <?php if ( is_front_page() ) : ?>
-            <h1 class="brand brand-fs" id="logo"><span class="is--logo">Dish Cooking Studio</span></h1>
+            <div class="brand brand-fs" id="logo"><span class="is--logo">Dish Cooking Studio</span></div>
         <?php else : ?>
-            <h1 class="brand brand-fs" id="logo"><a class="is--logo" href="/" rel="home">Dish Cooking Studio</a></h1>
+            <div class="brand brand-fs" id="logo"><a class="is--logo" href="/" rel="home">Dish Cooking Studio</a></div>
         <?php endif ?>
         <?php /* Global Menus */ ?>
         <div class="menu-global">
@@ -85,5 +87,6 @@
     </header>
 </div>
 <?php /* Header End */ ?>
+<?php the_toast(); ?>
 <hr class="hide-divider">
 

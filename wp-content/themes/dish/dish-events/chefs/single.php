@@ -77,7 +77,7 @@ while ( have_posts() ) :
 
             <?php if ( has_post_thumbnail() ) : ?>
                 <div class="dish-chef-photo-wrap">
-                    <?php echo wp_get_attachment_image( get_post_thumbnail_id(), 'portait-m', false, [ 'class' => 'dish-chef-photo', 'loading' => 'eager', 'sizes' => '160px' ] ); ?>
+                    <?php echo wp_get_attachment_image( get_post_thumbnail_id(), 'portait-m', false, [ 'class' => 'dish-chef-photo', 'loading' => 'eager' ] ); ?>
                 </div>
             <?php endif; ?>
 
@@ -128,7 +128,7 @@ while ( have_posts() ) :
 						?>
 							<figure class="dish-gallery-grid__item">
 								<a href="<?php echo esc_url( $src[0] ); ?>" target="_blank" rel="noopener noreferrer">
-									<?php echo wp_get_attachment_image( $gid, 'basecamp-img-sm', false, [ 'alt' => $alt, 'loading' => 'lazy', 'sizes' => '(max-width: 600px) 100vw, 50vw' ] ); ?>
+									<?php echo wp_get_attachment_image( $gid, 'basecamp-img-sm', false, [ 'alt' => $alt, 'loading' => 'lazy' ] ); ?>
 								</a>
 							</figure>
 						<?php endforeach; ?>

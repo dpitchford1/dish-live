@@ -128,6 +128,8 @@ final class ClassTemplateAdmin {
 		$event_theme    = (string) get_post_meta( $post->ID, 'dish_event_theme', true );
 
 		$booking_type      = (string) get_post_meta( $post->ID, 'dish_booking_type', true ) ?: 'online';
+		$is_featured       = (bool)   get_post_meta( $post->ID, 'dish_is_featured',      true );
+		$is_spotlight      = (bool)   get_post_meta( $post->ID, 'dish_is_spotlight',     true );
 		$is_guest_chef     = (bool)   get_post_meta( $post->ID, 'dish_is_guest_chef',    true );
 		$guest_chef_name   = (string) get_post_meta( $post->ID, 'dish_guest_chef_name',  true );
 		$guest_chef_role   = (string) get_post_meta( $post->ID, 'dish_guest_chef_role',  true );
@@ -310,6 +312,24 @@ final class ClassTemplateAdmin {
 				</p>
 			</div>
 
+			<?php /* ---- Featured flag ---------------------------------------------- */ ?>
+			<div class="dish-field">
+				<label>
+					<input type="checkbox" name="dish_is_featured" value="1" <?php checked( $is_featured ); ?>>
+					<?php esc_html_e( 'Mark as featured class', 'dish-events' ); ?>
+				</label>
+				<p class="description"><?php esc_html_e( 'Featured classes are pulled out of the standard grid and displayed prominently on the format page.', 'dish-events' ); ?></p>
+			</div>
+
+			<?php /* ---- Spotlight flag -------------------------------------------- */ ?>
+			<div class="dish-field">
+				<label>
+					<input type="checkbox" name="dish_is_spotlight" value="1" <?php checked( $is_spotlight ); ?>>
+					<?php esc_html_e( 'Class in the Spotlight', 'dish-events' ); ?>
+				</label>
+				<p class="description"><?php esc_html_e( 'Promotes this template as the “Class in the Spotlight” component. Only one template can hold this flag — saving will automatically remove it from any other template.', 'dish-events' ); ?></p>
+			</div>
+
 		</div>
 
 		<?php
@@ -350,6 +370,23 @@ final class ClassTemplateAdmin {
 		update_post_meta( $post_id, 'dish_is_guest_chef', ! empty( $_POST['dish_is_guest_chef'] ) ? 1 : 0 );
 		update_post_meta( $post_id, 'dish_guest_chef_name', sanitize_text_field( wp_unslash( $_POST['dish_guest_chef_name'] ?? '' ) ) );
 		update_post_meta( $post_id, 'dish_guest_chef_role', sanitize_text_field( wp_unslash( $_POST['dish_guest_chef_role'] ?? '' ) ) );
+
+		// Featured flag.
+		update_post_meta( $post_id, 'dish_is_featured', ! empty( $_POST['dish_is_featured'] ) ? 1 : 0 );
+
+		// Spotlight — only one template can hold this flag at a time.
+		$is_spotlight = ! empty( $_POST['dish_is_spotlight'] );
+		if ( $is_spotlight ) {
+			global $wpdb;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->query(
+				$wpdb->prepare(
+					"DELETE FROM {$wpdb->postmeta} WHERE meta_key = 'dish_is_spotlight' AND meta_value = '1' AND post_id != %d",
+					$post_id
+				)
+			);
+		}
+		update_post_meta( $post_id, 'dish_is_spotlight', $is_spotlight ? 1 : 0 );
 
 		if ( $booking_type === 'enquiry' ) {
 			// Ticket type is optional for enquiry; used only to surface capacity on the frontend.

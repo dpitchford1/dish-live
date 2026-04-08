@@ -23,10 +23,10 @@ use Dish\Events\Helpers\DateHelper;
 use Dish\Events\Helpers\MoneyHelper;
 
 $card_url     = get_permalink( $template );
+$is_featured  = (bool) get_post_meta( $template->ID, 'dish_is_featured', true );
 $format_id    = (int) get_post_meta( $template->ID, 'dish_format_id', true );
 $format_post  = $format_id ? get_post( $format_id ) : null;
 $format_color = $format_post ? ( (string) get_post_meta( $format_id, 'dish_format_color', true ) ?: '#c0392b' ) : '';
-$format_url   = $format_post ? get_permalink( $format_post ) : '';
 $ticket_type  = ClassTemplateRepository::get_ticket_type( $template->ID );
 $price_label = $ticket_type ? MoneyHelper::cents_to_display( (int) $ticket_type->price_cents ) : '';
 
@@ -66,7 +66,10 @@ if ( ! empty( $next_arr ) ) {
 	$next_date  = $next_start ? DateHelper::format( $next_start, 'j M Y' ) : '';
 }
 ?>
-<article class="dish-card dish-template-card" id="template-<?php echo esc_attr( $template->ID ); ?>">
+<article class="dish-card dish-template-card<?php echo $is_featured ? ' dish-card--featured' : ''; ?>" id="template-<?php echo esc_attr( $template->ID ); ?>">
+	<?php if ( $is_featured ) : ?>
+		<span class="dish-card__featured-badge" aria-label="<?php esc_attr_e( 'Featured', 'dish-events' ); ?>"><?php esc_html_e( 'Featured', 'dish-events' ); ?></span>
+	<?php endif; ?>
 
 	<?php if ( has_post_thumbnail( $template->ID ) ) : ?>
 		<a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__image-link" tabindex="-1" aria-hidden="true">
@@ -74,11 +77,9 @@ if ( ! empty( $next_arr ) ) {
 		</a>
 	<?php endif; ?>
 
-	<div class="dish-card__body"> 
-		<?php if ( $format_post && $format_color ) : ?>
-			<a href="<?php echo esc_url( $format_url ); ?>" class="dish-format-pill" style="--format-color:<?php echo esc_attr( $format_color ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Format: %s', 'dish-events' ), $format_post->post_title ) ); ?>">
-				<?php echo esc_html( $format_post->post_title ); ?>
-			</a>
+	<div class="dish-card__body">
+		<?php if ( empty( $suppress_format_pill ) ) : ?>
+			<?php dish_the_format_pill( $format_post, $format_color ); ?>
 		<?php endif; ?>
 
 		<h3 class="dish-card__title">

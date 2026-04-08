@@ -31,8 +31,9 @@ use Dish\Events\Admin\Panels\SettingsPanel;
  */
 final class ClassMetaBox {
 
-	private const NONCE_ACTION = 'dish_save_class_meta';
-	private const NONCE_FIELD  = 'dish_class_meta_nonce';
+	private const NONCE_ACTION    = 'dish_save_class_meta';
+	private const NONCE_FIELD     = 'dish_class_meta_nonce';
+	private const ERRORS_TRANSIENT = 'dish_class_errors_';
 
 	private DatetimePanel $datetime;
 	private TemplatePanel $template;
@@ -152,6 +153,12 @@ final class ClassMetaBox {
 			return;
 		}
 
+		// Validate required fields and surface errors via admin_notices.
+		$errors = self::validate_post_data();
+		if ( ! empty( $errors ) ) {
+			set_transient( self::ERRORS_TRANSIENT . $post_id, $errors, 60 );
+		}
+
 		$this->datetime->save( $post_id );
 		$this->template->save( $post_id );
 		$this->details->save( $post_id );
@@ -164,6 +171,113 @@ final class ClassMetaBox {
 				( new \Dish\Events\Recurrence\RecurrenceManager() )->update_series( $post_id );
 			} );
 		}
+	}
+
+	// -------------------------------------------------------------------------
+	// Validation
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Validate required class fields from $_POST.
+	 *
+	 * @return string[] Error messages; empty array if all valid.
+	 */
+	private static function validate_post_data(): array {
+		$errors    = [];
+		$start_raw = sanitize_text_field( wp_unslash( $_POST['dish_start_datetime'] ?? '' ) );
+		$end_raw   = sanitize_text_field( wp_unslash( $_POST['dish_end_datetime']   ?? '' ) );
+		$template  = absint( $_POST['dish_template_id'] ?? 0 );
+
+		if ( empty( $start_raw ) ) {
+			$errors[] = __( 'Start date & time is required (Date & Time tab).', 'dish-events' );
+		}
+
+		if ( empty( $end_raw ) ) {
+			$errors[] = __( 'End date & time is required (Date & Time tab).', 'dish-events' );
+		}
+
+		if ( ! empty( $start_raw ) && ! empty( $end_raw ) ) {
+			try {
+				$tz    = new \DateTimeZone( wp_timezone_string() ?: 'UTC' );
+				$start = new \DateTimeImmutable( $start_raw, $tz );
+				$end   = new \DateTimeImmutable( $end_raw,   $tz );
+				if ( $end <= $start ) {
+					$errors[] = __( 'End date & time must be after the start date & time (Date & Time tab).', 'dish-events' );
+				}
+			} catch ( \Exception $e ) {
+				$errors[] = __( 'One or more dates could not be parsed — please check the format (Date & Time tab).', 'dish-events' );
+			}
+		}
+
+		if ( $template === 0 ) {
+			$errors[] = __( 'A Class Template must be selected (Template tab).', 'dish-events' );
+		}
+
+		return $errors;
+	}
+
+	/**
+	 * Force the post back to draft status when required fields are missing.
+	 * Hooked to 'wp_insert_post_data' — fires before the DB write.
+	 *
+	 * @param array<string,mixed> $data    Sanitised post data.
+	 * @param array<string,mixed> $postarr Raw $_POST data.
+	 * @return array<string,mixed>
+	 */
+	public function maybe_force_draft( array $data, array $postarr ): array {
+		if ( ( $data['post_type'] ?? '' ) !== 'dish_class' ) {
+			return $data;
+		}
+
+		if (
+			! isset( $_POST[ self::NONCE_FIELD ] )
+			|| ! wp_verify_nonce(
+				sanitize_text_field( wp_unslash( $_POST[ self::NONCE_FIELD ] ) ),
+				self::NONCE_ACTION
+			)
+		) {
+			return $data;
+		}
+
+		if ( ! empty( self::validate_post_data() ) ) {
+			$data['post_status'] = 'draft';
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Display admin notices for class validation errors.
+	 * Reads the transient set during save() and deletes it after display.
+	 * Hooked to 'admin_notices'.
+	 */
+	public function show_admin_notices(): void {
+		$screen = get_current_screen();
+		if ( ! $screen || $screen->id !== 'dish_class' ) {
+			return;
+		}
+
+		$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! $post_id ) {
+			return;
+		}
+
+		$key    = self::ERRORS_TRANSIENT . $post_id;
+		$errors = get_transient( $key );
+		if ( empty( $errors ) || ! is_array( $errors ) ) {
+			return;
+		}
+
+		delete_transient( $key );
+
+		echo '<div class="notice notice-error">';
+		echo '<p><strong>' . esc_html__( 'This class could not be published — please correct the following:', 'dish-events' ) . '</strong></p>';
+		echo '<ul style="list-style:disc;margin-left:2em">';
+		foreach ( $errors as $error ) {
+			echo '<li>' . esc_html( $error ) . '</li>';
+		}
+		echo '</ul>';
+		echo '</div>';
 	}
 
 	// -------------------------------------------------------------------------

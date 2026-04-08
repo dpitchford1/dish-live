@@ -16,7 +16,22 @@
 * `article` contexts in Chrome, Edge, Firefox, and Safari.
 */
 :where(h1) {
-    font-size: 2em;
+    font-size: clamp( 1.75rem, 4vw, 3.5rem );
+    letter-spacing: -.12rem;
+    color: #444;
+    line-height: 1.35;
+    margin-bottom: 4vh;
+}
+:where(h2) {
+    font-size: clamp( 1.35rem, 4vw, 2.5rem );
+    letter-spacing: -.12rem;
+    color: #444;
+    line-height: 1.2;
+}
+:where(h3):not(.footer--subtitle) {
+    //font-size: clamp( 1.35rem, 3vw, 2rem );
+    //letter-spacing: -.1rem;
+    color: #777
 }
 
 /* Links
@@ -24,17 +39,18 @@
 :where(a) {
     background: transparent;
     text-decoration: underline;
-    //color: #fff;
+    color: #999;
 }
 :where(a:hover) {
     outline: none;
+    color: #ff7824;
     text-decoration: none;
     //color:#02101e;
 }
 :where(a:focus) {
     text-decoration: underline;
     outline: none;
-    color: #02101e;
+    color: #ff7824;
 }
 :where(a:active) {
     color: inherit;
@@ -149,4 +165,3 @@
 :where(mark) {
     background: none;
 }
-

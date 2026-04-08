@@ -5,18 +5,29 @@
 .fluid{
     padding-left: 5%;
     padding-right: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    }
+.fluid-content{
+    padding-left: 5%;
+    padding-right: 5%;
     }
 
-/* all purpose wrapper - used for blocks of content */
+/* all purpose wrappers - used for blocks of content */
 .region{ width: 100%; }
 
-/* all purpose wrapper */
+.content-region{
+    overflow: hidden;
+    padding-top: 2rem; 
+    padding-bottom: 1rem;
+    margin-bottom: 3vh;
+    }
 .content-wrapper{
     overflow: hidden;
     padding-bottom: 1rem;
     width: 100%;
     }
-
 .content--region{
     margin-bottom: 5vh;
     }
@@ -73,14 +84,14 @@
 
 
     // Layout Target: 2 column layout with aside - main content and sidebar
-    body:has(.aside) {
-    .main--content {
-        background-color: #aaa;
-    }
-    .aside {
-        background-color: #eee;
-    }
-}
+    // body:has(.aside) {
+    //     .main--content {
+    //         background-color: #aaa;
+    //     }
+    //     .aside {
+    //         background-color: #eee;
+    //     }
+    // }
     .has--aside {
         display: flex;
         flex-direction: row;
@@ -95,6 +106,7 @@
             flex-shrink: 1;
             align-self: auto;
             flex-basis: 75%;
+            padding-right: 3%;
         }
         .aside{
             order: 0;
@@ -102,6 +114,10 @@
             flex-shrink: 1;
             align-self: auto;
             flex-basis: 23%;
+            padding-top: 4vh;
+        }
+        .class-content{
+            padding-right: 2.5rem;
         }
     }
 
@@ -117,6 +133,11 @@
     .has--padding{
         padding-top: 7.5rem;
         }
+    
+    .fluid-content{
+        padding-left: 10%;
+        padding-right: 10%;
+        }
 
 }
 
@@ -130,10 +151,6 @@
 ---------------------------------------------- */
 @mixin bp-1600() { 
     // min-width: 100em
-
-    .fluid{
-        max-width: 95%;
-        }
         
 }
 
@@ -143,7 +160,7 @@
     // min-width: 131.25em
 
     .fluid{
-    max-width: 90%;
+        max-width: 90%;
 
     }
 }

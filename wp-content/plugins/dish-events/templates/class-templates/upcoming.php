@@ -16,42 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Dish\Events\Frontend\Frontend;
-
-$template_id = get_the_ID();
-
-$upcoming = get_posts( [
-	'post_type'      => 'dish_class',
-	'post_status'    => 'publish',
-	'posts_per_page' => 10,
-	'meta_key'       => 'dish_start_datetime',
-	'orderby'        => 'meta_value_num',
-	'order'          => 'ASC',
-	'meta_query'     => [
-		'relation' => 'AND',
-		[
-			'key'   => 'dish_template_id',
-			'value' => $template_id,
-			'type'  => 'NUMERIC',
-		],
-		[
-			'key'     => 'dish_start_datetime',
-			'value'   => time(),
-			'compare' => '>=',
-			'type'    => 'NUMERIC',
-		],
-	],
+dish_the_upcoming_classes( [
+	'template_id'          => get_the_ID(),
+	'limit'                => 10,
+	'suppress_format_pill' => true,
 ] );
-
-if ( empty( $upcoming ) ) {
-	return;
-}
-?>
-<section class="dish-template-listing">
-	<h2 class="dish-template-listing__heading"><?php esc_html_e( 'Upcoming Classes', 'dish-events' ); ?></h2>
-	<div class="dish-template-grid">
-		<?php foreach ( $upcoming as $class ) :
-			include Frontend::locate( 'classes/card.php' );
-		endforeach; ?>
-	</div>
-</section>

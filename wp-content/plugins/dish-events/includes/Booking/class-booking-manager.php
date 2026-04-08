@@ -292,8 +292,10 @@ final class BookingManager {
 		$fee_lines   = [];
 		$fees_cents  = 0;
 
-		$per_ticket  = json_decode( $ticket_type->per_ticket_fees  ?? 'null', true ) ?? [];
-		$per_booking = json_decode( $ticket_type->per_booking_fees ?? 'null', true ) ?? [];
+		$raw_per_ticket  = json_decode( $ticket_type->per_ticket_fees  ?? 'null', true );
+		$raw_per_booking = json_decode( $ticket_type->per_booking_fees ?? 'null', true );
+		$per_ticket      = is_array( $raw_per_ticket )  ? $raw_per_ticket  : [];
+		$per_booking     = is_array( $raw_per_booking ) ? $raw_per_booking : [];
 
 		foreach ( $per_ticket as $fee ) {
 			$amount = (int) ( $fee['amount_cents'] ?? 0 );

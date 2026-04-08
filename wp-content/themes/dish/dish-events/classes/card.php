@@ -74,7 +74,6 @@ $is_enquiry   = ( $booking_type === 'enquiry' );
 $format_id    = $template_id ? (int) get_post_meta( $template_id, 'dish_format_id', true ) : 0;
 $format_post  = $format_id ? get_post( $format_id ) : null;
 $format_color = $format_post ? ( (string) get_post_meta( $format_id, 'dish_format_color', true ) ?: '#c0392b' ) : '';
-$format_url   = $format_post ? get_permalink( $format_post ) : '';
 
 // Spots label.
 $spots_class = '';
@@ -105,10 +104,8 @@ if ( $is_private ) {
 	<?php endif; ?>
 
 	<div class="dish-card__body">
-		<?php if ( $format_post && $format_color ) : ?>
-				<a href="<?php echo esc_url( $format_url ); ?>" class="dish-format-pill" style="--format-color:<?php echo esc_attr( $format_color ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Format: %s', 'dish-events' ), $format_post->post_title ) ); ?>">
-					<?php echo esc_html( $format_post->post_title ); ?>
-				</a>
+		<?php if ( empty( $suppress_format_pill ) ) : ?>
+			<?php dish_the_format_pill( $format_post, $format_color ); ?>
 		<?php endif; ?>
 		<?php if ( $date_label ) : ?>
 			<time class="dish-card__date" datetime="<?php echo esc_attr( $start ? DateHelper::format( $start, 'c' ) : '' ); ?>">
@@ -139,21 +136,15 @@ if ( $is_private ) {
 		</div>
 
 		<?php if ( $is_private ) : ?>
-			<span class="dish-card__link dish-button dish-button--disabled" aria-disabled="true">
+			<span class="dish-card__link button button--disabled" aria-disabled="true">
 				<?php esc_html_e( 'Private event', 'dish-events' ); ?>
 			</span>
 		<?php elseif ( $is_enquiry ) : ?>
-			<?php
-			$_eq_page = (int) Settings::get( 'enquiry_page', 0 );
-			$_eq_url  = $_eq_page
-				? get_permalink( $_eq_page )
-				: 'mailto:' . Settings::get( 'studio_email', (string) get_bloginfo( 'admin_email' ) );
-			?>
-			<a href="<?php echo esc_url( $_eq_url ); ?>" class="dish-card__link dish-button dish-button--secondary">
+			<a href="<?php echo esc_url( dish_get_enquiry_url() ); ?>" class="dish-card__link button button--secondary">
 				<?php esc_html_e( 'Enquire to Book', 'dish-events' ); ?>
 			</a>
 		<?php elseif ( $spots_class !== 'dish-card__spots--sold-out' && $book_url ) : ?>
-			<a href="<?php echo esc_url( $book_url ); ?>" class="dish-card__link dish-button dish-button--primary">
+			<a href="<?php echo esc_url( $book_url ); ?>" class="dish-card__link button button--primary">
 				<?php esc_html_e( 'Book Now', 'dish-events' ); ?>
 			</a>
 		<?php endif; ?>

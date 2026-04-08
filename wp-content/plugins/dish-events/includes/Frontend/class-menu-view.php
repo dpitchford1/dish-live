@@ -140,10 +140,13 @@ final class MenuView {
 	 */
 	public static function render_all( $atts = [] ): string {
 		$atts = shortcode_atts(
-			[ 'limit' => 200, 'orderby' => 'title' ],
+			[ 'limit' => 200, 'orderby' => 'title', 'exclude_format' => 'private-events' ],
 			(array) $atts,
 			'dish_menus'
 		);
+
+		// Build a list of format slugs to exclude (comma-separated attribute).
+		$exclude_format_slugs = array_filter( array_map( 'trim', explode( ',', (string) $atts['exclude_format'] ) ) );
 
 		// All published templates, alphabetical by default.
 		$templates = get_posts( [
@@ -195,6 +198,11 @@ final class MenuView {
 		foreach ( $templates as $template ) {
 			$format_id = (int) get_post_meta( $template->ID, 'dish_format_id', true );
 			$format    = $format_id ? get_post( $format_id ) : null;
+
+			// Skip templates whose format slug is in the exclusion list.
+			if ( $format && ! empty( $exclude_format_slugs ) && in_array( $format->post_name, $exclude_format_slugs, true ) ) {
+				continue;
+			}
 
 			$entries[] = [
 			'template'        => $template,

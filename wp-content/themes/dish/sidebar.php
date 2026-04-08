@@ -13,7 +13,7 @@
  *   get_template_part( 'templates/sidebars/sidebar', 'about' );
  */
 
-if ( basecamp_is_page_or_child_of( 'about-dish' ) || is_page( [ 'recipes', 'contact-us', 'our-menus' ] ) ) {
+if ( basecamp_is_page_or_child_of( 'about-dish' ) || is_page( [ 'recipes', 'contact-us', 'class-menus' ] ) ) {
     get_template_part( 'templates/sidebars/sidebar', 'about' );
 } elseif ( is_post_type_archive( 'dish_chef' ) || is_singular( 'dish_chef' ) ) {
     get_template_part( 'templates/sidebars/sidebar', 'chefs' );

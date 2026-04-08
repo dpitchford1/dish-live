@@ -191,7 +191,7 @@ $bookings = BookingRepository::get_for_customer( $email, 'any', (int) $user->ID 
 						placeholder="<?php echo esc_attr( $user->user_email ); ?>"
 					>
 					<p class="dish-delete-account__error" id="dish-delete-error" style="display:none;color:#b32d2e;margin:.5em 0 0;"></p>
-					<button type="button" id="dish-delete-account-btn" class="dish-button dish-button--danger" style="margin-top:.75em;">
+					<button type="button" id="dish-delete-account-btn" class="button button--danger" style="margin-top:.75em;">
 						<?php esc_html_e( 'Permanently delete my account', 'dish-events' ); ?>
 					</button>
 				</div>

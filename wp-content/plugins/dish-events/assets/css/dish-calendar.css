@@ -1,0 +1,544 @@
+/**
+ * Dish Events — Frontend Styles
+ *
+ * Design tokens live in :root so the theme can override them without touching
+ * this file. No external dependencies; no jQuery; plain CSS.
+ *
+ * @package Dish\Events
+ */
+
+/* ==========================================================================
+   Design Tokens
+   ========================================================================== */
+
+:root {
+	--dish-radius:        6px;
+	--dish-radius-lg:     10px;
+	--dish-gap:           1.5rem;
+	--dish-card-bg:       #ffffff;
+	--dish-card-shadow:   0 1px 3px rgba(0, 0, 0, .08), 0 4px 12px rgba(0, 0, 0, .06);
+	--dish-primary:       #c0392b;
+	--dish-primary-hover: #a93226;
+	--dish-text:          #1d1d1d;
+	--dish-muted:         #6b7280;
+	--dish-border:        #e5e7eb;
+	--dish-warn:          #d97706;
+	--dish-danger:        #dc2626;
+	--dish-success:       #16a34a;
+	--dish-input-bg:      #f9fafb;
+	--dish-input-border:  #d1d5db;
+}
+
+/* ==========================================================================
+   Calendar — FullCalendar wrapper & filter bar
+   ========================================================================== */
+
+.dish-calendar-wrap {
+	width: 100%;
+}
+
+/* Format filter bar */
+.dish-calendar-filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5rem;
+	margin-bottom: 1.25rem;
+}
+
+.dish-calendar-filter {
+	display: inline-flex;
+	align-items: center;
+	gap: .375rem;
+	padding: .3rem .75rem;
+	border-radius: 2rem;
+	border: 2px solid transparent;
+	background: var( --dish-bg-alt, #f4f4f4 );
+	color: var( --dish-text );
+	font-size: .8125rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background .15s, border-color .15s, color .15s;
+}
+
+.dish-calendar-filter::before {
+	content: '';
+	display: inline-block;
+	width: .625rem;
+	height: .625rem;
+	border-radius: 50%;
+	background: var( --dish-filter-color, var( --dish-primary ) );
+	flex-shrink: 0;
+}
+
+/* "All Formats" button has no colour dot */
+.dish-calendar-filter[data-format-id="0"]::before {
+	display: none;
+}
+
+.dish-calendar-filter:hover,
+.dish-calendar-filter.is-active {
+	background: var( --dish-filter-color, var( --dish-primary ) );
+	border-color: var( --dish-filter-color, var( --dish-primary ) );
+	color: #fff;
+}
+
+.dish-calendar-filter[data-format-id="0"]:hover,
+.dish-calendar-filter[data-format-id="0"].is-active {
+	background: var( --dish-primary );
+	border-color: var( --dish-primary );
+	color: #fff;
+}
+
+/* FullCalendar container */
+.dish-calendar {
+	width: 100%;
+}
+
+/* Day numbers — render as plain text, not links */
+.dish-calendar .fc-daygrid-day-number {
+	pointer-events: none;
+	cursor: default;
+	text-decoration: none;
+	color: inherit;
+}
+
+/* Tighten FullCalendar's default toolbar on small screens */
+@media ( max-width: 540px ) {
+	.dish-calendar .fc-toolbar {
+		flex-direction: column;
+		gap: .5rem;
+		align-items: flex-start;
+	}
+	.dish-calendar .fc-toolbar-title {
+		font-size: 1rem;
+	}
+}
+
+/* ==========================================================================
+   Calendar — Event states
+   ========================================================================== */
+
+/* Private events — muted pill, no cursor */
+.dish-calendar .dish-event--private {
+	opacity: .55;
+	cursor: default;
+	pointer-events: none;
+}
+
+/* Low spots — amber left border accent */
+.dish-calendar .dish-event--low-spots .fc-event-main,
+.dish-calendar .dish-event--low-spots {
+	border-left: 3px solid #f39c12 !important;
+}
+
+/* Sold out — desaturated + strikethrough title */
+.dish-calendar .dish-event--sold-out {
+	opacity: .6;
+	filter: saturate( .3 );
+}
+
+.dish-calendar .dish-event--sold-out .fc-event-title::after {
+	content: ' — Sold out';
+	font-size: .75em;
+	font-weight: 400;
+	opacity: .8;
+}
+
+
+/* ==========================================================================
+   Calendar Hover Popover
+   ========================================================================== */
+
+#dish-cal-popover {
+        position: fixed;
+        z-index: 9999;
+        min-width: 220px;
+        max-width: 300px;
+        background: var( --dish-card-bg );
+        border: 1px solid var( --dish-border );
+        border-radius: var( --dish-radius-lg );
+        box-shadow: 0 4px 24px rgba( 0, 0, 0, .12 ), 0 1px 4px rgba( 0, 0, 0, .06 );
+        padding: 1rem 1.125rem;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY( 4px );
+        transition: opacity .15s ease, transform .15s ease;
+}
+
+#dish-cal-popover.is-visible {
+        opacity: 1;
+        transform: translateY( 0 );
+}
+
+.dish-pop__format {
+        display: flex;
+        align-items: center;
+        gap: .375rem;
+        font-size: .6875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var( --dish-muted );
+        margin-bottom: .5rem;
+}
+
+.dish-pop__dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+}
+
+.dish-pop__title {
+        font-size: .9375rem;
+        font-weight: 700;
+        color: var( --dish-text );
+        line-height: 1.3;
+        margin-bottom: .625rem;
+}
+
+.dish-pop__row {
+        display: flex;
+        align-items: flex-start;
+        gap: .4375rem;
+        font-size: .8125rem;
+        color: var( --dish-text );
+        line-height: 1.5;
+        margin-bottom: .25rem;
+}
+
+.dish-pop__row:last-child {
+        margin-bottom: 0;
+}
+
+.dish-pop__icon {
+        flex-shrink: 0;
+        width: 1.125rem;
+        text-align: center;
+        font-size: .8125rem;
+}
+
+.dish-pop__spots--sold-out {
+        color: var( --dish-danger );
+        font-weight: 600;
+}
+
+.dish-pop__spots--low {
+        color: var( --dish-warn );
+        font-weight: 600;
+}
+
+.dish-pop__actions {
+        margin-top: .75rem;
+        padding-top: .75rem;
+        border-top: 1px solid var( --dish-border );
+}
+
+.dish-pop__book-btn {
+        display: block;
+        width: 100%;
+        padding: .45rem .75rem;
+        background: var( --dish-primary, #c0392b );
+        color: #fff;
+        font-size: .8125rem;
+        font-weight: 700;
+        text-align: center;
+        text-decoration: none;
+        border-radius: var( --dish-radius );
+        pointer-events: auto;
+        transition: opacity .15s ease;
+}
+
+.dish-pop__book-btn:hover,
+.dish-pop__book-btn:focus {
+        opacity: .88;
+        color: #fff;
+        text-decoration: none;
+}
+
+
+/* ==========================================================================
+   Calendar Hover Popover
+   ========================================================================== */
+
+#dish-cal-popover {
+        position: fixed;
+        z-index: 9999;
+        min-width: 220px;
+        max-width: 300px;
+        background: var( --dish-card-bg );
+        border: 1px solid var( --dish-border );
+        border-radius: var( --dish-radius-lg );
+        box-shadow: 0 4px 24px rgba( 0, 0, 0, .12 ), 0 1px 4px rgba( 0, 0, 0, .06 );
+        padding: 1rem 1.125rem;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY( 4px );
+        transition: opacity .15s ease, transform .15s ease;
+}
+
+#dish-cal-popover.is-visible {
+        opacity: 1;
+        transform: translateY( 0 );
+}
+
+.dish-pop__format {
+        display: flex;
+        align-items: center;
+        gap: .375rem;
+        font-size: .6875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var( --dish-muted );
+        margin-bottom: .5rem;
+}
+
+.dish-pop__dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+}
+
+.dish-pop__title {
+        font-size: .9375rem;
+        font-weight: 700;
+        color: var( --dish-text );
+        line-height: 1.3;
+        margin-bottom: .625rem;
+}
+
+.dish-pop__row {
+        display: flex;
+        align-items: flex-start;
+        gap: .4375rem;
+        font-size: .8125rem;
+        color: var( --dish-text );
+        line-height: 1.5;
+        margin-bottom: .25rem;
+}
+
+.dish-pop__row:last-child {
+        margin-bottom: 0;
+}
+
+.dish-pop__icon {
+        flex-shrink: 0;
+        width: 1.125rem;
+        text-align: center;
+        font-size: .8125rem;
+}
+
+.dish-pop__spots--sold-out {
+        color: var( --dish-danger );
+        font-weight: 600;
+}
+
+.dish-pop__spots--low {
+        color: var( --dish-warn );
+        font-weight: 600;
+}
+
+
+/* -- Calendar event: spots-left label -------------------------------------- */
+
+.dish-event__spots-label {
+        display: block;
+        font-size: .6875rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-top: 2px;
+        opacity: .95;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+}
+
+/* Month / dayGrid view: inherit the event text colour (white on coloured bg) */
+.fc-daygrid-event .dish-event__spots-label {
+        color: inherit;
+}
+
+/* Week / timeGrid view: same */
+.fc-timegrid-event .dish-event__spots-label {
+        color: inherit;
+}
+
+
+/* ==========================================================================
+   Calendar Detail Modal
+   Triggered by clicking (or tapping) any non-private calendar event.
+   ========================================================================== */
+
+#dish-cal-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+}
+
+#dish-cal-modal[hidden] {
+        display: none;
+}
+
+.dish-modal__backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba( 0, 0, 0, .5 );
+        cursor: pointer;
+}
+
+.dish-modal__card {
+        position: relative;
+        background: var( --dish-card-bg, #fff );
+        border-radius: var( --dish-radius-lg, 12px );
+        box-shadow: 0 8px 40px rgba( 0, 0, 0, .18 ), 0 2px 8px rgba( 0, 0, 0, .1 );
+        padding: 1.5rem;
+        width: 100%;
+        max-width: 400px;
+        max-height: 90dvh;
+        overflow-y: auto;
+        animation: dish-modal-in .18s ease both;
+}
+
+@keyframes dish-modal-in {
+        from { opacity: 0; transform: translateY( 8px ) scale( .98 ); }
+        to   { opacity: 1; transform: translateY( 0 )   scale( 1 ); }
+}
+
+.dish-modal__close {
+        position: absolute;
+        top: .75rem;
+        right: .75rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var( --dish-muted, #888 );
+        font-size: 1.375rem;
+        line-height: 1;
+        padding: .25rem .4rem;
+        border-radius: var( --dish-radius, 6px );
+        transition: color .12s, background .12s;
+}
+
+.dish-modal__close:hover,
+.dish-modal__close:focus {
+        color: var( --dish-text, #111 );
+        background: var( --dish-bg, #f5f5f5 );
+}
+
+.dish-modal__format {
+        display: flex;
+        align-items: center;
+        gap: .375rem;
+        font-size: .6875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var( --dish-muted );
+        margin-bottom: .5rem;
+}
+
+.dish-modal__dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+}
+
+.dish-modal__title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var( --dish-text );
+        line-height: 1.3;
+        margin: 0 2rem .875rem 0; /* right offset avoids the × button */
+}
+
+.dish-modal__meta {
+        margin-bottom: 1.125rem;
+}
+
+.dish-modal__row {
+        display: flex;
+        align-items: flex-start;
+        gap: .4375rem;
+        font-size: .875rem;
+        color: var( --dish-text );
+        line-height: 1.5;
+        margin-bottom: .375rem;
+}
+
+.dish-modal__row:last-child {
+        margin-bottom: 0;
+}
+
+.dish-modal__icon {
+        flex-shrink: 0;
+        width: 1.125rem;
+        text-align: center;
+}
+
+.dish-modal__spots--sold-out {
+        color: var( --dish-danger );
+        font-weight: 600;
+}
+
+.dish-modal__spots--low {
+        color: var( --dish-warn );
+        font-weight: 600;
+}
+
+.dish-modal__actions {
+        margin-top: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: .625rem;
+}
+
+.dish-modal__book-btn {
+        display: block;
+        padding: .75rem 1rem;
+        background: var( --dish-primary, #c0392b );
+        color: #fff;
+        font-size: .9375rem;
+        font-weight: 700;
+        text-align: center;
+        text-decoration: none;
+        border-radius: var( --dish-radius, 6px );
+        transition: opacity .15s;
+}
+
+.dish-modal__book-btn:hover,
+.dish-modal__book-btn:focus {
+        opacity: .88;
+        color: #fff;
+        text-decoration: none;
+}
+
+.dish-modal__detail-link {
+        display: block;
+        padding: .6rem 1rem;
+        background: transparent;
+        border: 1px solid var( --dish-border, #e0e0e0 );
+        color: var( --dish-text );
+        font-size: .875rem;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        border-radius: var( --dish-radius, 6px );
+        transition: background .15s;
+}
+
+.dish-modal__detail-link:hover,
+.dish-modal__detail-link:focus {
+        background: var( --dish-bg, #f5f5f5 );
+        text-decoration: none;
+}
+

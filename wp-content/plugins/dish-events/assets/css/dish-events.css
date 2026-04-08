@@ -108,23 +108,6 @@
 	gap: .5rem;
 }
 
-/* Card title */
-.dish-card__title {
-	font-size: 1.05rem;
-	font-weight: 600;
-	margin: 0;
-	line-height: 1.3;
-}
-
-.dish-card__title a {
-	color: var( --dish-text );
-	text-decoration: none;
-}
-
-.dish-card__title a:hover {
-	color: var( --dish-primary );
-}
-
 /* Card date */
 .dish-card__date {
 	display: block;
@@ -295,13 +278,6 @@
 	padding-bottom: 1.5rem;
 }
 
-.dish-class-title {
-	font-size: 2rem;
-	font-weight: 700;
-	margin: 0 0 1.25rem;
-	line-height: 1.2;
-}
-
 /* Meta row */
 .dish-class-meta {
 	display: flex;
@@ -447,12 +423,6 @@
 	flex: 1;
 }
 
-.dish-chef-title {
-	font-size: 2rem;
-	font-weight: 700;
-	margin: 0 0 .35rem;
-}
-
 .dish-chef-role {
 	color: var( --dish-muted );
 	font-style: italic;
@@ -540,13 +510,6 @@
 	padding: 2rem 1.25rem 1rem;
 	max-width: 1140px;
 	margin: 0 auto;
-}
-
-.dish-template-title {
-	font-size: clamp( 1.75rem, 4vw, 2.5rem );
-	font-weight: 700;
-	margin: .5rem 0;
-	line-height: 1.2;
 }
 
 .dish-template-excerpt {
@@ -661,15 +624,6 @@
 	border-radius: var( --dish-radius );
 }
 
-.dish-details-panel__title {
-	font-size: .875rem;
-	text-transform: uppercase;
-	letter-spacing: .05em;
-	color: var( --dish-muted );
-	font-weight: 700;
-	margin: 0 0 .625rem;
-}
-
 .dish-details-panel__list {
 	margin: 0;
 	padding-left: 1.25rem;
@@ -706,12 +660,6 @@
 	max-width: 480px;
 	margin: 2rem auto;
 	padding: 0 1rem;
-}
-
-.dish-account__title {
-	font-size: 1.5rem;
-	font-weight: 700;
-	margin: 0 0 1.5rem;
 }
 
 .dish-account__intro {
@@ -860,20 +808,6 @@
 	background: var( --dish-input-bg );
 	border: 1px solid var( --dish-border );
 	border-radius: var( --dish-radius );
-}
-
-.dish-booking-list__title {
-	flex: 1;
-	font-weight: 600;
-}
-
-.dish-booking-list__title a {
-	color: var( --dish-text );
-	text-decoration: none;
-}
-
-.dish-booking-list__title a:hover {
-	color: var( --dish-primary );
 }
 
 .dish-booking-list__date {
@@ -1122,19 +1056,6 @@ span.dish-format-pill {
         margin-bottom: 1.25rem;
 }
 
-.dish-confirmation__title {
-        font-size: 2rem;
-        font-weight: 700;
-        margin: 0 0 .5rem;
-        color: var( --dish-text );
-}
-
-.dish-confirmation__subtitle {
-        font-size: 1.0625rem;
-        color: var( --dish-muted );
-        margin: 0;
-}
-
 /* -- Booking card ---------------------------------------------------------- */
 
 .dish-confirmation__card {
@@ -1335,19 +1256,6 @@ span.dish-format-pill {
         margin-bottom: 1.25rem;
 }
 
-.dish-confirmation__title {
-        font-size: 2rem;
-        font-weight: 700;
-        margin: 0 0 .5rem;
-        color: var( --dish-text );
-}
-
-.dish-confirmation__subtitle {
-        font-size: 1.0625rem;
-        color: var( --dish-muted );
-        margin: 0;
-}
-
 /* -- Booking card ---------------------------------------------------------- */
 
 .dish-confirmation__card {
@@ -1512,6 +1420,8 @@ span.dish-format-pill {
                 gap: .25rem;
         }
 }
+
+
 
 
 /* ==========================================================================
@@ -2072,17 +1982,6 @@ span.dish-format-pill {
         overflow: hidden;
 }
 
-.dish-checkout__summary-title {
-        font-size: 1rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: .05em;
-        color: var( --dish-muted );
-        padding: 1.1rem 1.25rem .75rem;
-        border-bottom: 1px solid var( --dish-border );
-        margin: 0;
-}
-
 .dish-checkout__summary-image {
         width: 100%;
         aspect-ratio: 16 / 9;
@@ -2582,21 +2481,6 @@ span.dish-format-pill {
 	color: var( --dish-accent, #c0392b );
 }
 
-.dish-menu-entry__title {
-	margin: 0;
-	font-size: 1.3rem;
-	line-height: 1.3;
-}
-
-.dish-menu-entry__title a {
-	color: inherit;
-	text-decoration: none;
-}
-
-.dish-menu-entry__title a:hover {
-	color: var( --dish-accent, #c0392b );
-}
-
 .dish-menu-entry__meta {
 	font-size: 0.85rem;
 	color: #666;
@@ -2669,3 +2553,49 @@ span.dish-format-pill {
 		padding: 1.25rem 1.25rem;
 	}
 }
+
+/* ==========================================================================
+   Class in the Spotlight
+   ========================================================================== */
+
+.dish-spotlight {
+	padding-block: 3rem;
+}
+
+.dish-spotlight__eyebrow {
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var( --dish-primary );
+	margin: 0 0 1.25rem;
+}
+
+.dish-spotlight__inner {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: calc( var( --dish-gap ) * 2 );
+	align-items: center;
+}
+
+.dish-spotlight__image {
+	overflow: hidden;
+	border-radius: var( --dish-radius-lg );
+}
+
+.dish-spotlight__image a {
+	display: block;
+}
+
+.dish-spotlight__image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.dish-spotlight__image:hover img {
+	transform: scale( 1.03 );
+	transition: transform 0.3s ease;
+}
+

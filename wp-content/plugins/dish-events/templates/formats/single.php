@@ -16,8 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Dish\Events\Data\ClassRepository;
-
 get_header();
 
 while ( have_posts() ) :
@@ -40,18 +38,10 @@ while ( have_posts() ) :
 		] ],
 	] );
 
-	// Upcoming scheduled class instances for this format's templates.
-	$upcoming_classes = [];
-	if ( ! empty( $templates ) ) {
-		$template_ids     = wp_list_pluck( $templates, 'ID' );
-		$upcoming_classes = ClassRepository::query( [
-			'template_ids' => $template_ids,
-			'start_after'  => time(),
-			'is_private'   => false,
-			'limit'        => -1,
-			'order'        => 'ASC',
-		] );
-	}
+	// Partition into featured and standard templates.
+	$featured_templates = array_values( array_filter( $templates, fn( $t ) => (bool) get_post_meta( $t->ID, 'dish_is_featured', true ) ) );
+	$standard_templates = array_values( array_filter( $templates, fn( $t ) => ! (bool) get_post_meta( $t->ID, 'dish_is_featured', true ) ) );
+
 	?>
 
 	<main id="primary" class="site-main dish-format-page">
@@ -76,27 +66,25 @@ while ( have_posts() ) :
 				</div>
 			<?php endif; ?>
 
-			<?php if ( ! empty( $upcoming_classes ) ) : ?>
-				<section class="dish-upcoming-listing">
-					<h2 class="dish-upcoming-listing__heading">
-						<?php
-						echo esc_html( sprintf(
-							/* translators: %s: format name e.g. "Hands On" */
-							__( 'Upcoming %s Classes', 'dish-events' ),
-							$format_title
-						) );
-						?>
-					</h2>
-					<div class="dish-class-grid">
-						<?php foreach ( $upcoming_classes as $class ) : ?>
-							<?php include __DIR__ . '/../classes/card.php'; ?>
-						<?php endforeach; ?>
-					</div>
+			<?php dish_the_upcoming_classes( [
+				'template_ids'         => ! empty( $templates ) ? wp_list_pluck( $templates, 'ID' ) : [],
+				'dedupe_by_template'   => true,
+				/* translators: %s: format name e.g. "Hands On" */
+				'heading'              => sprintf( __( 'Upcoming %s Classes', 'dish-events' ), $format_title ),
+				'suppress_format_pill' => true,
+			] ); ?>
+
+			<?php if ( ! empty( $featured_templates ) ) : ?>
+				<section class="dish-template-listing dish-template-listing--featured">
+					<?php $suppress_format_pill = true; ?>
+					<?php foreach ( $featured_templates as $template ) : ?>
+						<?php include __DIR__ . '/../class-templates/card.php'; ?>
+					<?php endforeach; ?>
 				</section>
 			<?php endif; ?>
 
-			<?php if ( ! empty( $templates ) ) : ?>
-				<section class="dish-template-listing">
+			<?php if ( ! empty( $standard_templates ) ) : ?>
+				<section class="dish-template-listing dish-template-listing--standard">
 					<h2 class="dish-template-listing__heading">
 						<?php
 						echo esc_html( sprintf(
@@ -107,12 +95,13 @@ while ( have_posts() ) :
 						?>
 					</h2>
 					<div class="dish-template-grid">
-						<?php foreach ( $templates as $template ) : ?>
+						<?php $suppress_format_pill = true; ?>
+						<?php foreach ( $standard_templates as $template ) : ?>
 							<?php include __DIR__ . '/../class-templates/card.php'; ?>
 						<?php endforeach; ?>
 					</div>
 				</section>
-			<?php else : ?>
+			<?php elseif ( empty( $featured_templates ) ) : ?>
 				<p class="dish-no-classes">
 					<?php esc_html_e( 'No classes currently available in this format.', 'dish-events' ); ?>
 				</p>

@@ -16,8 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Dish\Events\Data\ClassRepository;
-
 get_header();
 
 while ( have_posts() ) :
@@ -40,93 +38,95 @@ while ( have_posts() ) :
 		] ],
 	] );
 
-	// Upcoming scheduled class instances for this format's templates.
-	$upcoming_classes = [];
-	if ( ! empty( $templates ) ) {
-		$template_ids = wp_list_pluck( $templates, 'ID' );
-		$upcoming_classes = ClassRepository::query( [
-			'template_ids' => $template_ids,
-			'start_after'  => time(),
-			'is_private'   => false,
-			'limit'        => -1,
-			'order'        => 'ASC',
-		] );
-	}
+	// Partition into featured and standard templates.
+	$featured_templates = array_values( array_filter( $templates, fn( $t ) => (bool) get_post_meta( $t->ID, 'dish_is_featured', true ) ) );
+	$standard_templates = array_values( array_filter( $templates, fn( $t ) => ! (bool) get_post_meta( $t->ID, 'dish_is_featured', true ) ) );
+
 	?>
+    
+<?php /* ── Hero ─────────────────────────────────────────── */ ?>
+<?php if ( has_post_thumbnail() ) : ?>
+<div class="hero">
+    <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
+        'landscape_size' => 'basecamp-img-xl',
+        'loading'        => 'eager',
+        'fetchpriority'  => 'high',
+    ] ); ?>
+</div>
+<?php endif; ?>
+<?php /* ── Breadcrumb ─────────────────────────────────────────── */ ?>
+<div class="fluid-content breadcrumb"><?php dish_the_breadcrumb(); ?></div>
 
-<main id="main-content" class="main--content">
-    <article id="post-<?php the_ID(); ?>">
+<?php /* ── Main Content ─────────────────────────────────────────── */ ?>
+<main id="main-content" class="main--content fluid-content">
+    <h1 class="dish-format-title"><?php echo esc_html( sprintf( __( 'Class Format: %s', 'dish-events' ), get_the_title() ) ); ?></h1>
 
-        <?php if ( has_post_thumbnail() ) : ?>
-            <div class="dish-format-hero">
-                <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
-                    'landscape_size' => 'basecamp-img-xl',
-                    'loading'        => 'eager',
-                    'fetchpriority'  => 'high',
-                ] ); ?>
-            </div>
-        <?php endif; ?>
+    <?php /* ── If featured exists ───────── */ ?>
+    <?php if ( ! empty( $featured_templates ) ) : ?>
 
-        <header class="dish-format-header">
-
-		<?php dish_the_breadcrumb(); ?>
-
-        <h1 class="dish-format-title"><?php the_title(); ?></h1>
-
-        <?php if ( has_excerpt() ) : ?>
-                <p class="dish-format-excerpt"><?php the_excerpt(); ?></p>
-            <?php endif; ?>
-        </header>
+        <?php /* ── load 2 column with Content and featured card ───────── */ ?>
+        <section class="grid-general grid--2col">
 
         <?php if ( get_the_content() ) : ?>
-            <div class="dish-format-content dish-content">
+            <article class="">
                 <?php the_content(); ?>
-            </div>
+            </article>
+        <?php endif; ?>
+        
+        <div class="dish-template-listing dish-template-listing--featured">
+            <h3>Featured Class Type</h3>
+            <?php $suppress_format_pill = true; ?>
+            <?php foreach ( $featured_templates as $template ) : ?>
+                <?php include locate_template( 'dish-events/class-templates/card.php' ); ?>
+            <?php endforeach; ?>
+        </div>
+
+        </section>
+    <?php /* ── No featured — show image alongside content ───────── */ ?>
+    <?php else : ?>
+        <section class="grid-general grid--2col">
+        <?php if ( get_the_content() ) : ?>
+            <article class="">
+                <?php the_content(); ?>
+            </article>
         <?php endif; ?>
 
-        <?php if ( ! empty( $upcoming_classes ) ) : ?>
-            <section class="dish-upcoming-listing">
-                <h2 class="dish-upcoming-listing__heading">
-                    <?php
-                    echo esc_html( sprintf(
-                        /* translators: %s: format name e.g. "Hands On" */
-                        __( 'Upcoming %s Classes', 'dish-events' ),
-                        $format_title
-                    ) );
-                    ?>
-                </h2>
-                <div class="dish-class-grid">
-                    <?php foreach ( $upcoming_classes as $class ) : ?>
-                        <?php include locate_template( 'dish-events/classes/card.php' ); ?>
-                    <?php endforeach; ?>
-                </div>
-            </section>
-        <?php endif; ?>
+        <div class="dish-format-img">
+            <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
+                'landscape_size' => 'basecamp-img-sm',
+                'loading'        => 'lazy',
+            ] ); ?>
+        </div>
+        </section>
+    <?php endif; ?>
 
-        <?php if ( ! empty( $templates ) ) : ?>
-            <section class="dish-template-listing">
+    <div id="post-<?php the_ID(); ?>" class="content--region">
+
+        <?php dish_the_upcoming_classes( [
+            'template_ids'         => ! empty( $templates ) ? wp_list_pluck( $templates, 'ID' ) : [],
+            'dedupe_by_template'   => true,
+            /* translators: %s: format name e.g. "Hands On" */
+            'heading'              => sprintf( __( 'Upcoming %s Classes', 'dish-events' ), $format_title ),
+            'suppress_format_pill' => true,
+        ] ); ?>
+
+        <?php if ( ! empty( $standard_templates ) ) : ?>
+            <section class="dish-template-listings dish-template-listing--standards">
                 <h2 class="dish-template-listing__heading">
-                    <?php
-                    echo esc_html( sprintf(
-                        /* translators: %s: format name e.g. "Hands On" */
-                        __( 'Our %s Class Types', 'dish-events' ),
-                        $format_title
-                    ) );
-                    ?>
+                    <?php echo esc_html( sprintf( __( 'Our %s Classes', 'dish-events' ), $format_title ) ); /* translators: %s: format name e.g. "Hands On" */?>
                 </h2>
-                <div class="dish-template-grid">
-                    <?php foreach ( $templates as $template ) : ?>
+                <div class="grid-general grid--3col">
+                    <?php $suppress_format_pill = true; ?>
+                    <?php foreach ( $standard_templates as $template ) : ?>
                         <?php include locate_template( 'dish-events/class-templates/card.php' ); ?>
                     <?php endforeach; ?>
                 </div>
             </section>
-        <?php else : ?>
-            <p class="dish-no-classes">
-                <?php esc_html_e( 'No classes currently available in this format.', 'dish-events' ); ?>
-            </p>
+        <?php elseif ( empty( $featured_templates ) ) : ?>
+            <p class="dish-no-classes"><?php esc_html_e( 'No classes currently available in this format.', 'dish-events' ); ?></p>
         <?php endif; ?>
 
-    </article>
+    </div>
 </main>
 
 <?php endwhile; ?>

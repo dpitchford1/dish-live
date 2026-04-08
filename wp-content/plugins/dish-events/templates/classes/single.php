@@ -90,21 +90,7 @@ while ( have_posts() ) :
 			<header class="dish-class-header dish-container">
 
 				<?php // Breadcrumb. ?>
-				<nav class="dish-breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'dish-events' ); ?>">
-					<?php if ( $format_post && 'publish' === $format_post->post_status ) : ?>
-					<a href="<?php echo esc_url( get_permalink( $format_post ) ); ?>"<?php if ( $format_color ) : ?> class="dish-format-pill" style="--format-color:<?php echo esc_attr( $format_color ); ?>"<?php endif; ?>>
-							<?php echo esc_html( $format_post->post_title ); ?>
-						</a>
-						<span aria-hidden="true"> / </span>
-					<?php endif; ?>
-					<?php if ( $template && 'publish' === $template->post_status ) : ?>
-						<a href="<?php echo esc_url( get_permalink( $template ) ); ?>">
-							<?php echo esc_html( $template->post_title ); ?>
-						</a>
-						<span aria-hidden="true"> / </span>
-					<?php endif; ?>
-					<span><?php echo $start ? esc_html( DateHelper::to_display( $start ) ) : esc_html( get_the_title() ); ?></span>
-				</nav>
+				<?php dish_the_breadcrumb(); ?>
 
 				<h1 class="dish-class-title">
 					<?php echo esc_html( $template ? $template->post_title : get_the_title() ); ?>
@@ -186,62 +172,7 @@ while ( have_posts() ) :
 			<?php endif; ?>
 
 			<?php /* Menu — items + dietary flags from the linked class template. */ ?>
-			<?php
-				$_m_menu_items    = $template_id ? (string) get_post_meta( $template_id, 'dish_menu_items',           true ) : '';
-				$_m_menu_dietary  = $template_id ? (array)  json_decode( get_post_meta( $template_id, 'dish_menu_dietary_flags', true ) ?: '[]', true ) : [];
-				$_m_menu_friendly = $template_id ? (array)  json_decode( get_post_meta( $template_id, 'dish_menu_friendly_for',  true ) ?: '[]', true ) : [];
-			?>
-			<?php if ( $_m_menu_items || $_m_menu_dietary ) : ?>
-				<section class="dish-class-menu dish-container" aria-label="<?php esc_attr_e( 'Class menu', 'dish-events' ); ?>">
-					<h2 class="dish-class-menu__heading"><?php esc_html_e( 'The Menu', 'dish-events' ); ?></h2>
-
-					<?php if ( $_m_menu_items ) :
-						$_m_items = array_filter( array_map( 'trim', explode( "\n", $_m_menu_items ) ) );
-					?>
-						<ul class="dish-menu-list">
-							<?php foreach ( $_m_items as $_m_item ) : ?>
-								<li class="dish-menu-list__item"><?php echo esc_html( $_m_item ); ?></li>
-							<?php endforeach; ?>
-						</ul>
-					<?php endif; ?>
-
-					<?php if ( $_m_menu_dietary || $_m_menu_friendly ) :
-						$_m_flag_labels     = \Dish\Events\Admin\MenuMetaBox::DIETARY_FLAGS;
-						$_m_friendly_labels = \Dish\Events\Admin\MenuMetaBox::FRIENDLY_FOR;
-					?>
-						<div class="dish-menu-dietary">
-							<?php if ( $_m_menu_dietary ) :
-								$_m_flag_display = array_map(
-									fn( $k ) => $_m_flag_labels[ $k ] ?? ucfirst( str_replace( '_', ' ', $k ) ),
-									$_m_menu_dietary
-								);
-							?>
-								<p class="dish-menu-dietary__flags">
-									<strong><?php esc_html_e( 'Dietary Flags:', 'dish-events' ); ?></strong>
-									<?php echo esc_html( implode( ', ', $_m_flag_display ) ); ?>
-								</p>
-							<?php endif; ?>
-							<?php if ( $_m_menu_friendly ) :
-								$_m_friendly_display = array_map(
-									fn( $k ) => $_m_friendly_labels[ $k ] ?? ucfirst( str_replace( '_', ' ', $k ) ),
-									$_m_menu_friendly
-								);
-							?>
-								<p class="dish-menu-dietary__friendly">
-									<?php echo esc_html( implode( '/', $_m_friendly_display ) . ' ' . __( 'Friendly', 'dish-events' ) ); ?>
-								</p>
-							<?php endif; ?>
-							<?php if ( $_m_menu_dietary ) : ?>
-								<p class="dish-menu-dietary__disclaimer">
-									<?php esc_html_e( 'Please contact us if any of the above dietary flags apply to you to ensure we can accommodate your dietary requirements.', 'dish-events' ); ?>
-								</p>
-							<?php endif; ?>
-						</div>
-					<?php endif; ?>
-
-				</section>
-			<?php endif; ?>
-
+		<?php dish_the_menu( $template_id ); ?>
 			<?php if ( $my_seats > 0 ) : ?>
 				<div class="dish-class-my-booking dish-container">
 					<p class="dish-class-my-booking__notice">

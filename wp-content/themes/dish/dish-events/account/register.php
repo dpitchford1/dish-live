@@ -82,7 +82,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php wp_nonce_field( 'dish-register' ); ?>
 
 			<p class="dish-form-field">
-				<button type="submit" class="dish-button dish-button--primary">
+				<button type="submit" class="button button--primary">
 					<?php esc_html_e( 'Create account', 'dish-events' ); ?>
 				</button>
 			</p>

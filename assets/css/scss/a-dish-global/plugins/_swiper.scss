@@ -1,0 +1,137 @@
+
+ /* $ Template to start with 
+====================================================================== */
+
+/* ── Gallery Swiper ─────────────────────────────────────────────────────────── */
+
+.dish-template-gallery {
+	padding-top: 0;
+	padding-bottom: 3rem;
+}
+
+.dish-template-swiper {
+	width: 100%;
+	overflow: hidden;
+}
+
+.dish-template-swiper .swiper-slide {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.dish-template-swiper__item {
+	margin: 0;
+	width: 100%;
+}
+
+.dish-template-swiper__item a {
+	display: block;
+	width: 100%;
+}
+
+.dish-template-swiper__item img {
+	width: 100%;
+	height: 60vh;
+	max-height: 640px;
+	object-fit: cover;
+	display: block;
+}
+
+
+/* Navigation — reset <button> defaults, let Swiper handle icon/sizing */
+.dish-template-swiper .swiper-button-prev,
+.dish-template-swiper .swiper-button-next {
+	appearance: none;
+	border: none;
+	background: rgba(25, 25, 25, 0.65);
+	color: #fff;
+	cursor: pointer;
+	padding: 0;
+	border-radius: 50%;
+	width: 44px;
+	height: 44px;
+}
+
+.dish-template-swiper .swiper-button-prev:hover,
+.dish-template-swiper .swiper-button-next:hover {
+	background: rgba( 25, 25, 25, 0.95 );
+}
+.dish-template-swiper .swiper-button-next::after, .dish-template-swiper .swiper-button-prev::after{
+    font-size: 1.5rem;
+    //font-weight: 700;
+}
+
+/* Pagination bullets */
+.dish-template-swiper .swiper-pagination {
+	bottom: 14px;
+}
+
+.dish-template-swiper .swiper-pagination-bullet {
+	background: #fff;
+	opacity: 0.55;
+}
+
+.dish-template-swiper .swiper-pagination-bullet-active {
+	opacity: 1;
+}
+
+/* Min width 480px
+---------------------------------------------- */
+@mixin bp-480() { 
+
+}
+
+/* Min width 600px
+---------------------------------------------- */
+@mixin bp-600() { 
+    // min-width: 37.5em
+    
+}
+
+/* Min width 768px
+---------------------------------------------- */
+@mixin bp-768() { 
+    // min-width: 48em
+
+}
+
+/* Min width 920px
+---------------------------------------------- */
+@mixin bp-920() { 
+    // min-width: 57.5em
+
+}
+
+/* Min width 1024px
+---------------------------------------------- */
+@mixin bp-1024() { 
+
+}
+
+/* Min width 1280px
+---------------------------------------------- */
+@mixin bp-1280() { 
+    // min-width: 80em
+
+}
+
+/* Min width 1440px
+---------------------------------------------- */
+@mixin bp-1440() { 
+
+}
+
+/* Min width 1600px
+---------------------------------------------- */
+@mixin bp-1600() { 
+
+}
+
+/* Min width 2100px
+---------------------------------------------- */
+@mixin bp-2100() { 
+    // min-width: 131.25em
+
+}
+

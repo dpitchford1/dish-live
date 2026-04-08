@@ -7,9 +7,7 @@
     padding: 3rem 0 1.5rem;
     margin-top: 3.5vh;
     content-visibility: auto;
-    background-color: #000;
-
-
+    background-color: #191919;
     }
 
 /* Footer Branding
@@ -21,18 +19,12 @@
     background-size: contain;
     background-position: top center;
     background-image: url('/assets/img/logos/dish-full-thin.svg');
-    //mix-blend-mode: difference;
+    mix-blend-mode: difference;
     }
 
 
 /* Footer Structure
 ---------------------------------------------- */
-// .global-footer a{
-//     color: #f7f7f7;
-//     &:hover, &:focus{
-//         color: #ff7824;
-//         }
-//     }
 .footer-menu{
     margin: 1rem 0 0;
     padding: 0;
@@ -86,6 +78,10 @@
     grid-area: footer-resto;
 }
 
+.footer--subtitle {
+    font-size: clamp( 1.1rem, 3vw, 1.5rem );
+}
+
 .copyright{ font-size: .75rem; margin-bottom: 0; padding: 2rem 0 0rem; text-align: center; }
 
 
@@ -120,8 +116,6 @@
 @mixin bp-600() { 
     // min-width: 37.5em
     .footer-grid{
-        // display: grid;
-        // grid-gap: 1rem;
         grid-template-areas:
         "footer-logo footer-logo"
         "footer-menu-about footer-menu-about"
@@ -174,12 +168,7 @@
     /* Footer Structure
     ---------------------------------------------- */
     .footer-grid{
-        //grid-template-columns: 20% 15% 25% auto;
         grid-template-areas:
-        // "footer-logo footer-menu footer-about footer-nav"
-        // "footer-newsletter footer-newsletter footer-newsletter footer-newsletter"
-        // "copyright copyright copyright copyright"
-
         "footer-logo footer-menu-about footer-menu-mains"
         "footer-menu-apps footer-oven footer-resto"
         
@@ -215,14 +204,9 @@
         /* Footer Structure
     ---------------------------------------------- */
     .footer-grid{
-        //grid-template-columns: 10% 10% 25% auto auto;
         grid-template-areas:
-            // "footer-logo footer-menu footer-about footer-nav footer-newsletter"
-            // "copyright copyright copyright copyright copyright"
-
             "footer-logo footer-menu-about footer-menu-mains footer-menu-apps footer-oven footer-resto"
-            // "footer-menu-apps footer-oven footer-resto"
-    }
+        }
 
     .footer-logo{
         height: 100px;
@@ -250,12 +234,6 @@
     
     /* Footer Structure
     ---------------------------------------------- */
-    // .footer-grid{
-    //     grid-template-columns: 11% 15% 20% 15% 35%;
-    //     grid-template-areas:
-    //         "footer-logo footer-menu footer-about footer-nav footer-newsletter"
-    //         "copyright copyright copyright copyright copyright"
-    // }
     .footer-logo{
         height: 120px;
         margin: 0 0 1rem;

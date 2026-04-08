@@ -39,7 +39,7 @@ final class Assets {
 	 */
 	public function enqueue(): void {
 		wp_enqueue_style(
-			'dish-events',
+			'dish-calendar',
 			DISH_EVENTS_URL . 'assets/css/dish-events.css',
 			[],
 			DISH_EVENTS_VERSION

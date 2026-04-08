@@ -26,7 +26,6 @@ $card_url     = get_permalink( $template );
 $format_id    = (int) get_post_meta( $template->ID, 'dish_format_id', true );
 $format_post  = $format_id ? get_post( $format_id ) : null;
 $format_color = $format_post ? ( (string) get_post_meta( $format_id, 'dish_format_color', true ) ?: '#c0392b' ) : '';
-$format_url   = $format_post ? get_permalink( $format_post ) : '';
 $ticket_type  = ClassTemplateRepository::get_ticket_type( $template->ID );
 $price_label = $ticket_type ? MoneyHelper::cents_to_display( (int) $ticket_type->price_cents ) : '';
 
@@ -75,10 +74,8 @@ if ( ! empty( $next_arr ) ) {
 	<?php endif; ?>
 
 	<div class="dish-card__body">
-		<?php if ( $format_post && $format_color ) : ?>
-			<a href="<?php echo esc_url( $format_url ); ?>" class="dish-format-pill" style="--format-color:<?php echo esc_attr( $format_color ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Format: %s', 'dish-events' ), $format_post->post_title ) ); ?>">
-				<?php echo esc_html( $format_post->post_title ); ?>
-			</a>
+		<?php if ( empty( $suppress_format_pill ) ) : ?>
+			<?php dish_the_format_pill( $format_post, $format_color ); ?>
 		<?php endif; ?>
 
 		<h3 class="dish-card__title">

@@ -89,6 +89,9 @@ while ( have_posts() ) :
 	] );
 	$first = ! empty( $first_arr ) ? $first_arr[0] : null;
 
+	// ── Display class: specific if URL param provided, else first upcoming ──
+	$display_class = $requested_class ?? $first;
+
 	// ── Duration ──────────────────────────────────────────────────────────────────────────
 	$duration_label = '';
 	if ( $first ) {
@@ -142,81 +145,205 @@ while ( have_posts() ) :
 	$attendee_note  = $first ? (string) get_post_meta( $first->ID, 'dish_attendee_note', true ) : '';
 	?>
 
-<main id="main-content" class="main--content">
-    <article id="post-<?php the_ID(); ?>">
+<?php /* ── Hero ─────────────────────────────────────────── */ ?>
+<?php if ( has_post_thumbnail() ) : ?>
+<div class="hero">
+    <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
+        'landscape_size' => 'basecamp-img-xl',
+        'loading'        => 'eager',
+        'fetchpriority'  => 'high',
+    ] ); ?>
+</div>
+<?php endif; ?>
+<div class="fluid-content breadcrumb"><?php dish_the_breadcrumb(); ?></div>
 
-        <?php if ( has_post_thumbnail() ) : ?>
-            <div class="dish-template-hero">
-                <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
-                    'landscape_size' => 'basecamp-img-xl',
-                    'loading'        => 'eager',
-                    'fetchpriority'  => 'high',
-                ] ); ?>
+<div class="content--region has--aside fluid-content">
+<?php /* ── Main Content ─────────────────────────────────────────── */ ?>
+<main id="main-content" class="main--content">
+    <h1 class="dish-template-title"><?php the_title(); ?></h1>
+    
+    <header class="dish-template-headers dish-containers">
+    <?php if ( has_excerpt() ) : ?>
+        <p class="dish-template-excerpt"><?php the_excerpt(); ?></p>
+    <?php endif; ?>
+    </header>
+
+    <section class="class-content">
+
+<?php /* ── Description ─────────────────────────────────────────── */ ?>
+<?php if ( get_the_content() ) : ?>
+    <article class="dish-template-contents dish-containers dish-contents">
+        <?php the_content(); ?>
+
+<?php /* ── Gallery ─────────────────────────────────────────── */ ?>
+    <?php if ( ! empty( $gallery_ids ) ) :
+        // Lazy-enqueue Swiper — only fires when the gallery actually renders.
+        wp_enqueue_style( 'dish-swiper', site_url( '/assets/css/resources/swiper.min.css' ), [], '11.2.7' );
+        wp_enqueue_script( 'dish-swiper', site_url( '/assets/js/resources/swiper.min.js' ), [], '11.2.7', true );
+        wp_add_inline_script( 'dish-swiper', '(function () {
+"use strict";
+function initGallery() {
+var el = document.querySelector( ".dish-template-swiper" );
+if ( ! el ) { return; }
+new Swiper( el, {
+    loop:        el.querySelectorAll( ".swiper-slide" ).length > 1,
+    slidesPerView: 1,
+    spaceBetween:  0,
+    pagination:  { el: el.querySelector( ".swiper-pagination" ), clickable: true },
+    navigation:  { nextEl: el.querySelector( ".swiper-button-next" ), prevEl: el.querySelector( ".swiper-button-prev" ) },
+} );
+}
+if ( document.readyState === "loading" ) {
+document.addEventListener( "DOMContentLoaded", initGallery );
+} else {
+initGallery();
+}
+}() );' );
+    ?>
+    <div class="dish-template-gallery dish-container" aria-label="<?php esc_attr_e( 'Class gallery', 'dish-events' ); ?>">
+        <div class="swiper dish-template-swiper">
+            <div class="swiper-wrapper">
+                <?php foreach ( $gallery_ids as $gid ) :
+                $alt = (string) get_post_meta( $gid, '_wp_attachment_image_alt', true );
+            ?>
+                <div class="swiper-slide">
+                    <figure class="dish-template-swiper__item">
+                        <?php echo wp_get_attachment_image( $gid, 'basecamp-img-xl', false, [ 'alt' => $alt, 'loading' => 'lazy' ] ); ?>
+                        </figure>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <div class="swiper-pagination"></div>
+            <button type="button" class="swiper-button-prev" aria-label="<?php esc_attr_e( 'Previous image', 'dish-events' ); ?>"></button>
+            <button type="button" class="swiper-button-next" aria-label="<?php esc_attr_e( 'Next image', 'dish-events' ); ?>"></button>
+        </div>
+    </div>
+<?php endif; ?>
+
+<?php /* ── Menu ─────────────────────────────────────────── */ ?>
+        <?php dish_the_menu( $template_id ); ?>
+    </article>
+<?php endif; ?>
+    </section>
+
+
+
+
+<?php /* ── Details panels ─────────────────────────────────────────── */ ?>
+<?php if ( $whats_included || $what_to_bring || $requirements || $dietary_flags ) : ?>
+
+    <section class="grid-general grid--4col tight--grid">
+
+        <?php if ( ! empty( $whats_included ) ) : ?>
+            <div class="dish-details-panel">
+                <h4 class="dish-details-panel__title"><?php esc_html_e( "What's Included", 'dish-events' ); ?></h4>
+                <ul class="dish-details-panel__list">
+                    <?php foreach ( $whats_included as $item ) : ?>
+                        <li><?php echo esc_html( $item['label'] ); ?></li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
         <?php endif; ?>
 
-        <header class="dish-template-header dish-container">
-
-			<?php dish_the_breadcrumb(); ?>
-
-            <h1 class="dish-template-title"><?php the_title(); ?></h1>
-
-            <?php if ( has_excerpt() ) : ?>
-                <p class="dish-template-excerpt"><?php the_excerpt(); ?></p>
-            <?php endif; ?>
-
-        <?php if ( $first && ( ( ! $is_enquiry && $price_cents ) || $duration_label || $capacity ) ) : ?>
-            <ul class="dish-template-meta" aria-label="<?php esc_attr_e( 'Class overview', 'dish-events' ); ?>">
-
-                <?php if ( $price_cents && ! $is_enquiry ) : ?>
-                        <li class="dish-template-meta__item dish-template-meta__item--price">
-                            <span class="dish-template-meta__label"><?php esc_html_e( 'From', 'dish-events' ); ?></span>
-                            <?php if ( $sale_cents && $sale_cents < $price_cents ) : ?>
-                                <span class="dish-template-meta__value">
-                                    <del><?php echo esc_html( MoneyHelper::cents_to_display( $price_cents ) ); ?></del>
-                                    <?php echo esc_html( MoneyHelper::cents_to_display( $sale_cents ) ); ?>
-                                </span>
-                            <?php else : ?>
-                                <span class="dish-template-meta__value"><?php echo esc_html( MoneyHelper::cents_to_display( $price_cents ) ); ?></span>
-                            <?php endif; ?>
-                        </li>
-                    <?php endif; ?>
-
-                    <?php if ( $duration_label ) : ?>
-                        <li class="dish-template-meta__item dish-template-meta__item--duration">
-                            <span class="dish-template-meta__label"><?php esc_html_e( 'Duration', 'dish-events' ); ?></span>
-                            <span class="dish-template-meta__value"><?php echo esc_html( $duration_label ); ?></span>
-                        </li>
-                    <?php endif; ?>
-
-                    <?php if ( $capacity ) : ?>
-                        <li class="dish-template-meta__item dish-template-meta__item--capacity">
-                            <span class="dish-template-meta__label"><?php esc_html_e( 'Max group size', 'dish-events' ); ?></span>
-                            <span class="dish-template-meta__value">
-                                <?php echo esc_html( sprintf( _n( '%d person', '%d people', $capacity, 'dish-events' ), $capacity ) ); ?>
-                            </span>
-                        </li>
-                    <?php endif; ?>
-
+        <?php if ( ! empty( $what_to_bring ) ) : ?>
+            <div class="dish-details-panel">
+                <h4 class="dish-details-panel__title"><?php esc_html_e( 'What to Bring', 'dish-events' ); ?></h4>
+                <ul class="dish-details-panel__list">
+                    <?php foreach ( $what_to_bring as $item ) : ?>
+                        <li><?php echo esc_html( $item['label'] ); ?></li>
+                    <?php endforeach; ?>
                 </ul>
-            <?php endif; ?>
+            </div>
+        <?php endif; ?>
 
-        </header>
+        <?php if ( ! empty( $requirements ) ) : ?>
+            <div class="dish-details-panel">
+                <h4 class="dish-details-panel__title"><?php esc_html_e( 'Class Requirements', 'dish-events' ); ?></h4>
+                <ul class="dish-details-panel__list">
+                    <?php foreach ( $requirements as $item ) : ?>
+                        <li><?php echo esc_html( $item['label'] ); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
+        <?php if ( ! empty( $dietary_flags ) ) : ?>
+            <div class="dish-details-panel">
+                <h4 class="dish-details-panel__title"><?php esc_html_e( 'Dietary Information', 'dish-events' ); ?></h4>
+                <ul class="dish-details-panel__list">
+                    <?php foreach ( $dietary_flags as $item ) : ?>
+                        <li><?php echo esc_html( $item['label'] ); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
+    </section><!-- .dish-details-grid -->
+
+<?php endif; ?>
+    
+</main>
+
+    <aside class="aside class--aside">
+        <h3 class="dish-template-title dish-template-title--secondary"><?php esc_html_e( 'Class Ingredients', 'dish-events' ); ?></h3>
+        
+        <?php /* ── Class Meta ─────────────────────────────────────────── */ ?>
+    <?php if ( ! $display_class && ( ( ! $is_enquiry && $price_cents ) || $capacity ) ) : ?>
+        <ul class="dish-template-meta" aria-label="<?php esc_attr_e( 'Class overview', 'dish-events' ); ?>">
+
+        <?php if ( $format ) : ?>
+            <li class="dish-template-meta__item">
+                <span class="dish-template-meta__label"><?php esc_html_e( 'Format', 'dish-events' ); ?></span>
+                <span class="dish-template-format" style="color: <?php echo esc_attr( $format_color ); ?>;"><?php echo esc_html( $format->post_title ); ?></span>
+            </li>
+        <?php endif; ?>
+
+        <?php if ( $price_cents && ! $is_enquiry ) : ?>
+            <li class="dish-template-meta__item">
+                <span class="dish-template-meta__label"><?php esc_html_e( 'From', 'dish-events' ); ?></span>
+                <?php if ( $sale_cents && $sale_cents < $price_cents ) : ?>
+                    <span class="dish-template-meta__value">
+                        <del><?php echo esc_html( MoneyHelper::cents_to_display( $price_cents ) ); ?></del>
+                        <?php echo esc_html( MoneyHelper::cents_to_display( $sale_cents ) ); ?>
+                    </span>
+                <?php else : ?>
+                    <span class="dish-template-meta__value"><?php echo esc_html( MoneyHelper::cents_to_display( $price_cents ) ); ?></span>
+                <?php endif; ?>
+            </li>
+        <?php endif; ?>
+
+        <?php if ( $duration_label ) : ?>
+            <li class="dish-template-meta__item">
+                <span class="dish-template-meta__label"><?php esc_html_e( 'Duration', 'dish-events' ); ?></span>
+                <span class="dish-template-meta__value"><?php echo esc_html( $duration_label ); ?></span>
+            </li>
+        <?php endif; ?>
+
+        <?php if ( $capacity ) : ?>
+            <li class="dish-template-meta__item">
+                <span class="dish-template-meta__label"><?php esc_html_e( 'Capacity', 'dish-events' ); ?></span>
+                <span class="dish-template-meta__value"><?php echo esc_html( sprintf( _n( '%d person', '%d people', $capacity, 'dish-events' ), $capacity ) ); ?></span>
+            </li>
+        <?php endif; ?>
+
+        </ul>
+        <p><?php esc_html_e( 'No classes are currently scheduled. Please check back later for upcoming dates.', 'dish-events' ); ?></p>
+    <?php endif; ?>
 
     <?php
-    // ── Specific instance booking panel ───────────────────────────────────
-    // Shown when ?class_id=N is in the URL (calendar click or card click).
-    if ( $requested_class ) :
+    // ── Instance booking panel ─────────────────────────────────────────────
+    // Shows the first upcoming class by default; overridden by ?class_id=N.
+    if ( $display_class ) :
         $_dish_settings  = (array) get_option( 'dish_settings', [] );
         $_booking_page   = (int) ( $_dish_settings['booking_page'] ?? 0 );
         $_book_url       = $_booking_page
-            ? add_query_arg( 'class_id', $requested_class->ID, get_permalink( $_booking_page ) )
+            ? add_query_arg( 'class_id', $display_class->ID, get_permalink( $_booking_page ) )
             : '';
 
-        $_inst_start  = (int) get_post_meta( $requested_class->ID, 'dish_start_datetime', true );
-        $_inst_end    = (int) get_post_meta( $requested_class->ID, 'dish_end_datetime',   true );
-        $_is_private  = (bool) get_post_meta( $requested_class->ID, 'dish_is_private', true );
-        $_booked      = ClassRepository::get_booked_count( $requested_class->ID );
+        $_inst_start  = (int) get_post_meta( $display_class->ID, 'dish_start_datetime', true );
+        $_inst_end    = (int) get_post_meta( $display_class->ID, 'dish_end_datetime',   true );
+        $_is_private  = (bool) get_post_meta( $display_class->ID, 'dish_is_private', true );
+        $_booked      = ClassRepository::get_booked_count( $display_class->ID );
         $_remaining   = $capacity > 0 ? max( 0, $capacity - $_booked ) : null;
 
         $_date_label  = $_inst_start ? DateHelper::to_display( $_inst_start ) : '';
@@ -228,7 +355,8 @@ while ( have_posts() ) :
             }
         }
     ?>
-    <div class="dish-instance-panel dish-container">
+    <div class="dish-instance-panel dish-containers">
+        <h4 class="dish-instance-panel__title"><?php esc_html_e( 'Next Class', 'dish-events' ); ?></h4>
         <div class="dish-instance-panel__inner">
             <div class="dish-instance-panel__meta">
                 <?php if ( $_date_label ) : ?>
@@ -260,240 +388,73 @@ while ( have_posts() ) :
             </div>
         <?php if ( ! $_is_private && ( $_remaining === null || $_remaining > 0 ) ) : ?>
             <?php if ( $is_enquiry ) : ?>
-                <?php
-                $_eq_page = (int) Settings::get( 'enquiry_page', 0 );
-                $_eq_url  = $_eq_page
-                    ? get_permalink( $_eq_page )
-                    : 'mailto:' . Settings::get( 'studio_email', (string) get_bloginfo( 'admin_email' ) );
-                ?>
-                <a href="<?php echo esc_url( $_eq_url ); ?>" class="dish-instance-panel__cta dish-button dish-button--secondary">
+                <a href="<?php echo esc_url( dish_get_enquiry_url() ); ?>" class="dish-instance-panel__cta button button--secondary">
                     <?php esc_html_e( 'Enquire to Book', 'dish-events' ); ?>
                 </a>
             <?php elseif ( $_book_url ) : ?>
-                <a href="<?php echo esc_url( $_book_url ); ?>" class="dish-instance-panel__cta dish-button dish-button--primary">
+                <a href="<?php echo esc_url( $_book_url ); ?>" class="dish-instance-panel__cta button button--primary">
                     <?php esc_html_e( 'Book This Class', 'dish-events' ); ?>
                 </a>
             <?php endif; ?>
-            <?php elseif ( $_remaining !== null && $_remaining <= 0 ) : ?>
-                <span class="dish-instance-panel__cta dish-button dish-button--disabled" aria-disabled="true">
-                    <?php esc_html_e( 'Sold Out', 'dish-events' ); ?>
-                </span>
-            <?php endif; ?>
+        <?php elseif ( $_remaining !== null && $_remaining <= 0 ) : ?>
+            <span class="dish-instance-panel__cta button button--disabled" aria-disabled="true">
+                <?php esc_html_e( 'Sold Out', 'dish-events' ); ?>
+            </span>
+        <?php endif; ?>
         </div>
     </div>
     <?php endif; ?>
 
-
-        <?php /* ── Description ─────────────────────────────────────────────────────────── */ ?>
-    <?php if ( get_the_content() ) : ?>
-        <div class="dish-template-content dish-container dish-content">
-            <?php the_content(); ?>
+    <?php /* ── Chefs ─────────────────────────────────────────── */ ?>
+    <?php if ( $is_guest_chef && $guest_chef_name ) : ?>
+    <div class="dish-template-chefs dish-container">
+        <h4 class="dish-template-chefs__heading"><?php esc_html_e( 'The Guest Chef', 'dish-events' ); ?></h4>
+        <div class="dish-chef-mini-list">
+            <div class="dish-chef-mini">
+                <div class="dish-chef-mini__info">
+                    <strong class="dish-chef-mini__name"><?php echo esc_html( $guest_chef_name ); ?></strong>
+                    <?php if ( $guest_chef_role ) : ?>
+                        <span class="dish-chef-mini__role"><?php echo esc_html( $guest_chef_role ); ?></span>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php elseif ( ! $is_guest_chef && ! empty( $chefs ) ) : ?>
+    <div class="dish-template-chefss dish-containers">
+        <h4 class="dish-template-chefs__heading">
+            <?php echo esc_html( _n( 'Class Chef', 'Class Chefs', count( $chefs ), 'dish-events' ) ); ?>
+        </h4>
+        <div class="dish-chef-mini-list">
+            <?php foreach ( $chefs as $chef ) :
+                $chef_role = (string) get_post_meta( $chef->ID, 'dish_chef_role', true );
+            ?>
+                <a href="<?php echo esc_url( get_permalink( $chef->ID ) ); ?>" class="dish-chef-mini">
+                    <?php if ( has_post_thumbnail( $chef->ID ) ) : ?>
+                    <?php echo wp_get_attachment_image( get_post_thumbnail_id( $chef->ID ), 'thumbnail', false, [ 'class' => 'dish-chef-mini__photo', 'loading' => 'lazy' ] ); ?>
+                    <?php endif; ?>
+                    <div class="dish-chef-mini__info">
+                        <h5><?php echo esc_html( $chef->post_title ); ?></h5>
+                        <?php if ( $chef_role ) : ?>
+                            <span class="dish-chef-mini__role"><?php echo esc_html( $chef_role ); ?></span>
+                        <?php endif; ?>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+    <?php if ( $attendee_note ) : ?>
+        <div class="dish-attendee-note dish-containers">
+            <p>Note from the chef: <?php echo wp_kses_post( nl2br( $attendee_note ) ); ?></p>
         </div>
     <?php endif; ?>
-    <?php /* ── Menu ────────────────────────────────────────────────────────────────────────── */ ?>
-    <?php
-        $_t_menu_items    = (string) get_post_meta( $template_id, 'dish_menu_items',           true );
-        $_t_menu_dietary  = (array)  json_decode( get_post_meta( $template_id, 'dish_menu_dietary_flags', true ) ?: '[]', true );
-        $_t_menu_friendly = (array)  json_decode( get_post_meta( $template_id, 'dish_menu_friendly_for',  true ) ?: '[]', true );
-    ?>
-    <?php if ( $_t_menu_items || $_t_menu_dietary ) : ?>
-        <section class="dish-template-menu dish-container" aria-label="<?php esc_attr_e( 'Class menu', 'dish-events' ); ?>">
-            <h2 class="dish-template-menu__heading"><?php esc_html_e( 'The Menu', 'dish-events' ); ?></h2>
+            
+    </aside>
+</div>
 
-            <?php if ( $_t_menu_items ) :
-                $_t_items = array_filter( array_map( 'trim', explode( "\n", $_t_menu_items ) ) );
-            ?>
-                <ul class="dish-menu-list">
-                    <?php foreach ( $_t_items as $_t_item ) : ?>
-                        <li class="dish-menu-list__item"><?php echo esc_html( $_t_item ); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
-
-            <?php if ( $_t_menu_dietary || $_t_menu_friendly ) :
-                $_t_flag_labels     = \Dish\Events\Admin\MenuMetaBox::DIETARY_FLAGS;
-                $_t_friendly_labels = \Dish\Events\Admin\MenuMetaBox::FRIENDLY_FOR;
-            ?>
-                <div class="dish-menu-dietary">
-                    <?php if ( $_t_menu_dietary ) :
-                        $_t_flag_display = array_map(
-                            fn( $k ) => $_t_flag_labels[ $k ] ?? ucfirst( str_replace( '_', ' ', $k ) ),
-                            $_t_menu_dietary
-                        );
-                    ?>
-                        <p class="dish-menu-dietary__flags">
-                            <strong><?php esc_html_e( 'Dietary Flags:', 'dish-events' ); ?></strong>
-                            <?php echo esc_html( implode( ', ', $_t_flag_display ) ); ?>
-                        </p>
-                    <?php endif; ?>
-                    <?php if ( $_t_menu_friendly ) :
-                        $_t_friendly_display = array_map(
-                            fn( $k ) => $_t_friendly_labels[ $k ] ?? ucfirst( str_replace( '_', ' ', $k ) ),
-                            $_t_menu_friendly
-                        );
-                    ?>
-                        <p class="dish-menu-dietary__friendly">
-                            <?php echo esc_html( implode( '/', $_t_friendly_display ) . ' ' . __( 'Friendly', 'dish-events' ) ); ?>
-                        </p>
-                    <?php endif; ?>
-                    <?php if ( $_t_menu_dietary ) : ?>
-                        <p class="dish-menu-dietary__disclaimer">
-                            <?php esc_html_e( 'Please contact us if any of the above dietary flags apply to you to ensure we can accommodate your dietary requirements.', 'dish-events' ); ?>
-                        </p>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
-
-        </section>
-    <?php endif; ?>
-    <?php /* ── Gallery ──────────────────────────────────────────────────────────────── */ ?>
-        <?php if ( ! empty( $gallery_ids ) ) :
-            // Lazy-enqueue Swiper — only fires when the gallery actually renders.
-            wp_enqueue_style( 'dish-swiper', site_url( '/assets/css/resources/swiper.min.css' ), [], '11.2.7' );
-            wp_enqueue_script( 'dish-swiper', site_url( '/assets/js/resources/swiper.min.js' ), [], '11.2.7', true );
-            wp_add_inline_script( 'dish-swiper', '(function () {
-"use strict";
-function initGallery() {
-    var el = document.querySelector( ".dish-template-swiper" );
-    if ( ! el ) { return; }
-    new Swiper( el, {
-        loop:        el.querySelectorAll( ".swiper-slide" ).length > 1,
-        slidesPerView: 1,
-        spaceBetween:  0,
-        pagination:  { el: el.querySelector( ".swiper-pagination" ), clickable: true },
-        navigation:  { nextEl: el.querySelector( ".swiper-button-next" ), prevEl: el.querySelector( ".swiper-button-prev" ) },
-    } );
-}
-if ( document.readyState === "loading" ) {
-    document.addEventListener( "DOMContentLoaded", initGallery );
-} else {
-    initGallery();
-}
-}() );' );
-        ?>
-            <section class="dish-template-gallery dish-container" aria-label="<?php esc_attr_e( 'Class gallery', 'dish-events' ); ?>">
-                <div class="swiper dish-template-swiper">
-                    <div class="swiper-wrapper">
-                        <?php foreach ( $gallery_ids as $gid ) :
-                        $alt = (string) get_post_meta( $gid, '_wp_attachment_image_alt', true );
-                    ?>
-                        <div class="swiper-slide">
-                            <figure class="dish-template-swiper__item">
-                                <?php echo wp_get_attachment_image( $gid, 'basecamp-img-xl', false, [ 'alt' => $alt, 'loading' => 'lazy', 'sizes' => '100vw' ] ); ?>
-                                </figure>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                    <div class="swiper-pagination"></div>
-                    <button type="button" class="swiper-button-prev" aria-label="<?php esc_attr_e( 'Previous image', 'dish-events' ); ?>"></button>
-                    <button type="button" class="swiper-button-next" aria-label="<?php esc_attr_e( 'Next image', 'dish-events' ); ?>"></button>
-                </div>
-            </section>
-        <?php endif; ?>
-
-        <?php /* ── Chefs ─────────────────────────────────────────────────────────────────── */ ?>
-        <?php if ( $is_guest_chef && $guest_chef_name ) : ?>
-            <section class="dish-template-chefs dish-container">
-                <h2 class="dish-template-chefs__heading"><?php esc_html_e( 'Your Guest Chef', 'dish-events' ); ?></h2>
-                <div class="dish-chef-mini-list">
-                    <div class="dish-chef-mini">
-                        <div class="dish-chef-mini__info">
-                            <strong class="dish-chef-mini__name"><?php echo esc_html( $guest_chef_name ); ?></strong>
-                            <?php if ( $guest_chef_role ) : ?>
-                                <span class="dish-chef-mini__role"><?php echo esc_html( $guest_chef_role ); ?></span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        <?php elseif ( ! $is_guest_chef && ! empty( $chefs ) ) : ?>
-            <section class="dish-template-chefs dish-container">
-                <h2 class="dish-template-chefs__heading">
-                    <?php echo esc_html( _n( 'Your Chef', 'Your Chefs', count( $chefs ), 'dish-events' ) ); ?>
-                </h2>
-                <div class="dish-chef-mini-list">
-                    <?php foreach ( $chefs as $chef ) :
-                        $chef_role = (string) get_post_meta( $chef->ID, 'dish_chef_role', true );
-                    ?>
-                        <a href="<?php echo esc_url( get_permalink( $chef->ID ) ); ?>" class="dish-chef-mini">
-                            <?php if ( has_post_thumbnail( $chef->ID ) ) : ?>
-                            <?php echo wp_get_attachment_image( get_post_thumbnail_id( $chef->ID ), 'thumbnail', false, [ 'class' => 'dish-chef-mini__photo', 'sizes' => '40px', 'loading' => 'lazy' ] ); ?>
-                            <?php endif; ?>
-                            <div class="dish-chef-mini__info">
-                                <strong class="dish-chef-mini__name"><?php echo esc_html( $chef->post_title ); ?></strong>
-                                <?php if ( $chef_role ) : ?>
-                                    <span class="dish-chef-mini__role"><?php echo esc_html( $chef_role ); ?></span>
-                                <?php endif; ?>
-                            </div>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
-            </section>
-        <?php endif; ?>
-
-        <?php /* ── Details panels ─────────────────────────────────────────────────────── */ ?>
-        <?php if ( $whats_included || $what_to_bring || $requirements || $dietary_flags ) : ?>
-            <section class="dish-template-details dish-container">
-                <div class="dish-details-grid">
-
-                    <?php if ( ! empty( $whats_included ) ) : ?>
-                        <div class="dish-details-panel">
-                            <h3 class="dish-details-panel__title"><?php esc_html_e( "What's Included", 'dish-events' ); ?></h3>
-                            <ul class="dish-details-panel__list">
-                                <?php foreach ( $whats_included as $item ) : ?>
-                                    <li><?php echo esc_html( $item['label'] ); ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ( ! empty( $what_to_bring ) ) : ?>
-                        <div class="dish-details-panel">
-                            <h3 class="dish-details-panel__title"><?php esc_html_e( 'What to Bring', 'dish-events' ); ?></h3>
-                            <ul class="dish-details-panel__list">
-                                <?php foreach ( $what_to_bring as $item ) : ?>
-                                    <li><?php echo esc_html( $item['label'] ); ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ( ! empty( $requirements ) ) : ?>
-                        <div class="dish-details-panel">
-                            <h3 class="dish-details-panel__title"><?php esc_html_e( 'Class Requirements', 'dish-events' ); ?></h3>
-                            <ul class="dish-details-panel__list">
-                                <?php foreach ( $requirements as $item ) : ?>
-                                    <li><?php echo esc_html( $item['label'] ); ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ( ! empty( $dietary_flags ) ) : ?>
-                        <div class="dish-details-panel">
-                            <h3 class="dish-details-panel__title"><?php esc_html_e( 'Dietary Information', 'dish-events' ); ?></h3>
-                            <ul class="dish-details-panel__list">
-                                <?php foreach ( $dietary_flags as $item ) : ?>
-                                    <li><?php echo esc_html( $item['label'] ); ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    <?php endif; ?>
-
-                </div><!-- .dish-details-grid -->
-            </section>
-        <?php endif; ?>
-
-        <?php if ( $attendee_note ) : ?>
-            <div class="dish-attendee-note dish-container">
-                <p><?php echo wp_kses_post( nl2br( $attendee_note ) ); ?></p>
-            </div>
-        <?php endif; ?>
-
-        <?php include __DIR__ . '/upcoming.php'; ?>
-
-    </article>
-</main>
+<?php /* ── Upcoming Classes ─────────────────────────────────────────── */ ?>
+<?php include __DIR__ . '/upcoming.php'; ?>
 
 <?php endwhile; ?>
 

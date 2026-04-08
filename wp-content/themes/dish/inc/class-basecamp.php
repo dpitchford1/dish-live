@@ -116,6 +116,9 @@ if ( ! class_exists( __NAMESPACE__ . '\\Theme' ) ) :
             add_image_size( 'basecamp-img-m', 980, 560, false );
             add_image_size( 'basecamp-img-sm', 600, 343, false );
             add_image_size( 'basecamp-img-s', 400, 229, false );
+            add_image_size( 'basecamp-img-sq-sm', 150, 150, true );
+            add_image_size( 'basecamp-img-sq-md', 300, 300, true );
+            add_image_size( 'basecamp-img-sq-lg', 600, 600, true );
 
             // Portrait sizes — 3:4 hard crop. Used with srcset/<picture> for mobile portrait contexts.
             add_image_size( 'portait-sm', 300, 400, true );
@@ -124,14 +127,17 @@ if ( ! class_exists( __NAMESPACE__ . '\\Theme' ) ) :
 
 add_filter( 'image_size_names_choose', function( $sizes ) {
 				return array_merge( $sizes, array(
-					'basecamp-img-xl' => __('1400px by 800px', 'basecamp'),
-					'basecamp-img-lg' => __('1280 by 720', 'basecamp'),
-					'basecamp-img-m'  => __('980 by 560', 'basecamp'),
-					'basecamp-img-sm' => __('600 by 343', 'basecamp'),
-					'basecamp-img-s'  => __('400 by 229', 'basecamp'),
-					'portait-sm'      => __('Portrait 300 by 400', 'basecamp'),
-					'portait-m'       => __('Portrait 640 by 853', 'basecamp'),
-					'portait-lg'      => __('Portrait 960 by 1280', 'basecamp'),
+					'basecamp-img-xl'    => __( '1400 × 800', 'basecamp' ),
+					'basecamp-img-lg'    => __( '1280 × 720', 'basecamp' ),
+					'basecamp-img-m'     => __( '980 × 560', 'basecamp' ),
+					'basecamp-img-sm'    => __( '600 × 343', 'basecamp' ),
+					'basecamp-img-s'     => __( '400 × 229', 'basecamp' ),
+					'basecamp-img-sq-sm' => __( 'Square 150 × 150', 'basecamp' ),
+					'basecamp-img-sq-md' => __( 'Square 300 × 300', 'basecamp' ),
+					'basecamp-img-sq-lg' => __( 'Square 600 × 600', 'basecamp' ),
+					'portait-sm'         => __( 'Portrait 300 × 400', 'basecamp' ),
+					'portait-m'          => __( 'Portrait 640 × 853', 'basecamp' ),
+					'portait-lg'         => __( 'Portrait 960 × 1280', 'basecamp' ),
 				) );
 			} );
 

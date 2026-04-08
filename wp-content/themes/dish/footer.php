@@ -7,7 +7,7 @@
                 <div class="footer-logo"></div>
             </div>
             <div class="footer-area footer-span-2" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
-                <h3 class="subtitle">About Dish</h3>
+                <h3 class="footer--subtitle">About Dish</h3>
                 <?php /* Main Menu - different css */ ?>
                 <?php
                     wp_nav_menu( 
@@ -21,7 +21,7 @@
                 ?>
             </div>
             <div class="footer-area footer-span-3">
-                <h3 class="subtitle">Main Course</h3>
+                <h3 class="footer--subtitle">Main Course</h3>
                 <?php /* Main Menu - different css */ ?>
                 <?php
                     wp_nav_menu( 
@@ -35,7 +35,7 @@
                 ?>
             </div>
             <div class="footer-area footer-span-4">
-                <h3 class="subtitle">Appetizers</h3>
+                <h3 class="footer--subtitle">Appetizers</h3>
                 <?php /* Main Menu - different css */ ?>
                 <?php
                     wp_nav_menu( 
@@ -49,7 +49,7 @@
                 ?>
             </div>
             <div class="footer-area footer-span-5">
-                <h3 class="subtitle">In Person</h3>
+                <h3 class="footer--subtitle">In Person</h3>
                 <div itemscope itemtype="https://schema.org/LocalBusiness">
                     <div itemprop="name" class="hide-text">Dish Cooking Studio</div>
                     <meta itemprop="openingHours" class="is--hidden" content="Mo,Tu,We,Th,Fr 11:00-18:00" datetime="Mo,Tu,We,Th,Fr 11:00-18:00">
@@ -67,7 +67,7 @@
                 </div>  
             </div>
             <div class="footer-area footer-span-6">
-                <h3 class="subtitle">Online</h3>
+                <h3 class="footer--subtitle">Online</h3>
                 <ul class="footer--social-links is--flex-list">
 
                     <li class="flex"><a class="ico-list--item" href="https://www.instagram.com/dishcookingstudio/" target="_blank" rel="me"><svg xmlns="http://www.w3.org/2000/svg" class="svg-inline i-instagram" style="enable-background:new 0 0 216 216" viewBox="0 0 216 216"><path fill="currentColor" d="M108 56.3c-28.6 0-51.7 23.1-51.7 51.7s23.1 51.7 51.7 51.7 51.7-23.1 51.7-51.7-23.1-51.7-51.7-51.7zm0 85.3c-18.5 0-33.6-15.1-33.6-33.6S89.5 74.4 108 74.4s33.6 15.1 33.6 33.6-15.1 33.6-33.6 33.6zm65.9-87.4c0 6.7-5.4 12.1-12.1 12.1-6.7 0-12.1-5.4-12.1-12.1s5.4-12.1 12.1-12.1 12.1 5.5 12.1 12.1zm34.2 12.2c-.8-16.1-4.5-30.4-16.3-42.2C180 12.4 165.7 8.7 149.6 7.9c-16.7-.9-66.5-.9-83.2 0-16.1.8-30.4 4.5-42.2 16.3S8.7 50.3 7.9 66.4C7 83 7 132.9 7.9 149.6c.8 16.1 4.5 30.4 16.3 42.2s26.1 15.5 42.2 16.3c16.6.9 66.5.9 83.2 0 16.1-.8 30.4-4.5 42.2-16.3 11.8-11.8 15.5-26.1 16.3-42.2.9-16.7.9-66.5 0-83.2zm-21.5 101c-3.5 8.8-10.3 15.6-19.2 19.2-13.3 5.3-44.8 4-59.4 4s-46.2 1.2-59.4-4c-8.8-3.5-15.6-10.3-19.2-19.2-5.3-13.3-4-44.8-4-59.4s-1.2-46.2 4-59.4C33 39.8 39.7 33 48.6 29.4c13.3-5.3 44.8-4 59.4-4s46.2-1.2 59.4 4c8.8 3.5 15.6 10.3 19.2 19.2 5.3 13.3 4 44.8 4 59.4s1.3 46.2-4 59.4z"/></svg><span class="hide-text">Instagram</span></a></li>

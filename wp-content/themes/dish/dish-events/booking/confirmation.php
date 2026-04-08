@@ -124,9 +124,7 @@ get_header();
 		<!-- ── Success header ──────────────────────────────────────────────── -->
 		<div class="dish-confirmation__hero">
 			<div class="dish-confirmation__icon" aria-hidden="true">✓</div>
-			<h1 class="dish-confirmation__title">
-				<?php esc_html_e( "You're booked!", 'dish-events' ); ?>
-			</h1>
+			<h2 class="dish-confirmation__title"><?php esc_html_e( "You're booked!", 'dish-events' ); ?></h2>
 			<p class="dish-confirmation__subtitle">
 				<?php
 				printf(

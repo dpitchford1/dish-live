@@ -171,7 +171,7 @@ final class Admin {
 		 * @return array
 		 */
 		public function cleanup_mce( array $args ): array {
-			$args['block_formats'] = 'Paragraph=p;Heading 3=h3;Heading 4=h4; Heading 5=h5; Heading 6=h6';
+			$args['block_formats'] = 'Paragraph=p;Heading 2=h2;Heading 3=h3;Heading 4=h4; Heading 5=h5; Heading 6=h6';
 			return $args;
 		}
 

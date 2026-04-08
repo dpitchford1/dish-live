@@ -47,6 +47,7 @@ final class RemoveBloat {
 		remove_action( 'template_redirect', 'rest_output_link_header', 11 );
 		remove_filter( 'oembed_dataparse',    'wp_filter_oembed_result',  10 );
 		remove_filter( 'the_content',         'convert_smilies' );
+		remove_filter( 'the_excerpt',         'wpautop' );
 		remove_action( 'set_comment_cookies', 'wp_set_comment_cookies' );
 		remove_action( 'wp_enqueue_scripts',  'wp_enqueue_global_styles' );
 		remove_action( 'wp_body_open',        'wp_global_styles_render_svg_filters' );
@@ -113,6 +114,12 @@ final class RemoveBloat {
 
         wp_deregister_style( 'global-styles-inline-css' );
         wp_dequeue_style( 'global-styles-inline-css' );
+
+        // wp_deregister_style( 'dish-events' );
+        // wp_dequeue_style( 'dish-events' );
+
+        // wp_deregister_style( 'dish-calendar' );
+        // wp_dequeue_style( 'dish-calendar' );
 	}
 
 	/**

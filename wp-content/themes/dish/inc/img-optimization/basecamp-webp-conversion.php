@@ -81,6 +81,9 @@ function basecamp_convert_to_webp_gd($source_path, $destination_path, $quality =
 	if (!function_exists('imagewebp') || !file_exists($source_path)) {
 		return false;
 	}
+	// GD image conversion can be slow for large files — extend the time
+	// limit for this operation without affecting the global limit.
+	set_time_limit( 120 );
 	$mime_info = wp_check_filetype($source_path);
 	$mime_type = isset($mime_info['type']) ? $mime_info['type'] : '';
 	$image = false;
