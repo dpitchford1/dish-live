@@ -53,6 +53,7 @@ function the_toast(): void {
 }
 
 require_once __DIR__ . '/inc/frontend/basecamp-page-helpers.php';
+require_once __DIR__ . '/inc/frontend/basecamp-subnav.php';
 //require_once __DIR__ . '/inc/frontend/class-basecamp-video-carousel-metabox.php';
 $basecamp_frontend = new Basecamp_Frontend();
 
@@ -104,6 +105,8 @@ if ( Basecamp_Settings::get( 'webp_optimization', '1' ) ) {
 	require_once __DIR__ . '/inc/img-optimization/basecamp-webp-conversion.php';
 	require_once __DIR__ . '/inc/img-optimization/webp-test-admin.php';
 }
+
+require_once __DIR__ . '/inc/img-optimization/basecamp-thumb-regen.php';
 
 // ---------------------------------------------------------------------------
 // REST API

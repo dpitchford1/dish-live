@@ -1,44 +1,36 @@
 
- /* $ Article Content - WP entry content 
+ /* $ Inner pages subnav 
 ====================================================================== */
-.entry--content {
+.subnav{
+    background-color: #f9fafb;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 1.5rem;
+    //padding: 0.8rem 0;
+    z-index: 1;
 
-    //padding: 0 0 2.5vw;
-    line-height: 1.5;
+    .subnav-list{
+        padding: 1.2rem 0 .8rem;
+    }
 
+    li:after{
+        content: "|";
+        margin-left: 0.5rem;
+        color: #999;
+    }
+    li:last-child:after{
+        content: "";
+        margin-left: 0;
+        color: #999;
+    }
     a{
-        color: #ff7824;
+        text-decoration: none;
+
+        &:hover{
+            text-decoration: underline;
+        }
     }
-    P{
-        font-size: clamp( 1rem, 2vw, 1.15rem );
-        margin-bottom: 1.5rem;
-        overflow: hidden;
-    }
-    // img{
-    //     max-width: 100%;
-    //     height: auto;
-    //     width: 35%;
-    // }
-    .alignleft{
-        float: left;
-        margin: 0 1.5rem 1.5rem 0;
-        max-width: 100%;
-        height: auto;
-        width: 35%;
-    }
-    .alignright{
-        float: right;
-        margin: 0 0 1.5rem 1.5rem;
-        max-width: 100%;
-        height: auto;
-        width: 35%;
-    }
-    blockquote{
-        border-left: 4px solid #7f54b3;
-        padding-left: 1rem;
-        margin-left: 2rem;
-        margin-right: 0;
-        margin-bottom: 1.5rem;
+    .menu--selected:hover{
+        color: #999;
     }
 }
 

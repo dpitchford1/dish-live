@@ -15,7 +15,7 @@ use Dish\Events\Data\ClassRepository;
 use Dish\Events\Frontend\Frontend;
 ?>
 <aside class="aside">
-
+    <h3>Chefs Sidebar</h3>
     <?php /* ── Class Formats ────────────────────────────────────────────── */ ?>
     <?php
     $formats = get_posts( [

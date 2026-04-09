@@ -42,7 +42,7 @@ get_header();
 </div>
 <?php endif; ?>
 <main id="main-content" class="main--content">
-
+<?php // var_dump( wp_get_attachment_metadata( get_post_thumbnail_id( $promo_page->ID ) )['sizes'] ?? [] ); ?>
 <?php /* ── 1. Hero ─────────────────────────────────────────────────────── */ ?>
 
 <section class="content-region fluid-content">
@@ -112,16 +112,18 @@ $promo_pages = array_filter( [
 <section class="content-region spotlight-wrapper fluid-content">
     <div class="grid-general grid--2col">
         <?php foreach ( $promo_pages as $promo_page ) : ?>
-        <div class="region">
+        <div class="region mini-card">
             <?php if ( has_post_thumbnail( $promo_page->ID ) ) : ?>
-                <?php echo wp_get_attachment_image( get_post_thumbnail_id( $promo_page->ID ), 'basecamp-img-sq', false, [ 'loading' => 'lazy' ] ); ?>
+                <?php echo wp_get_attachment_image( get_post_thumbnail_id( $promo_page->ID ), 'basecamp-img-sq-sm', false, [ 'loading' => 'lazy', 'class' => 'mini-card--image' ] ); ?> 
             <?php endif; ?>
-            <h3><a href="<?php echo esc_url( get_permalink( $promo_page->ID ) ); ?>"><?php echo esc_html( get_the_title( $promo_page->ID ) ); ?></a></h3>
+            <div class="mini-card--content">
+            <h2><a href="<?php echo esc_url( get_permalink( $promo_page->ID ) ); ?>"><?php echo esc_html( get_the_title( $promo_page->ID ) ); ?></a></h2>
             <?php $excerpt = get_the_excerpt( $promo_page ); ?>
             <?php if ( $excerpt ) : ?>
                 <p><?php echo esc_html( $excerpt ); ?></p>
             <?php endif; ?>
             <a href="<?php echo esc_url( get_permalink( $promo_page->ID ) ); ?>" class="button"><?php esc_html_e( 'Read More', 'basecamp' ); ?></a>
+            </div>
         </div>
         <?php endforeach; ?>
     </div>

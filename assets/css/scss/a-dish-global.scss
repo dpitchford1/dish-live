@@ -4,9 +4,12 @@
 @use "a-dish-global/components/faq" as *;
 @use "a-dish-global/components/toast" as *;
 @use "a-dish-global/components/breadcrumb" as *;
-@use "a-dish-global/components/buttons" as *;
+@use "a-dish-global/components/cards" as *;
+@use "a-dish-global/components/subnav" as *;
 
 @use "a-dish-global/pages/article-content" as *;
+@use "a-dish-global/components/forms" as *;
+@use "a-dish-global/components/buttons" as *;
 
 @use "a-dish-global/plugins/swiper" as *;
 

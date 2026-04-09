@@ -18,16 +18,8 @@ if (!defined('ABSPATH')) {
 /**
  * Add WebP test page to the admin Tools menu.
  */
-function basecamp_webp_test_menu() {
-    add_management_page(
-        'WebP Testing',            // Page title
-        'WebP Testing',            // Menu title
-        'manage_options',          // Capability
-        'basecamp-webp-test',      // Menu slug
-        'basecamp_webp_test_page'  // Callback function
-    );
-}
-add_action('admin_menu', 'basecamp_webp_test_menu');
+// Menu registration removed — this page is now rendered as the 'test' tab
+// on the consolidated Image Tools page (Tools → Image Tools).
 
 /**
  * Display the WebP test admin page.

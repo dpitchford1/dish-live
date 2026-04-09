@@ -1,0 +1,6 @@
+path: /Users/dildomatrix/Sites/dish-live
+url: http://dishes.local
+
+# MAMP uses a Unix socket rather than TCP localhost.
+# Override here so wp-config.php doesn't need to change.
+dbhost: /Applications/MAMP/tmp/mysql/mysql.sock

@@ -22,6 +22,7 @@
     ] ); ?>
 </div>
 <?php endif; ?>
+<?php the_subnav(); ?>
 <div class="fluid-content has--aside">
 
 <main id="main-content" class="main--content">

@@ -4,9 +4,12 @@
 @use 'components/toast';
 @use 'components/faq';
 @use 'components/carousels';
-@use 'components/buttons';
+@use 'components/cards';
+@use 'components/subnav';
 
 @use 'pages/article-content';
+@use 'components/forms';
+@use 'components/buttons';
 
 @use 'plugins/swiper';
 
@@ -20,8 +23,11 @@
     @include toast.bp-480();
     @include faq.bp-480();
     @include buttons.bp-480();
+    @include subnav.bp-480();
+    @include cards.bp-480();
 
     @include article-content.bp-480();
+    @include forms.bp-480();
 
     @include swiper.bp-480();
 }
@@ -33,8 +39,11 @@
     @include toast.bp-600();
     @include faq.bp-600();
     @include buttons.bp-600();
+    @include subnav.bp-600();
+    @include cards.bp-600();
 
     @include article-content.bp-600();
+    @include forms.bp-600();
 
     @include swiper.bp-600();
 }
@@ -46,8 +55,11 @@
     @include toast.bp-768();
     @include faq.bp-768();
     @include buttons.bp-768();
+    @include subnav.bp-768();
+    @include cards.bp-768();
 
     @include article-content.bp-768();
+    @include forms.bp-768();
 
     @include swiper.bp-768();
 }
@@ -59,8 +71,11 @@
     @include toast.bp-1024();
     @include faq.bp-1024();
     @include buttons.bp-1024();
+        @include subnav.bp-1024();
+    @include cards.bp-1024();
 
     @include article-content.bp-1024();
+    @include forms.bp-1024();
 
     @include swiper.bp-1024();
 }
@@ -72,8 +87,11 @@
     @include toast.bp-1280();
     @include faq.bp-1280();
     @include buttons.bp-1280();
+    @include subnav.bp-1280();
+    @include cards.bp-1280();
 
     @include article-content.bp-1280();
+    @include forms.bp-1280();
 
     @include swiper.bp-1280();
 }
@@ -85,8 +103,11 @@
     @include toast.bp-1440();
     @include faq.bp-1440();
     @include buttons.bp-1440();
+    @include subnav.bp-1440();
+    @include cards.bp-1440();
 
     @include article-content.bp-1440();
+    @include forms.bp-1440();
 
     @include swiper.bp-1440();
 }
@@ -98,8 +119,11 @@
     @include toast.bp-1600();
     @include faq.bp-1600();
     @include buttons.bp-1600();
+    @include subnav.bp-1600();
+    @include cards.bp-1600();
 
     @include article-content.bp-1600();
+    @include forms.bp-1600();
 
     @include swiper.bp-1600();
 }
@@ -111,8 +135,11 @@
     @include toast.bp-2100();
     @include faq.bp-2100();
     @include buttons.bp-2100();
+    @include subnav.bp-2100();
+    @include cards.bp-2100();
 
     @include article-content.bp-2100();
+    @include forms.bp-2100();
 
     @include swiper.bp-2100();
 }

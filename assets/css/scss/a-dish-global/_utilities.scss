@@ -166,4 +166,20 @@
     color: #ff7824;
 }
 
+.icon--list{
+    flex-wrap: wrap;
+}
 
+.icon--list li{
+    display: inline-block;
+    height: 50px; 
+    width: 50px;
+    padding:.2rem;
+    color: #ff7824;
+    
+
+    svg{
+        height: 100%;
+        width: 100%;
+    }
+}

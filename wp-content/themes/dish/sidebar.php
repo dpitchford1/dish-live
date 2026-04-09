@@ -13,8 +13,12 @@
  *   get_template_part( 'templates/sidebars/sidebar', 'about' );
  */
 
-if ( basecamp_is_page_or_child_of( 'about-dish' ) || is_page( [ 'recipes', 'contact-us', 'class-menus' ] ) ) {
+if ( basecamp_is_page_or_child_of( 'about-dish' ) || is_page( [ 'recipes', 'class-menus' ] ) ) {
     get_template_part( 'templates/sidebars/sidebar', 'about' );
+} if ( basecamp_is_page_or_child_of( 'contact-us' ) || is_page( [ 'studio-rental' ] ) ) {
+    get_template_part( 'templates/sidebars/sidebar', 'corporate' );
+} elseif ( is_post_type_archive( 'dish_format' ) || is_singular( 'dish_format' ) ) {
+    get_template_part( 'templates/sidebars/sidebar', 'formats' );
 } elseif ( is_post_type_archive( 'dish_chef' ) || is_singular( 'dish_chef' ) ) {
     get_template_part( 'templates/sidebars/sidebar', 'chefs' );
 } elseif ( is_page( 'style-guide' ) ) {

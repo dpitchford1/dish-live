@@ -14,18 +14,22 @@ use Dish\Events\Data\ChefRepository;
 use Dish\Events\Frontend\Frontend;
 ?>
 <aside class="aside">
-    <h3>About Sidebar</h3>
+    <h3>Corporate Sidebar</h3>
     <?php /* ── Chefs ───────────────────────────────────────────────────── */ ?>
     <?php $chefs = ChefRepository::query( [ 'exclude_team' => true, 'limit' => 4 ] ); ?>
     <?php if ( ! empty( $chefs ) ) : ?>
     <section class="aside-section aside-chefs">
         <h3 class="aside-section__title"><?php esc_html_e( 'Meet the Chefs', 'dish-events' ); ?></h3>
-        <div class="content-wrapper">
+        <div class="grid-general grid--2col">
             <?php foreach ( $chefs as $chef ) : ?>
-                <?php include Frontend::locate( 'chefs/mini-card.php' ); ?>
+                <?php include Frontend::locate( 'chefs/card.php' ); ?>
             <?php endforeach; ?>
         </div>
-        <p><a href="<?php echo esc_url( get_post_type_archive_link( 'dish_chef' ) ); ?>" class=""><?php esc_html_e( 'Meet the Team', 'dish-events' ); ?></a></p>
+        <p>
+            <a href="<?php echo esc_url( get_post_type_archive_link( 'dish_chef' ) ); ?>" class="button">
+                <?php esc_html_e( 'All Chefs', 'dish-events' ); ?>
+            </a>
+        </p>
     </section>
     <?php endif; ?>
 

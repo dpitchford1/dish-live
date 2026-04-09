@@ -374,19 +374,99 @@ add_filter( 'wp_handle_upload', 'basecamp_mlp_handle_upload', 10, 1 );
 add_filter( 'mla_handle_upload', 'basecamp_mlp_handle_upload', 10, 1 );
 
 /**
- * Add admin page for bulk WebP conversion.
+ * Register the single Image Tools menu item under Tools.
+ * Shared across all three img-optimization pages — declared here as the
+ * primary file, guarded against duplicate registration.
  */
-function basecamp_webp_conversion_menu() {
-	add_submenu_page(
-		'tools.php',
-		'WebP Conversion',
-		'WebP Conversion',
+function basecamp_image_tools_menu(): void {
+	if ( function_exists( 'basecamp_image_tools_menu_registered' ) ) {
+		return;
+	}
+	add_management_page(
+		'Image Tools',
+		'Image Tools',
 		'manage_options',
-		'basecamp-webp-conversion',
-		'basecamp_webp_conversion_page'
+		'basecamp-image-tools',
+		'basecamp_image_tools_page'
 	);
 }
-add_action( 'admin_menu', 'basecamp_webp_conversion_menu' );
+add_action( 'admin_menu', 'basecamp_image_tools_menu' );
+
+/**
+ * Render the tabbed Image Tools hub page.
+ */
+function basecamp_image_tools_page(): void {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( 'You do not have sufficient permissions to access this page.' );
+	}
+
+	$current_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'webp';
+	$base_url    = add_query_arg( 'page', 'basecamp-image-tools', admin_url( 'tools.php' ) );
+
+	$tabs = [
+		'webp'  => 'WebP Conversion',
+		'regen' => 'Regenerate Thumbnails',
+		'test'  => 'WebP Testing',
+	];
+	?>
+	<div class="wrap">
+		<h1>Image Tools</h1>
+		<nav class="nav-tab-wrapper" aria-label="Image Tools tabs">
+			<?php foreach ( $tabs as $slug => $label ) : ?>
+			<a href="<?php echo esc_url( add_query_arg( 'tab', $slug, $base_url ) ); ?>"
+			   class="nav-tab<?php echo $current_tab === $slug ? ' nav-tab-active' : ''; ?>">
+				<?php echo esc_html( $label ); ?>
+			</a>
+			<?php endforeach; ?>
+		</nav>
+		<div class="tab-content" style="margin-top:1px;">
+			<?php
+			if ( $current_tab === 'webp' )        { basecamp_webp_conversion_page(); }
+			elseif ( $current_tab === 'regen' )   { basecamp_thumb_regen_page(); }
+			elseif ( $current_tab === 'test' )    { basecamp_webp_test_page(); }
+			?>
+		</div>
+	</div>
+	<?php
+}
+
+/**
+ * Handle WebP conversion form submissions at admin_init — before any output is sent.
+ * wp_redirect() must be called before headers are sent; the page callback fires too late.
+ */
+function basecamp_webp_conversion_handle_actions(): void {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	// Start conversion (POST).
+	if (
+		isset( $_POST['basecamp_webp_action'] ) &&
+		$_POST['basecamp_webp_action'] === 'start' &&
+		isset( $_POST['basecamp_webp_nonce'] ) &&
+		wp_verify_nonce( $_POST['basecamp_webp_nonce'], 'basecamp_webp_conversion' )
+	) {
+		$quality = isset( $_POST['basecamp_webp_quality'] ) ? intval( $_POST['basecamp_webp_quality'] ) : 80;
+		basecamp_webp_reset_conversion();
+		basecamp_webp_get_current_batch( $quality );
+
+		wp_redirect( add_query_arg( [ 'page' => 'basecamp-image-tools', 'tab' => 'webp' ], admin_url( 'tools.php' ) ) );
+		exit;
+	}
+
+	// Reset conversion (GET).
+	if (
+		isset( $_GET['reset'] ) && $_GET['reset'] == '1' &&
+		isset( $_GET['nonce'] ) &&
+		wp_verify_nonce( $_GET['nonce'], 'basecamp_reset_conversion' )
+	) {
+		basecamp_webp_reset_conversion();
+
+		wp_redirect( add_query_arg( [ 'page' => 'basecamp-image-tools', 'tab' => 'webp' ], admin_url( 'tools.php' ) ) );
+		exit;
+	}
+}
+add_action( 'admin_init', 'basecamp_webp_conversion_handle_actions' );
 
 /**
  * Admin page for bulk WebP conversion.
@@ -401,38 +481,7 @@ function basecamp_webp_conversion_page() {
 	$total_images = $progress['total_images'];
 	$processed_images = $progress['processed_images'];
 	$quality = isset($progress['quality']) ? $progress['quality'] : 80;
-	
-	// Initialize or update total count if needed
-	if (isset($_POST['basecamp_webp_action']) && $_POST['basecamp_webp_action'] === 'start' && 
-		isset($_POST['basecamp_webp_nonce']) && wp_verify_nonce($_POST['basecamp_webp_nonce'], 'basecamp_webp_conversion')) {
-		
-		// Get quality setting
-		$quality = isset($_POST['basecamp_webp_quality']) ? intval($_POST['basecamp_webp_quality']) : 80;
-		
-		// Reset any existing conversion and start a new one
-		basecamp_webp_reset_conversion();
-		$batch_id = basecamp_webp_get_current_batch($quality);
-		
-		// Get updated progress
-		$progress = basecamp_webp_get_conversion_progress();
-		
-		// Redirect to refresh the page
-		wp_redirect(add_query_arg('page', 'basecamp-webp-conversion', admin_url('tools.php')));
-		exit;
-	}
-	
-	// Reset conversion
-	if (isset($_GET['reset']) && $_GET['reset'] == '1' && 
-		isset($_GET['nonce']) && wp_verify_nonce($_GET['nonce'], 'basecamp_reset_conversion')) {
-		
-		// Reset conversion progress using the new database function
-		basecamp_webp_reset_conversion();
-		
-		// Redirect back to the page
-		wp_redirect(add_query_arg('page', 'basecamp-webp-conversion', admin_url('tools.php')));
-		exit;
-	}
-	
+
 	?>
 	<div class="wrap webp-conversion-wrap">
 		<h1>WebP Image Conversion</h1>
@@ -457,15 +506,16 @@ function basecamp_webp_conversion_page() {
 			<h2>Conversion Progress</h2>
 			
 			<?php if ( $total_images > 0 ):
-				$progress_pct = ( $processed_images / $total_images ) * 100;
+				$progress_pct     = ( $processed_images / $total_images ) * 100;
+				$progress_pct_str = number_format( $progress_pct, 1 );
 			?>
 			<div class="progress-bar">
-				<div class="progress" style="width: <?php echo esc_attr( $progress_pct ); ?>%;"></div>
+				<div class="progress" style="width: <?php echo esc_attr( $progress_pct_str ); ?>%;"></div>
 			</div>
 			
 			<p class="progress-text">
 				<strong>Progress:</strong> <?php echo esc_html( $processed_images ); ?> of <?php echo esc_html( $total_images ); ?> images processed
-				(<?php echo esc_html( round( $progress_pct, 1 ) ); ?>%)
+				(<?php echo esc_html( $progress_pct_str ); ?>%)
 			</p>
 			
 			<?php if ($processed_images > 0 && isset($progress['space_saved'])): ?>
@@ -545,11 +595,12 @@ function basecamp_webp_conversion_page() {
 			</div>
 			
 			<div class="reset-conversion">
-				<a href="<?php echo esc_url(add_query_arg(array(
-					'page' => 'basecamp-webp-conversion',
+				<a href="<?php echo esc_url( add_query_arg( [
+					'page'  => 'basecamp-image-tools',
+					'tab'   => 'webp',
 					'reset' => 1,
-					'nonce' => wp_create_nonce('basecamp_reset_conversion')
-				), admin_url('tools.php'))); ?>" class="button" onclick="return confirm('<?php echo esc_js(__('Are you sure you want to reset the conversion progress?', 'basecamp')); ?>');">Reset Conversion</a>
+					'nonce' => wp_create_nonce( 'basecamp_reset_conversion' ),
+				], admin_url( 'tools.php' ) ) ); ?>" class="button" onclick="return confirm('<?php echo esc_js(__('Are you sure you want to reset the conversion progress?', 'basecamp')); ?>');">Reset Conversion</a>
 				<p class="description">This will reset the conversion progress, allowing you to start from the beginning.</p>
 			</div>
 			<?php else: ?>
@@ -584,7 +635,7 @@ function basecamp_webp_conversion_page() {
  * Enqueue scripts for the WebP conversion admin page.
  */
 function basecamp_webp_admin_scripts( $hook ) {
-	if ( 'tools_page_basecamp-webp-conversion' !== $hook ) {
+	if ( 'tools_page_basecamp-image-tools' !== $hook ) {
 		return;
 	}
 	
