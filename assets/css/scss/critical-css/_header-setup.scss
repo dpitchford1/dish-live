@@ -1,0 +1,147 @@
+/* Enhanced small screen slide in out
+---------------------------------------------- */
+
+/* This gets loaded into critical.css and inlined */
+
+// .global-header{
+//     right: 0;
+//     //transform: translateX(0);
+// }
+/* Small screen functionality
+---------------------------------------------- */
+.no-js .global-header--ss {
+    display: none;
+}
+
+.global-header {
+    top: 60px;
+}
+.brand-fs {
+    display: none;
+}
+.is--fixed {
+    position: fixed;
+}
+
+/* Enhanced state */
+// Global header slide in out
+.global-header[data-nav-slide*="slide"], .global-header[data-nav-slide*="hidden"]{
+    right: -62rem;
+}
+.global-header[data-nav-slide*="visible"]{
+    right: 0;
+}
+
+
+/* Page BG with Navigation Open */
+.enhanced .exit-offcanvas{
+    transform: translateZ(0);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: -1;
+    transition: opacity 500ms ease-in-out;
+    backface-visibility: hidden;
+    pointer-events: none;
+    background-color: #ff7824;
+}
+
+@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+	.enhanced .exit-offcanvas {
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px); 
+		}
+}
+
+.enhanced[data-off-canvas="visible"] .exit-offcanvas, .enhanced [data-off-screen="visible"] .exit-offcanvas {
+    cursor: pointer;
+    transition: opacity 300ms ease;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+    z-index: 3;
+    pointer-events: unset;
+}
+
+.exit-offcanvas{
+    opacity: 0;
+}
+[data-off-canvas="visible"] .exit-offcanvas, [data-off-screen="visible"] .exit-offcanvas {
+    opacity: 0.5;
+}
+
+/* Min width 480px
+---------------------------------------------- */
+@mixin bp-480() { 
+    // min-width: 30em;
+}
+
+/* Min width 600px
+---------------------------------------------- */
+@mixin bp-600() { 
+    // min-width: 37.5em;
+}
+
+/* Max width 768px
+---------------------------------------------- */
+@mixin bp-767() {
+
+    // max-width: 48em;
+}
+/* Min width 768
+---------------------------------------------- */
+@mixin bp-768() { 
+    // min-width: 48em;
+}
+
+/* Min width 920px
+---------------------------------------------- */
+@mixin bp-920() { 
+    // min-width: 57.5em;
+}
+
+@mixin bp-1023() {
+    // max-width: 48em;
+
+    // set scrollbars on off canvas visible - padding of small screen header
+    .enhanced[data-off-canvas="visible"], .enhanced [data-off-screen="visible"]{
+        overflow: hidden;
+    }
+}
+
+/* Min width 1024px
+---------------------------------------------- */
+@mixin bp-1024() { 
+    // min-width: 64em;
+
+    // default large screen Header state
+    .global-header[data-nav-slide*="slide"]{ 
+        right: 0;
+    }
+    
+}
+
+/* Min width 1280px
+---------------------------------------------- */
+@mixin bp-1280() { 
+    // min-width: 80em;
+}
+
+/* Min width 1440px
+---------------------------------------------- */
+@mixin bp-1440() { 
+    // min-width: 90em;
+}
+
+/* Min width 1600px
+---------------------------------------------- */
+@mixin bp-1600() { 
+    // min-width: 100em;
+}
+
+/* Min width 2100px
+---------------------------------------------- */
+@mixin bp-2100() { 
+    // min-width: 131.25em;
+}

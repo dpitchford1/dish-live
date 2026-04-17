@@ -22,12 +22,12 @@
     background-color: transparent;
     }
 
-:where(input[type="text"], input[type="email"], input[type="password"], textarea) {
+:where(input[type="text"], input[type="email"], input[type="password"], input[type="tel"], textarea) {
     outline: none;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
-:where(input[type="text"], input[type="email"], input[type="password"], input:-webkit-autofill, input:-moz-autofill, textarea):not(.mc4wp-form-fields input) {
+:where(input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="number"], input[type="tel"], input:-webkit-autofill, input:-moz-autofill, textarea) {
     background-color: #fff;
     border: 1px solid #7f54b3;
     }
@@ -112,6 +112,14 @@ select{
     margin-bottom: .5rem;
 }
 
+// .wpcf7-form{
+//     padding-top: 1.7rem;
+// }
+.wpcf7-form-control:not(.wpcf7-submit){
+    width: 100%;
+}
+
+
 
 /* Min width 480px
 ---------------------------------------------- */
@@ -143,7 +151,10 @@ select{
 /* Min width 1024px
 ---------------------------------------------- */
 @mixin bp-1024() { 
-
+    // .wpcf7-form{
+    //     max-width: 75%;
+    //     margin: 0 auto;
+    // }
 }
 
 /* Min width 1280px
@@ -151,6 +162,9 @@ select{
 @mixin bp-1280() { 
     // min-width: 80em
 
+    // .wpcf7-form-control:not(.wpcf7-submit){
+    //     width: 60%;
+    // }
 }
 
 /* Min width 1440px

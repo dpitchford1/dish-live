@@ -80,6 +80,7 @@
 
 .footer--subtitle {
     font-size: clamp( 1.1rem, 3vw, 1.5rem );
+    color: #fff;
 }
 
 .copyright{ font-size: .75rem; margin-bottom: 0; padding: 2rem 0 0rem; text-align: center; }
@@ -92,8 +93,8 @@
     a{
         display: block;
         padding: .2rem;
-        }
     }
+}
 
 .footer-area .is--flex-list{
     margin-bottom: 1rem;

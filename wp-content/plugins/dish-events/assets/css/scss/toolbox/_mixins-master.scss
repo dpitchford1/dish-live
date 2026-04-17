@@ -1,0 +1,70 @@
+@use 'sass:map';        // ← new, must be first
+@use 'theme' as *;
+@use 'variables' as *;
+
+$theme-map: null;
+
+// Clearfix
+@mixin clearfix() {
+	content: "";
+	display: table;
+	table-layout: fixed;
+}
+
+// Clear after (not all clearfix need this also)
+@mixin clearfix-after() {
+	clear: both;
+}
+
+//////////////////////////////
+
+@mixin theme() {
+  @each $theme, $map in $themes {
+
+    $theme-map: $map !global;
+    .#{$theme} & {
+      @content;
+    }
+  }
+  $theme-map: null !global;
+}
+
+@function theme-get($key) {
+  @return map-get($theme-map, $key);
+}
+
+/////////////////////////////
+
+// font theme function
+@function text-scale($level) {
+  @return map-get(map-get($text-settings, $level), 'font-size');
+}
+
+@function line-height($level) {
+  @return map-get(map-get($text-settings, $level), 'line-height');
+}
+
+@mixin text-setting($level) {
+  font-size: text-scale($level);
+  line-height: line-height($level);
+}
+
+// ─── Responsive Mixins ─────────────────────────────────────
+
+@mixin respond-to($bp) {
+  @if not map.has-key($breakpoints, $bp) {
+    @error "Unknown breakpoint '#{$bp}'. Valid keys: #{map.keys($breakpoints)}";
+  }
+  @media (min-width: #{map.get($breakpoints, $bp)}) {
+    @content;
+  }
+}
+
+@mixin respond-below($bp) {
+  @if not map.has-key($breakpoints-max, $bp) {
+    @error "Unknown breakpoint '#{$bp}'. Valid keys: #{map.keys($breakpoints-max)}";
+  }
+  @media (max-width: #{map.get($breakpoints-max, $bp)}) {
+    @content;
+  }
+}

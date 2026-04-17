@@ -72,7 +72,7 @@ while ( have_posts() ) :
 	}
 	?>
 
-	<main id="primary" class="site-main dish-chef-page">
+	<main id="primary" class="site-main dish-page">
 		<article id="post-<?php the_ID(); ?>" <?php post_class( 'dish-chef' ); ?>>
 
 			<div class="dish-chef-header dish-container">

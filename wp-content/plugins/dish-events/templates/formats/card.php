@@ -42,7 +42,7 @@ $card_color  = (string) get_post_meta( $format->ID, 'dish_format_color', true ) 
 			<p class="dish-card__excerpt"><?php echo esc_html( $format->post_excerpt ); ?></p>
 		<?php endif; ?>
 
-		<a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__link button">
+		<a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__link button button--secondary">
 			<?php esc_html_e( 'Read More', 'dish-events' ); ?>
 		</a>
 	</div>

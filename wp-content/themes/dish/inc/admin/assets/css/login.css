@@ -21,7 +21,7 @@ Add a custom logo to the WordPress login. Clients really like their logo here.
 Just create image at 320x84px and replace images/login-logo.png (add a @2x image for retina - the function is below).
 */
 .login h1 a {
-  background: url(../images/login-logo.png) no-repeat top center;
+  background: url(/assets/img/logos/dish-full.svg) no-repeat top center;
   /* make sure to replace this! */
   background-size: 320px 84px;
   width: 320px;

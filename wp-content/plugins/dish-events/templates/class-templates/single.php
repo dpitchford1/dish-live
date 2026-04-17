@@ -145,11 +145,11 @@ while ( have_posts() ) :
 	$attendee_note  = $first ? (string) get_post_meta( $first->ID, 'dish_attendee_note', true ) : '';
 	?>
 
-<main id="primary" class="site-main dish-template-page">
+<main id="primary" class="site-main dish-page">
     <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
         <?php if ( has_post_thumbnail() ) : ?>
-            <div class="dish-template-hero">
+            <div class="dish-hero">
                 <?php the_post_thumbnail( 'large' ); ?>
             </div>
         <?php endif; ?>
@@ -276,7 +276,7 @@ while ( have_posts() ) :
 
         <?php /* ── Description ─────────────────────────────────────────────────────────── */ ?>
     <?php if ( get_the_content() ) : ?>
-        <div class="dish-template-content dish-container dish-content">
+        <div class="dish-content dish-container">
             <?php the_content(); ?>
         </div>
     <?php endif; ?>

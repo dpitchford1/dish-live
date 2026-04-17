@@ -11,4 +11,14 @@ start customizing. All admin functions are located in admin.php.
 
 ******************************************************************/
 .customize-control-description { font-style: normal !important; }
+
+.login h1 a {
+    background-image: url(/assets/img/logos/dish-full.svg) !important;
+    width: 100%;
+    height: 80px;
+    background-size: contain;
+}
+
+
 /*# sourceMappingURL=admin.css.map */
+

@@ -63,7 +63,7 @@ final class Calendar {
 	 * Safe to call multiple times — idempotent.
 	 */
 	public static function enqueue(): void {
-		if ( self::$enqueued ) {
+		if ( self::$enqueued || wp_script_is( 'dish-calendar', 'enqueued' ) ) {
 			return;
 		}
 

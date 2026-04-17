@@ -34,9 +34,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class TitleCore {
 	public static function maybe_title( $title ) {
 		$site_name = get_bloginfo( 'name' );
-		if ( empty( $title ) && is_singular() ) {
-			$title = get_the_title();
-		}
+
+		// Walk ancestor chain for hierarchical pages.
+                if ( is_page() && ! is_front_page() ) {
+                        $parts     = [ get_the_title() ];
+                        $ancestors = get_post_ancestors( get_the_ID() );
+                        foreach ( $ancestors as $ancestor_id ) {
+                                $parts[] = get_the_title( $ancestor_id );
+                        }
+                        $parts[] = $site_name;
+                        return implode( ' - ', $parts );
+                }
+
 		if ( empty( $title ) ) {
 			return $site_name;
 		}

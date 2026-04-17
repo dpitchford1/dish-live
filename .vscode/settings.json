@@ -1,0 +1,16 @@
+{
+    // ─── Live Sass Compiler ───────────────────────────────────────────────────
+    // Suppress the UTF-8 BOM that Live Sass Compiler writes by default.
+    // A BOM is harmless in a linked CSS file but breaks @font-face (and any
+    // other first rule) when the CSS is injected inline in a <style> tag,
+    // because the browser's CSS parser treats the BOM bytes as literal content.
+    "liveSassCompile.settings.formats": [
+        {
+            "format": "compressed",
+            "extensionName": ".min.css",
+            "savePath": "/assets/css/build"
+        }
+    ],
+    "liveSassCompile.settings.useNewCompiler": true,
+    "files.encoding": "utf8"
+}

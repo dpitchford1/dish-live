@@ -167,6 +167,13 @@ $saved = ClassRepository::get_meta( $post_id, $config['meta_key'] );
 	 * @param \WP_Post $post    Post object.
 	 */
 	public function save( int $post_id, \WP_Post $post ): void {
+		// Bail during shutdown — RecurrenceManager calls wp_insert_post() programmatically
+		// at this phase; $_POST still holds the parent form data so the nonce would pass,
+		// causing duplicate meta rows on every child post.
+		if ( doing_action( 'shutdown' ) ) {
+			return;
+		}
+
 		if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
 			return;
 		}

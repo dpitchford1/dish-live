@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 dish_the_upcoming_classes( [
 	'template_id'          => get_the_ID(),
-	'limit'                => 10,
+	'limit'                => 4,
 	'suppress_format_pill' => true,
 	'section_class'        => 'fluid-content',
 ] );

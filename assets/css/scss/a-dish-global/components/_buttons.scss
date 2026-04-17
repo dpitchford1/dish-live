@@ -1,31 +1,85 @@
 
  /* $ Buttons 
 ====================================================================== */
-.button {
+.button, .wpcf7-submit {
 	display: inline-block;
 	padding: .5rem 1.25rem;
+	font-size: .9rem;
+	line-height: 1.4;
 	text-align: center;
 	text-decoration: none;
-	//cursor: pointer;
-	border: 2px solid transparent;
+	border: 1px solid transparent;
 	transition: background .15s ease, color .15s ease, border-color .15s ease;
-    //margin: 0 1rem;
+    align-self: flex-start;
 }
 
-.button--primary {
-	background: #ff7824;
+.button--primary, .wpcf7-submit {
+	background: var( --dish-primary );
 	color: #fff;
-	border-color: #ff7824;
+	border-color: var( --dish-primary );
 }
 
-.button--primary:hover, .button--primary:focus-visible {
-	background: #191919;
-	border-color: #191919;
+.button--primary:hover,
+.button--primary:focus-visible, .wpcf7-submit:hover, .wpcf7-submit:focus-visible {
+	background: var( --dish-primary-hover );
+	border-color: var( --dish-primary-hover );
 	color: #fff;
 }
+
+.button--secondary {
+	background: var( --dish-input-border );
+	color: var( --dish-text );
+	border-color: var( --dish-input-border );
+}
+
+.button--secondary:hover,
+.button--secondary:focus-visible {
+	background: var( --dish-muted );
+	color: #fff;
+    border-color: var( --dish-muted );
+}
+
+.button--danger {
+	background: var( --dish-danger );
+	color: #fff;
+	border-color: var( --dish-danger );
+}
+
+.button--danger:hover,
+.button--danger:focus-visible {
+	background: #b91c1c;
+	border-color: #b91c1c;
+	color: #fff;
+}
+
+.button--disabled,
+.button[disabled],
+.button[aria-disabled="true"] {
+	background: var( --dish-border );
+	color: var( --dish-muted );
+	border-color: var( --dish-border );
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.button--outline {
+	background: transparent;
+	color: var( --dish-text );
+	border-color: var( --dish-border );
+}
+
+.button--outline:hover,
+.button--outline:focus-visible {
+	background: var( --dish-input-bg );
+	color: var( --dish-text );
+	border-color: var( --dish-border );
+}
+
+
 
 .hero-buttons .button--primary {
     box-shadow: 4px 5px 7px -1px rgba(0,0,0,0.51);
+    // font-size: .9rem;
 }
 .hero-buttons .button--primary:active {
     box-shadow: 1px 2px 3px -1px rgba(0,0,0,0.51);
@@ -69,6 +123,16 @@
 @mixin bp-1280() { 
     // min-width: 80em
 
+    .hero-buttons .button--primary {
+        //box-shadow: 4px 5px 7px -1px rgba(0,0,0,0.51);
+        font-size: 1.1rem;
+    }
+    // .hero-buttons .button--primary:active {
+    //     box-shadow: 1px 2px 3px -1px rgba(0,0,0,0.51);
+    // }
+    .button, .wpcf7-submit {
+        font-size: 1rem;
+    }
 }
 
 /* Min width 1440px

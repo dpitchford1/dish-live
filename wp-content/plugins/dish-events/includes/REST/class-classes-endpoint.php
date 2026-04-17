@@ -239,15 +239,16 @@ final class ClassesEndpoint {
 			}
 		}
 
-		// 3. Load format colours.
+		// 3. Load format colours and private flag.
 		$fmt_ids = array_values( array_unique( array_filter( array_column( $templates, 'format_id' ) ) ) );
-		$formats = []; // [ format_id => [ 'id', 'title', 'color' ] ]
+		$formats = []; // [ format_id => [ 'id', 'title', 'color', 'is_private' ] ]
 		foreach ( $fmt_ids as $fid ) {
 			$fp = get_post( $fid );
 			$formats[ $fid ] = [
-				'id'    => $fid,
-				'title' => $fp ? $fp->post_title : '',
-				'color' => (string) get_post_meta( $fid, 'dish_format_color', true ) ?: self::DEFAULT_COLOR,
+				'id'         => $fid,
+				'title'      => $fp ? $fp->post_title : '',
+				'color'      => (string) get_post_meta( $fid, 'dish_format_color', true ) ?: self::DEFAULT_COLOR,
+				'is_private' => (bool) get_post_meta( $fid, 'dish_format_is_private', true ),
 			];
 		}
 
@@ -286,9 +287,6 @@ final class ClassesEndpoint {
 			$start_ts   = (int) get_post_meta( $post->ID, 'dish_start_datetime', true );
 			$end_ts     = (int) get_post_meta( $post->ID, 'dish_end_datetime',   true );
 
-			$is_private = (bool) get_post_meta( $post->ID, 'dish_is_private', true )
-						|| get_post_meta( $post->ID, 'dish_class_type', true ) === 'private';
-
 			$tpl_id  = (int) get_post_meta( $post->ID, 'dish_template_id', true );
 			$tpl     = $templates[ $tpl_id ] ?? null;
 			$fmt_id  = $tpl ? $tpl['format_id'] : 0;
@@ -296,9 +294,11 @@ final class ClassesEndpoint {
 			$tkt_id  = $tpl ? $tpl['ticket_id'] : 0;
 			$ticket  = $tickets[ $tkt_id ] ?? null;
 
-			$title = $is_private
-				? __( 'Private Event', 'dish-events' )
-				: ( $tpl && $tpl['post'] ? $tpl['post']->post_title : $post->post_title );
+			$is_private = (bool) get_post_meta( $post->ID, 'dish_is_private', true )
+						|| get_post_meta( $post->ID, 'dish_class_type', true ) === 'private'
+						|| ( $format && ! empty( $format['is_private'] ) );
+
+			$title = $tpl && $tpl['post'] ? $tpl['post']->post_title : $post->post_title;
 
 			$capacity  = $ticket ? (int) $ticket->capacity : 0;
 			$booked    = $booked_counts[ $post->ID ] ?? 0;
@@ -327,7 +327,6 @@ final class ClassesEndpoint {
 				'title'           => $title,
 				'start'           => $fmt_ts( $start_ts ),
 				'end'             => $fmt_ts( $end_ts ),
-				'url'             => $event_url,
 				'backgroundColor' => $color,
 				'borderColor'     => $color,
 				'extendedProps'   => [
@@ -340,6 +339,8 @@ final class ClassesEndpoint {
 						: '',
 					'booking_type'    => $tpl['booking_type'] ?? 'online',
 					'enquiry_url'     => $enquiry_page_url,
+					'thumbnail_url'   => $tpl_post ? ( get_the_post_thumbnail_url( $tpl_post->ID, 'medium' ) ?: '' ) : '',
+					'detail_url'      => $event_url,
 				],
 			];
 		}

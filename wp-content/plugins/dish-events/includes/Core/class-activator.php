@@ -168,12 +168,13 @@ CREATE TABLE {$wpdb->prefix}dish_checkout_fields (
 			// Pages — stores WP page IDs for shortcode pages
 			// -----------------------------------------------------------------
 			'classes_page'                 => 0,
+			'formats_page'                 => 0,
+			'chefs_page'                   => 0,
 			'booking_page'                 => 0,
 			'booking_details_page'         => 0,
 			'profile_page'                 => 0,
 			'login_page'                   => 0,
 			'register_page'                => 0,
-			'chefs_page'                   => 0,
 
 			// -----------------------------------------------------------------
 			// Calendar & Views
@@ -248,7 +249,7 @@ CREATE TABLE {$wpdb->prefix}dish_checkout_fields (
 			// -----------------------------------------------------------------
 			'class_slug'                   => 'class',
 			'chef_slug'                    => 'chef',
-			'class_format_slug'            => 'classes', // Base for format archives: /classes/{format}/
+			'class_format_slug'            => 'classes/formats', // Base for format archives: /classes/formats/{format}/
 
 			// -----------------------------------------------------------------
 			// Features (toggles)

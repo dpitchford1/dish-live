@@ -1,11 +1,14 @@
 <?php
 /**
- * Format meta box — colour picker.
+ * Format meta box — settings sidebar.
  *
- * Adds a small "Calendar Colour" meta box to dish_format edit screens so
- * each format can have a distinct colour on the FullCalendar frontend.
+ * Adds a single "Format Settings" meta box to dish_format edit screens
+ * containing: calendar colour picker, default capacity, and secondary image.
  *
- * Meta key: dish_format_color  (7-char hex string, e.g. "#c0392b")
+ * Meta keys:
+ *   dish_format_color             — 7-char hex string e.g. "#c0392b"
+ *   dish_default_capacity         — integer
+ *   dish_format_secondary_image   — attachment ID integer
  *
  * @package Dish\Events\Admin
  */
@@ -29,8 +32,28 @@ final class FormatMetaBox {
 	];
 
 	public function register_hooks( Loader $loader ): void {
-		$loader->add_action( 'add_meta_boxes', $this, 'add' );
+		$loader->add_action( 'add_meta_boxes',        $this, 'add' );
 		$loader->add_action( 'save_post_dish_format', $this, 'save', 10, 2 );
+		$loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_media' );
+	}
+
+	// -------------------------------------------------------------------------
+	// Enqueue
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Enqueue WP media uploader on the dish_format edit screen only.
+	 *
+	 * @param string $hook Current admin page hook.
+	 */
+	public function enqueue_media( string $hook ): void {
+		if ( ! in_array( $hook, [ 'post.php', 'post-new.php' ], true ) ) {
+			return;
+		}
+		if ( get_current_screen()?->post_type !== 'dish_format' ) {
+			return;
+		}
+		wp_enqueue_media();
 	}
 
 	// -------------------------------------------------------------------------
@@ -38,17 +61,17 @@ final class FormatMetaBox {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the meta box on the dish_format edit screen.
+	 * Register a single Format Settings meta box on the dish_format edit screen.
 	 */
 	public function add(): void {
 		add_meta_box(
-			'dish_format_color',
-			__( 'Format Settings', 'dish-events' ),
-			[ $this, 'render' ],
-			'dish_format',
-			'side',
-			'default'
-		);
+'dish_format_settings',
+__( 'Format Settings', 'dish-events' ),
+[ $this, 'render' ],
+'dish_format',
+'side',
+'default'
+);
 	}
 
 	// -------------------------------------------------------------------------
@@ -56,17 +79,24 @@ final class FormatMetaBox {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Output the colour picker inside the meta box.
+	 * Output the full Format Settings meta box.
+	 *
+	 * Contains: colour picker + quick-pick swatches, default capacity,
+	 * and secondary image picker.
 	 *
 	 * @param \WP_Post $post Current post.
 	 */
 	public function render( \WP_Post $post ): void {
-		wp_nonce_field( 'dish_format_color_nonce', 'dish_format_color_nonce' );
+		wp_nonce_field( 'dish_format_settings_nonce', 'dish_format_settings_nonce' );
 
-		$saved = (string) get_post_meta( $post->ID, 'dish_format_color', true );
-		$color = preg_match( '/^#[0-9a-fA-F]{6}$/', $saved ) ? $saved : '#c0392b';
+		$saved            = (string) get_post_meta( $post->ID, 'dish_format_color', true );
+		$color            = preg_match( '/^#[0-9a-fA-F]{6}$/', $saved ) ? $saved : '#c0392b';
 		$default_capacity = (int) get_post_meta( $post->ID, 'dish_default_capacity', true );
+		$is_private       = (bool) get_post_meta( $post->ID, 'dish_format_is_private', true );
+		$img_id           = (int) get_post_meta( $post->ID, 'dish_format_secondary_image', true );
+		$img_src          = $img_id ? wp_get_attachment_image_url( $img_id, 'medium' ) : '';
 		?>
+
 		<p>
 			<label for="dish_format_color" class="screen-reader-text">
 				<?php esc_html_e( 'Calendar colour', 'dish-events' ); ?>
@@ -95,8 +125,9 @@ final class FormatMetaBox {
 				></button>
 			<?php endforeach; ?>
 		</div>
+
 		<p style="margin-top:16px;">
-			<label for="dish_default_capacity" style="display:block;font-weight:600;margin-bottom:4px;">
+			<label for="dish_default_capacity" style="display:block; font-weight:600; margin-bottom:4px;">
 				<?php esc_html_e( 'Default capacity', 'dish-events' ); ?>
 			</label>
 			<input
@@ -108,8 +139,81 @@ final class FormatMetaBox {
 				class="small-text"
 				placeholder="—"
 			>
-			<span style="color:#787c82;font-size:12px;"><?php esc_html_e( 'Pre-fills Capacity on new ticket types', 'dish-events' ); ?></span>
+			<span style="color:#787c82; font-size:12px;"><?php esc_html_e( 'Pre-fills Capacity on new ticket types', 'dish-events' ); ?></span>
 		</p>
+
+		<p style="margin-top:12px;">
+			<label style="display:flex; align-items:center; gap:6px; font-weight:600; cursor:pointer;">
+				<input
+					type="checkbox"
+					id="dish_format_is_private"
+					name="dish_format_is_private"
+					value="1"
+					<?php checked( $is_private ); ?>
+				>
+				<?php esc_html_e( 'Private format', 'dish-events' ); ?>
+			</label>
+			<span style="display:block; color:#787c82; font-size:12px; margin-top:3px;"><?php esc_html_e( 'Listed separately on the formats archive (e.g. Private Events).', 'dish-events' ); ?></span>
+		</p>
+
+		<hr style="margin:16px 0 12px; border:none; border-top:1px solid #dcdcde;">
+		<p style="font-weight:600; margin:0 0 4px;"><?php esc_html_e( 'Secondary Image', 'dish-events' ); ?></p>
+		<p style="color:#787c82; font-size:12px; margin:0 0 8px;"><?php esc_html_e( 'Shown beside content when no featured class is set.', 'dish-events' ); ?></p>
+
+		<input type="hidden" id="dish_format_secondary_image" name="dish_format_secondary_image" value="<?php echo esc_attr( $img_id ?: '' ); ?>">
+
+		<div style="margin-bottom:8px;">
+			<img
+				id="dish-secondary-image-preview"
+				src="<?php echo $img_src ? esc_url( $img_src ) : ''; ?>"
+				alt=""
+				style="width:100%; height:auto; border-radius:3px;<?php echo $img_src ? '' : ' display:none;'; ?>"
+			>
+		</div>
+
+		<div style="display:flex; gap:6px;">
+			<button type="button" id="dish-secondary-image-select" class="button" style="flex:1;">
+				<?php echo $img_id ? esc_html__( 'Change image', 'dish-events' ) : esc_html__( 'Select image', 'dish-events' ); ?>
+			</button>
+			<button type="button" id="dish-secondary-image-remove" class="button" aria-label="<?php esc_attr_e( 'Remove secondary image', 'dish-events' ); ?>"<?php echo $img_id ? '' : ' style="display:none;"'; ?>>&times;</button>
+		</div>
+
+		<script>
+		( function () {
+			var frame;
+			var sel     = document.getElementById( 'dish-secondary-image-select' );
+			var rem     = document.getElementById( 'dish-secondary-image-remove' );
+			var preview = document.getElementById( 'dish-secondary-image-preview' );
+			var input   = document.getElementById( 'dish_format_secondary_image' );
+
+			sel.addEventListener( 'click', function () {
+				if ( frame ) { frame.open(); return; }
+				frame = wp.media( {
+title    : '<?php echo esc_js( __( 'Select Secondary Image', 'dish-events' ) ); ?>',
+button   : { text: '<?php echo esc_js( __( 'Use this image', 'dish-events' ) ); ?>' },
+multiple : false,
+library  : { type: 'image' },
+} );
+				frame.on( 'select', function () {
+					var att          = frame.state().get( 'selection' ).first().toJSON();
+					input.value      = att.id;
+					preview.src      = ( att.sizes && att.sizes.medium ) ? att.sizes.medium.url : att.url;
+					preview.style.display = 'block';
+					sel.textContent  = '<?php echo esc_js( __( 'Change image', 'dish-events' ) ); ?>';
+					rem.style.display = '';
+				} );
+				frame.open();
+			} );
+
+			rem.addEventListener( 'click', function () {
+				input.value           = '';
+				preview.src           = '';
+				preview.style.display = 'none';
+				sel.textContent       = '<?php echo esc_js( __( 'Select image', 'dish-events' ) ); ?>';
+				rem.style.display     = 'none';
+			} );
+		} () );
+		</script>
 		<?php
 	}
 
@@ -118,21 +222,19 @@ final class FormatMetaBox {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Persist the colour on post save.
+	 * Persist all Format Settings fields on post save.
 	 *
 	 * @param int       $post_id Post ID.
 	 * @param \WP_Post  $post    Post object.
 	 */
 	public function save( int $post_id, \WP_Post $post ): void {
-		// Nonce check.
 		if (
-			! isset( $_POST['dish_format_color_nonce'] ) ||
-			! wp_verify_nonce( sanitize_key( $_POST['dish_format_color_nonce'] ), 'dish_format_color_nonce' )
+			! isset( $_POST['dish_format_settings_nonce'] ) ||
+			! wp_verify_nonce( sanitize_key( $_POST['dish_format_settings_nonce'] ), 'dish_format_settings_nonce' )
 		) {
 			return;
 		}
 
-		// Autosave / revision guard.
 		if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
 			return;
 		}
@@ -141,20 +243,36 @@ final class FormatMetaBox {
 			return;
 		}
 
+		// Colour.
 		$raw   = isset( $_POST['dish_format_color'] ) ? sanitize_hex_color( wp_unslash( $_POST['dish_format_color'] ) ) : '';
 		$color = $raw ?: '';
-
 		if ( $color ) {
 			update_post_meta( $post_id, 'dish_format_color', $color );
 		} else {
 			delete_post_meta( $post_id, 'dish_format_color' );
 		}
 
+		// Default capacity.
 		$cap = absint( $_POST['dish_default_capacity'] ?? 0 );
 		if ( $cap > 0 ) {
 			update_post_meta( $post_id, 'dish_default_capacity', $cap );
 		} else {
 			delete_post_meta( $post_id, 'dish_default_capacity' );
+		}
+
+		// Secondary image.
+		$img_id = absint( $_POST['dish_format_secondary_image'] ?? 0 );
+		if ( $img_id > 0 ) {
+			update_post_meta( $post_id, 'dish_format_secondary_image', $img_id );
+		} else {
+			delete_post_meta( $post_id, 'dish_format_secondary_image' );
+		}
+
+		// Private flag.
+		if ( ! empty( $_POST['dish_format_is_private'] ) ) {
+			update_post_meta( $post_id, 'dish_format_is_private', 1 );
+		} else {
+			delete_post_meta( $post_id, 'dish_format_is_private' );
 		}
 	}
 }

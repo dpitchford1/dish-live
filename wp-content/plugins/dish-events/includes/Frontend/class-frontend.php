@@ -70,11 +70,20 @@ final class Frontend {
 		}
 
 		// ── Single routing ──────────────────────────────────────────────────────
+
+		// dish_class_template: private formats use a dedicated template.
+		if ( is_singular( 'dish_class_template' ) ) {
+			$fmt_id   = (int) get_post_meta( get_the_ID(), 'dish_format_id', true );
+			$private  = $fmt_id && get_post_meta( $fmt_id, 'dish_format_is_private', true );
+			$relative = $private ? 'class-templates/single-private.php' : 'class-templates/single.php';
+			$resolved = self::locate( $relative );
+			return file_exists( $resolved ) ? $resolved : $template;
+		}
+
 		$map = [
-			'dish_format'         => 'formats/single.php',
-			'dish_class_template' => 'class-templates/single.php',
-			'dish_class'          => 'classes/single.php',
-			'dish_chef'           => 'chefs/single.php',
+			'dish_format' => 'formats/single.php',
+			'dish_class'  => 'classes/single.php',
+			'dish_chef'   => 'chefs/single.php',
 		];
 
 		foreach ( $map as $post_type => $relative ) {

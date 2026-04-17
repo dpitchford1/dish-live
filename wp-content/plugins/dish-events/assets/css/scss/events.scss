@@ -1,0 +1,10 @@
+@use 'toolbox' as *;
+@use "a-dish-base/global-structure" as *;
+// @use "a-dish-base/header" as *;
+@use "a-dish-base/typography" as *;
+@use "a-dish-base/global-footer" as *;
+// @use "a-dish-base/grid-global" as *;
+@use "a-dish-base/responsive";
+// ─── Responsive ────────────────────────────────────────────
+
+@include responsive.all();

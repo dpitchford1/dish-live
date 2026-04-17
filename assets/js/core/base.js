@@ -26,7 +26,7 @@ window.dish = (function (window, document, dishwrapper){
     //const searchtoggle = fragment.appendChild(doc.createElement('a'));
 
     // Initialize media query
-    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    const mediaQuery = window.matchMedia('(max-width: 1023px)');
     
     // Feature detection for better browser support
     const supportsTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;

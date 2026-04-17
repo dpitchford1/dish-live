@@ -32,8 +32,9 @@ final class ChefPost {
 	// -------------------------------------------------------------------------
 
 	private function register_post_type(): void {
-		$settings = (array) get_option( 'dish_settings', [] );
-		$slug     = sanitize_title( $settings['chef_slug'] ?? 'chef' );
+		$settings  = (array) get_option( 'dish_settings', [] );
+		$raw_slug  = (string) ( $settings['chef_slug'] ?? 'chef' );
+		$slug      = implode( '/', array_map( 'sanitize_title', explode( '/', $raw_slug ) ) );
 
 		$labels = [
 			'name'                  => __( 'Chefs',                     'dish-events' ),

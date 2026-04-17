@@ -14,7 +14,7 @@ use Dish\Events\Data\ChefRepository;
 use Dish\Events\Frontend\Frontend;
 ?>
 <aside class="aside">
-    <h3>About Sidebar</h3>
+    <h2 class="section-subtitle">More Dish</h2>
     <?php /* ── Chefs ───────────────────────────────────────────────────── */ ?>
     <?php $chefs = ChefRepository::query( [ 'exclude_team' => true, 'limit' => 4 ] ); ?>
     <?php if ( ! empty( $chefs ) ) : ?>

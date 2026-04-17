@@ -104,7 +104,7 @@ if ( ! empty( $next_class ) ) {
 ?>
 <section class="content-region spotlight-wrapper full--width">
 
-	<h2 class="spotlight-heading text--centered"><?php esc_html_e( 'Dish in the Spotlight', 'dish-events' ); ?></h2>
+	<h2 class="section-heading text--centered"><?php esc_html_e( 'Dish in the Spotlight', 'dish-events' ); ?></h2>
 
 	<div class="grid-general grid--2col"> 
 
@@ -134,7 +134,7 @@ if ( ! empty( $next_class ) ) {
 		<div class="spotlight--content">
 			<?php dish_the_format_pill( $format_post, $format_color ); ?>
 
-			<h3 class=""><a href="<?php echo esc_url( $card_url ); ?>"><?php echo esc_html( $template->post_title ); ?></a></h3>
+			<h3 class="section-title"><a href="<?php echo esc_url( $card_url ); ?>"><?php echo esc_html( $template->post_title ); ?></a></h3>
 
 			<?php if ( $template->post_content ) : ?>
 				<div class="entry--content">

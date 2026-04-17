@@ -37,19 +37,19 @@ $has_thumb = has_post_thumbnail( $chef->ID );
 			] ); ?>
 		</a> -->
 	<?php endif; ?>
-	<div class="dish-card--body">
+	<div class="card--body">
 
-		<h3 class="dish-card--title"><a href="<?php echo esc_url( $card_url ); ?>"><?php echo esc_html( $chef->post_title ); ?></a></h3>
+		<h3 class="card--title"><a href="<?php echo esc_url( $card_url ); ?>"><?php echo esc_html( $chef->post_title ); ?></a></h3>
 
 		<?php if ( $role ) : ?>
-			<p class="dish-chef-card--role"><?php echo esc_html( $role ); ?></p>
+			<p class="card--role"><?php echo esc_html( $role ); ?></p>
 		<?php endif; ?>
 
 		<?php if ( $chef->post_excerpt ) : ?>
-			<p class="dish-card--excerpt"><?php echo esc_html( $chef->post_excerpt ); ?></p>
+			<p class="card--excerpt"><?php echo esc_html( $chef->post_excerpt ); ?></p>
 		<?php endif; ?>
 
-		<!-- <a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__link button button--secondary"><?php esc_html_e( 'View Profile', 'dish-events' ); ?></a> -->
+		<!-- <a href="<?php echo esc_url( $card_url ); ?>" class="button button--secondary"><?php esc_html_e( 'View Profile', 'dish-events' ); ?></a> -->
 
 	</div>
 </article>

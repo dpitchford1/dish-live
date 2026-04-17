@@ -35,15 +35,62 @@ final class Assets {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Enqueue dish-events.css when the current page needs frontend plugin styles.
+	 * Enqueue plugin stylesheets on pages that need frontend plugin styles.
+	 *
+	 * dish-calendar.css is registered first (no deps) because it carries the
+	 * :root design tokens. dish-events.css declares it as a dependency so the
+	 * tokens are always resolved before component styles are parsed.
 	 */
 	public function enqueue(): void {
 		wp_enqueue_style(
 			'dish-calendar',
-			DISH_EVENTS_URL . 'assets/css/dish-events.css',
+			DISH_EVENTS_URL . 'assets/css/dish-calendar.css',
 			[],
 			DISH_EVENTS_VERSION
 		);
+
+		wp_enqueue_style(
+			'dish-events',
+			DISH_EVENTS_URL . 'assets/css/dish-events.css',
+			[ 'dish-calendar' ],
+			DISH_EVENTS_VERSION
+		);
+
+		// Calendar JS — only on the classes/calendar page.
+		$classes_page = (int) Settings::get( 'classes_page', 0 );
+
+		if ( $classes_page && is_page( $classes_page ) ) {
+			wp_enqueue_script(
+				'fullcalendar',
+				DISH_EVENTS_URL . 'assets/vendor/fullcalendar/fullcalendar.min.js',
+				[],
+				'6.1.15',
+				true
+			);
+
+			wp_enqueue_script(
+				'dish-calendar',
+				DISH_EVENTS_URL . 'assets/js/dish-calendar.js',
+				[ 'fullcalendar' ],
+				DISH_EVENTS_VERSION,
+				true
+			);
+
+			wp_localize_script( 'dish-calendar', 'dishCalendar', [
+				'restUrl'        => rest_url( 'dish/v1/classes' ),
+				'locale'         => str_replace( '_', '-', (string) get_locale() ),
+				'currencySymbol' => Settings::get( 'currency_symbol', '$' ),
+				'spotsThreshold' => (int) Settings::get( 'spots_left_threshold', 0 ),
+				'i18n'           => [
+					'allFormats'   => __( 'All Formats', 'dish-events' ),
+					'noEvents'     => __( 'No classes this period.', 'dish-events' ),
+					'privateEvent' => __( 'Private Event', 'dish-events' ),
+					'close'        => __( 'Close', 'dish-events' ),
+					'bookIt'       => __( 'Book It', 'dish-events' ),
+					'viewClass'    => __( 'View class details', 'dish-events' ),
+				],
+			] );
+		}
 
 		// Booking JS — only on the checkout page.
 		$booking_page = (int) Settings::get( 'booking_page', 0 );

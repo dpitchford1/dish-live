@@ -44,11 +44,11 @@ while ( have_posts() ) :
 
 	?>
 
-	<main id="primary" class="site-main dish-format-page">
+	<main id="primary" class="site-main dish-page">
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 			<?php if ( has_post_thumbnail() ) : ?>
-				<div class="dish-format-hero">
+				<div class="dish-hero">
 					<?php the_post_thumbnail( 'large' ); ?>
 				</div>
 			<?php endif; ?>
@@ -61,7 +61,7 @@ while ( have_posts() ) :
 			</header>
 
 			<?php if ( get_the_content() ) : ?>
-				<div class="dish-format-content dish-content">
+				<div class="dish-content">
 					<?php the_content(); ?>
 				</div>
 			<?php endif; ?>

@@ -214,7 +214,7 @@ get_header();
 				<div class="dish-confirmation__calendar-actions">
 					<a
 						href="<?php echo esc_url( $gcal_url ); ?>"
-						class="dish-confirmation__cal-link button button--outline"
+						class="dish-confirmation__cal-link button button--secondary"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -247,7 +247,7 @@ get_header();
 
 		<!-- ── CTA ─────────────────────────────────────────────────────────── -->
 		<div class="dish-confirmation__cta">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="button">
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="button button--secondary">
 				<?php esc_html_e( '← Back to home', 'dish-events' ); ?>
 			</a>
 		</div>

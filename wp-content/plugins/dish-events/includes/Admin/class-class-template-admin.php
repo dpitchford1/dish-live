@@ -507,7 +507,8 @@ final class ClassTemplateAdmin {
 	 */
 	public function register_rewrite_rule(): void {
 		$settings = (array) get_option( 'dish_settings', [] );
-		$base     = sanitize_title( $settings['class_format_slug'] ?? 'classes' );
+		$raw_base = $settings['class_format_slug'] ?? 'classes/formats';
+		$base     = implode( '/', array_map( 'sanitize_title', explode( '/', $raw_base ) ) );
 
 		// matches /classes/{format-slug}/{template-slug}/
 		add_rewrite_rule(
@@ -543,7 +544,8 @@ final class ClassTemplateAdmin {
 		}
 
 		$settings = (array) get_option( 'dish_settings', [] );
-		$base     = sanitize_title( $settings['class_format_slug'] ?? 'classes' );
+		$raw_base = $settings['class_format_slug'] ?? 'classes/formats';
+		$base     = implode( '/', array_map( 'sanitize_title', explode( '/', $raw_base ) ) );
 
 		return home_url( trailingslashit( $base . '/' . $format->post_name . '/' . $post->post_name ) );
 	}

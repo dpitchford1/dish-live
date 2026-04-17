@@ -74,7 +74,7 @@ while ( have_posts() ) :
 	$format_color = $format_post ? ( (string) get_post_meta( $format_id, 'dish_format_color', true ) ?: '#c0392b' ) : '';
 	?>
 
-	<main id="primary" class="site-main dish-class-page">
+	<main id="primary" class="site-main dish-page">
 		<article id="post-<?php the_ID(); ?>" <?php post_class( 'dish-class' ); ?>>
 
 			<?php
@@ -82,7 +82,7 @@ while ( have_posts() ) :
 			$thumb_id = get_post_thumbnail_id( $class_id ) ?: ( $template ? get_post_thumbnail_id( $template->ID ) : 0 );
 			if ( $thumb_id ) :
 			?>
-				<div class="dish-class-hero">
+				<div class="dish-hero">
 					<?php echo wp_get_attachment_image( (int) $thumb_id, 'large', false, [ 'class' => 'dish-hero__img' ] ); ?>
 				</div>
 			<?php endif; ?>
@@ -166,7 +166,7 @@ while ( have_posts() ) :
 			</header>
 
 			<?php if ( $display_content ) : ?>
-				<div class="dish-class-content dish-content dish-container">
+				<div class="dish-content dish-container">
 					<?php echo wp_kses_post( $display_content ); ?>
 				</div>
 			<?php endif; ?>

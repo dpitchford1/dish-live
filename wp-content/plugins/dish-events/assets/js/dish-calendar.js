@@ -96,68 +96,60 @@
 				html += '<h3 class="dish-modal__title" id="dish-cal-modal-title">' + esc( event.title ) + '</h3>';
 
 				// Meta rows.
-				html += '<div class="dish-modal__meta">';
+				html += '<ul class="icon-list--default dish-modal__meta">';
 
 				if ( event.start ) {
-					html += '<div class="dish-modal__row">'
-						+ '<span class="dish-modal__icon" aria-hidden="true">📅</span>'
-						+ '<span>' + esc( fmt_date( event.start ) ) + '</span>'
-						+ '</div>';
+					html += '<li class="ico--date">' + esc( fmt_date( event.start ) ) + '</li>';
 				}
 
 				if ( event.start ) {
 					var time_str = fmt_time( event.start );
 					if ( event.end ) { time_str += ' \u2013 ' + fmt_time( event.end ); }
-					html += '<div class="dish-modal__row">'
-						+ '<span class="dish-modal__icon" aria-hidden="true">🕐</span>'
-						+ '<span>' + esc( time_str ) + '</span>'
-						+ '</div>';
+					html += '<li class="ico--time">' + esc( time_str ) + '</li>';
 				}
 
 				if ( props.price_cents ) {
 					var price_str = currency + ( props.price_cents / 100 ).toFixed( 2 ).replace( /\.00$/, '' );
-					html += '<div class="dish-modal__row">'
-						+ '<span class="dish-modal__icon" aria-hidden="true">💳</span>'
-						+ '<span>' + esc( price_str ) + ' per ticket</span>'
-						+ '</div>';
+					html += '<li class="ico--price">' + esc( price_str ) + ' per ticket</li>';
 				}
 
 				var spots = props.spots_remaining;
 				if ( spots !== null && spots !== undefined ) {
-					var spots_cls = spots <= 0 ? 'dish-modal__spots--sold-out' : ( spots <= 3 ? 'dish-modal__spots--low' : '' );
+					var spots_cls = spots <= 0 ? ' dish-modal__spots--sold-out' : ( spots <= 3 ? ' dish-modal__spots--low' : '' );
 					var spots_txt = spots <= 0
 						? 'Sold out'
 						: ( spots <= 3
 							? 'Only ' + spots + ' spot' + ( spots === 1 ? '' : 's' ) + ' left'
 							: spots + ' spots available' );
-					html += '<div class="dish-modal__row ' + spots_cls + '">'
-						+ '<span class="dish-modal__icon" aria-hidden="true">🎟</span>'
-						+ '<span>' + esc( spots_txt ) + '</span>'
-						+ '</div>';
+					html += '<li class="ico--ticket' + spots_cls + '">' + esc( spots_txt ) + '</li>';
 				}
 
-				html += '</div>'; // .dish-modal__meta
+				html += '</ul>'; // .dish-modal__meta
 
 				// Action buttons.
 				var soldOut     = spots !== null && spots !== undefined && spots <= 0;
 				var bookUrl     = props.booking_url;
-				var detailUrl   = event.url;
+				var detailUrl   = props.detail_url;
 				var isEnquiry   = props.booking_type === 'enquiry';
 				var enquiryUrl  = props.enquiry_url || '';
 
-				if ( isEnquiry || bookUrl || detailUrl ) {
+				if ( isEnquiry || bookUrl || detailUrl || soldOut ) {
 					html += '<div class="dish-modal__actions">';
 					if ( isEnquiry && enquiryUrl ) {
-						html += '<a href="' + esc( enquiryUrl ) + '" class="dish-modal__book-btn dish-modal__book-btn--enquiry">'
+						html += '<a href="' + esc( enquiryUrl ) + '" class="button button--primary">'
 							+ esc( i18n.enquire || 'Enquire to Book' ) + ' \u2192'
 							+ '</a>';
-					} else if ( bookUrl && ! soldOut ) {
-						html += '<a href="' + esc( bookUrl ) + '" class="dish-modal__book-btn">'
+					} else if ( soldOut ) {
+						html += '<a href="/contact-us/waiting-list/" class="button button--secondary">'
+							+ 'Join the waiting list \u2192'
+							+ '</a>';
+					} else if ( bookUrl ) {
+						html += '<a href="' + esc( bookUrl ) + '" class="button button--primary">'
 							+ esc( i18n.bookIt || 'Book It' ) + ' \u2192'
 							+ '</a>';
 					}
 					if ( detailUrl ) {
-						html += '<a href="' + esc( detailUrl ) + '" class="dish-modal__detail-link">'
+						html += '<a href="' + esc( detailUrl ) + '" class="button button--outline">'
 							+ esc( i18n.viewClass || 'View class details' ) + ' \u2192'
 							+ '</a>';
 					}
@@ -194,20 +186,57 @@
 		}() );
 
 		// ── FullCalendar init ─────────────────────────────────────────────────
+		// First day of the current month — used as the earliest navigable date.
+		var now             = new Date();
+		var validRangeStart = new Date( now.getFullYear(), now.getMonth(), 1 );
+
+		// Responsive view: list on mobile, grid on desktop.
+		var mql         = window.matchMedia( '(max-width: 767px)' );
+		var isMobile    = mql.matches;
+
+		/**
+		 * Returns the correct initialView / changeView string for the given state.
+		 * @param  {boolean} mobile
+		 * @returns {string}
+		 */
+		function calView( mobile ) {
+			return mobile ? 'listMonth' : 'dayGridMonth';
+		}
+
+		/**
+		 * Returns the correct headerToolbar config for the given state.
+		 * Mobile strips the view-switcher buttons to keep the bar uncluttered.
+		 * @param  {boolean} mobile
+		 * @returns {object}
+		 */
+		function calToolbar( mobile ) {
+			if ( mobile ) {
+				return {
+					left   : 'prev,next',
+					center : 'title',
+					right  : '',
+				};
+			}
+			return {
+				left   : 'prev,next today',
+				center : 'title',
+				right  : 'dayGridMonth,timeGridWeek,listWeek',
+			};
+		}
+
 		var calendar = new FullCalendar.Calendar( el, {
 
-			initialView : 'dayGridMonth',
+			initialView : calView( isMobile ),
 			locale      : locale,
 			height      : 'auto',
 			slotMinTime : '14:00:00', // 2 pm — hide earlier slots in week view
 			slotMaxTime : '23:00:00', // 11 pm — hide later slots in week view
 			scrollTime  : '16:00:00', // scroll week view to 4 pm on open
 
-			headerToolbar : {
-				left   : 'prev,next today',
-				center : 'title',
-				right  : 'dayGridMonth,timeGridWeek,listWeek',
-			},
+			// Prevent backwards navigation — no past months.
+			validRange : { start: validRangeStart },
+
+			headerToolbar : calToolbar( isMobile ),
 
 			noEventsContent : i18n.noEvents || 'No classes this period.',
 
@@ -230,6 +259,57 @@
 				},
 			],
 
+			// Render each event as a mini-card: format name + time + title.
+			eventContent : function ( arg ) {
+				var event  = arg.event;
+				var props  = event.extendedProps || {};
+				var fmt    = props.format || {};
+
+				var wrap   = document.createElement( 'div' );
+				wrap.className = 'dish-event__inner';
+
+				// Header row: format name (left) + time (right).
+				var header = document.createElement( 'div' );
+				header.className = 'dish-event__header';
+
+				if ( fmt.color && arg.view.type !== 'listMonth' ) {
+					var eventDot = document.createElement( 'span' );
+					eventDot.className = 'dish-event__dot';
+					eventDot.style.background = fmt.color;
+					header.appendChild( eventDot );
+				}
+
+				if ( fmt.title ) {
+					var formatName = document.createElement( 'span' );
+					formatName.className = 'dish-event__format-name';
+					formatName.textContent = fmt.title;
+					header.appendChild( formatName );
+				}
+
+				if ( event.start && ! event.allDay ) {
+					var time = document.createElement( 'span' );
+					time.className = 'dish-event__time';
+					time.textContent = event.start.toLocaleTimeString( locale, {
+						hour   : 'numeric',
+						minute : '2-digit',
+						hour12 : true,
+					} ).toLowerCase();
+					header.appendChild( time );
+				}
+
+				if ( header.hasChildNodes() ) {
+					wrap.appendChild( header );
+				}
+
+				// Title.
+				var title = document.createElement( 'div' );
+				title.className = 'dish-event__title fc-event-title';
+				title.textContent = event.title;
+				wrap.appendChild( title );
+
+				return { domNodes: [ wrap ] };
+			},
+
 			// Click to open detail modal — works on desktop and mobile alike.
 			eventClick : function ( info ) {
 				info.jsEvent.preventDefault();
@@ -239,11 +319,35 @@
 				}
 			},
 
-			// Apply CSS state classes after each event is mounted.
+			// Apply CSS state classes and inject list-view thumbnail after each event is mounted.
 			eventDidMount : function ( info ) {
-				var props    = info.event.extendedProps || {};
-				var spots    = props.spots_remaining;
+				var props     = info.event.extendedProps || {};
+				var spots     = props.spots_remaining;
 				var isPrivate = props.is_private;
+
+				// List view enhancements.
+				if ( info.view.type === 'listMonth' ) {
+					// Thumbnail — inject as the first <td> in the row.
+					if ( props.thumbnail_url ) {
+						var td = document.createElement( 'td' );
+						td.className = 'dish-list-event__thumb-cell';
+						var img = document.createElement( 'img' );
+						img.src = props.thumbnail_url;
+						img.alt = '';
+						img.className = 'dish-list-event__thumb';
+						td.appendChild( img );
+						info.el.insertAdjacentElement( 'afterbegin', td );
+					}
+					// Format dot — inject as first child of the event header, before the format name.
+					var listFmt    = props.format || {};
+					var listHeader = info.el.querySelector( '.dish-event__header' );
+					if ( listHeader && listFmt.color ) {
+						var listDot = document.createElement( 'span' );
+						listDot.className = 'dish-list-event__dot';
+						listDot.style.background = listFmt.color;
+						listHeader.insertBefore( listDot, listHeader.firstChild );
+					}
+				}
 
 				if ( isPrivate ) {
 					info.el.classList.add( 'dish-event--private' );
@@ -253,11 +357,30 @@
 						anchor.removeAttribute( 'href' );
 						anchor.setAttribute( 'role', 'presentation' );
 					}
+					// Always show "Booked" label — private events have no public spots.
+					var privateTarget = info.el.querySelector( '.dish-event__title' ) || info.el.querySelector( '.fc-event-main' ) || info.el;
+					var bookedLabel = document.createElement( 'span' );
+					bookedLabel.className = 'dish-event__status-label';
+					bookedLabel.textContent = 'Booked';
+					privateTarget.insertAdjacentElement( 'afterend', bookedLabel );
 				}
 
 				if ( spots !== null && spots !== undefined ) {
+					var target = info.el.querySelector( '.dish-event__title' ) || info.el.querySelector( '.fc-event-main' ) || info.el;
+
 					if ( spots <= 0 ) {
 						info.el.classList.add( 'dish-event--sold-out' );
+						var soldLabel = document.createElement( 'span' );
+						soldLabel.className = 'dish-event__status-label';
+						soldLabel.textContent = isPrivate ? 'Booked' : 'Sold out!';
+						target.insertAdjacentElement( 'afterend', soldLabel );
+						if ( ! isPrivate ) {
+							var waitLink = document.createElement( 'a' );
+							waitLink.className = 'dish-event__waitlist-link';
+							waitLink.href = '/contact-us/waiting-list/';
+							waitLink.textContent = 'Join waiting list';
+							soldLabel.insertAdjacentElement( 'afterend', waitLink );
+						}
 					} else if ( spots <= 3 ) {
 						info.el.classList.add( 'dish-event--low-spots' );
 					}
@@ -265,11 +388,10 @@
 					// "N spots left!" label — injected when within the admin-configured threshold.
 					var threshold = parseInt( ( window.dishCalendar || {} ).spotsThreshold, 10 ) || 0;
 					if ( threshold > 0 && spots > 0 && spots <= threshold ) {
-						var label = document.createElement( 'span' );
-						label.className = 'dish-event__spots-label';
-						label.textContent = spots + ( spots === 1 ? ' spot left!' : ' spots left!' );
-						var target = info.el.querySelector( '.fc-event-main' ) || info.el;
-						target.appendChild( label );
+						var spotsLabel = document.createElement( 'span' );
+						spotsLabel.className = 'dish-event__spots-label';
+						spotsLabel.textContent = spots + ( spots === 1 ? ' spot left!' : ' spots left!' );
+						target.insertAdjacentElement( 'afterend', spotsLabel );
 					}
 				}
 			},
@@ -277,6 +399,12 @@
 		} );
 
 		calendar.render();
+
+		// Switch view and toolbar when the mobile breakpoint is crossed.
+		mql.addEventListener( 'change', function ( e ) {
+			calendar.changeView( calView( e.matches ) );
+			calendar.setOption( 'headerToolbar', calToolbar( e.matches ) );
+		} );
 
 		// ── Format filter bar ─────────────────────────────────────────────────
 		var filterBtns = document.querySelectorAll( '.dish-calendar-filter[data-format-id]' );

@@ -102,7 +102,7 @@ if ( ! empty( $next_arr ) ) {
 			<?php endif; ?>
 		</div>
 
-		<a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__link button">
+		<a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__link button button--primary">
 			<?php esc_html_e( 'View Class', 'dish-events' ); ?>
 		</a>
 	</div>

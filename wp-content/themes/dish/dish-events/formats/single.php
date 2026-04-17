@@ -43,23 +43,33 @@ while ( have_posts() ) :
 	$standard_templates = array_values( array_filter( $templates, fn( $t ) => ! (bool) get_post_meta( $t->ID, 'dish_is_featured', true ) ) );
 
 	?>
-    
+
 <?php /* ── Hero ─────────────────────────────────────────── */ ?>
-<?php if ( has_post_thumbnail() ) : ?>
-<div class="hero">
-    <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
+<section class="global--hero">
+    <div class="hero--wrapper">
+    <?php if ( has_post_thumbnail() ) : ?>
+
+        <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
         'landscape_size' => 'basecamp-img-xl',
         'loading'        => 'eager',
         'fetchpriority'  => 'high',
+        'img_class'      => 'hero--img size-basecamp-img-xl',
     ] ); ?>
-</div>
-<?php endif; ?>
+
+    <?php endif; ?>
+        <div class="hero--text-block">
+            <div class="hero--content">
+                <h1 class="hero--heading">Class Format: <?php the_title(); ?></h1>
+            </div>
+        </div>
+    </div>
+</section>
 <?php /* ── Breadcrumb ─────────────────────────────────────────── */ ?>
 <div class="fluid-content breadcrumb"><?php dish_the_breadcrumb(); ?></div>
 
 <?php /* ── Main Content ─────────────────────────────────────────── */ ?>
-<main id="main-content" class="main--content fluid-content">
-    <h1 class="dish-format-title"><?php echo esc_html( sprintf( __( 'Class Format: %s', 'dish-events' ), get_the_title() ) ); ?></h1>
+<main id="main-content" class="main--content fluid-content inner--content">
+    <!-- <h1 class="dish-format-title"><?php echo esc_html( sprintf( __( 'Class Format: %s', 'dish-events' ), get_the_title() ) ); ?></h1> -->
 
     <?php /* ── If featured exists ───────── */ ?>
     <?php if ( ! empty( $featured_templates ) ) : ?>
@@ -68,13 +78,13 @@ while ( have_posts() ) :
         <section class="grid-general grid--2col">
 
         <?php if ( get_the_content() ) : ?>
-            <article class="">
+            <article class="entry--content">
                 <?php the_content(); ?>
             </article>
         <?php endif; ?>
         
         <div class="dish-template-listing dish-template-listing--featured">
-            <h3>Featured Class Type</h3>
+            <h3 class="section-title">Featured Class Type</h3>
             <?php $suppress_format_pill = true; ?>
             <?php foreach ( $featured_templates as $template ) : ?>
                 <?php include locate_template( 'dish-events/class-templates/card.php' ); ?>
@@ -82,26 +92,35 @@ while ( have_posts() ) :
         </div>
 
         </section>
-    <?php /* ── No featured — show image alongside content ───────── */ ?>
+<?php /* ── No featured — show secondary image (or featured image) alongside content ───────── */ ?>
     <?php else : ?>
+        <?php
+        $secondary_img_id = (int) get_post_meta( $format_id, 'dish_format_secondary_image', true );
+        $sidebar_img_id   = $secondary_img_id ?: get_post_thumbnail_id();
+        ?>
         <section class="grid-general grid--2col">
         <?php if ( get_the_content() ) : ?>
-            <article class="">
+            <article class="entry--content">
                 <?php the_content(); ?>
             </article>
         <?php endif; ?>
 
-        <div class="dish-format-img">
-            <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
+        <?php if ( $sidebar_img_id ) : ?>
+        <div class="general--imgs">
+            <?php Basecamp_Frontend::picture( $sidebar_img_id, [
                 'landscape_size' => 'basecamp-img-sm',
                 'loading'        => 'lazy',
+                'fetchpriority'  => 'low',
+                'img_class'      => 'general--img',
             ] ); ?>
         </div>
+        <?php endif; ?>
         </section>
     <?php endif; ?>
 
     <div id="post-<?php the_ID(); ?>" class="content--region">
 
+        <?php if ( ! get_post_meta( $format_id, 'dish_format_is_private', true ) ) : ?>
         <?php dish_the_upcoming_classes( [
             'template_ids'         => ! empty( $templates ) ? wp_list_pluck( $templates, 'ID' ) : [],
             'dedupe_by_template'   => true,
@@ -109,10 +128,11 @@ while ( have_posts() ) :
             'heading'              => sprintf( __( 'Upcoming %s Classes', 'dish-events' ), $format_title ),
             'suppress_format_pill' => true,
         ] ); ?>
+        <?php endif; ?>
 
         <?php if ( ! empty( $standard_templates ) ) : ?>
             <section class="dish-template-listings dish-template-listing--standards">
-                <h2 class="dish-template-listing__heading">
+                <h2 class="section-heading">
                     <?php echo esc_html( sprintf( __( 'Our %s Classes', 'dish-events' ), $format_title ) ); /* translators: %s: format name e.g. "Hands On" */?>
                 </h2>
                 <div class="grid-general grid--3col">

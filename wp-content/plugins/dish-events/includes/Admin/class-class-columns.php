@@ -420,9 +420,9 @@ final class ClassColumns {
 				}
 				continue;
 			}
-			foreach ( $values as $value ) {
-				add_post_meta( $new_id, $key, maybe_unserialize( $value ) );
-			}
+			// Use update_post_meta so duplicating a class that already has meta
+			// cannot stack duplicate rows if the save hook fires alongside this.
+			update_post_meta( $new_id, $key, maybe_unserialize( $values[0] ) );
 		}
 
 		// Copy taxonomy terms.

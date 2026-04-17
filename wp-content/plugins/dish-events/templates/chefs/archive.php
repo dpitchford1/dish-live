@@ -19,7 +19,7 @@ if ( ! isset( $chefs ) || ! is_array( $chefs ) ) {
 	$chefs = [];
 }
 ?>
-<div class="dish-chefs-archive">
+<div class="dish-archive">
 
 	<?php if ( empty( $chefs ) ) : ?>
 

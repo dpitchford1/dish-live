@@ -56,7 +56,7 @@ function dish_the_breadcrumb(): void {
 		case 'dish_format':
 			$format_color = (string) FormatRepository::get_meta( get_the_ID(), 'dish_format_color' );
 			$crumbs       = [
-				[ 'url' => $archive_url, 'label' => __( 'Classes', 'dish-events' ) ],
+				[ 'url' => $archive_url, 'label' => __( 'Class Formats', 'dish-events' ) ],
 				[ 'url' => null,         'label' => get_the_title(), 'color' => $format_color, 'current' => true ],
 			];
 			break;
@@ -331,7 +331,7 @@ function dish_the_upcoming_classes( array $args = [] ): void {
 	?>
 	<section class="<?php echo esc_attr( $section_class ); ?>">
 		<?php if ( $args['heading'] ) : ?>
-			<<?php echo $tag; ?> class=""><?php echo esc_html( $args['heading'] ); ?></<?php echo $tag; ?>>
+			<<?php echo $tag; ?> class="section-heading"><?php echo esc_html( $args['heading'] ); ?></<?php echo $tag; ?>>
 		<?php endif; ?>
 		<div class="<?php echo esc_attr( $args['grid_class'] ); ?>">
 			<?php foreach ( $classes as $class ) : ?>

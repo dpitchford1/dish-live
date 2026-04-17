@@ -52,7 +52,6 @@
                 <h3 class="footer--subtitle">In Person</h3>
                 <div itemscope itemtype="https://schema.org/LocalBusiness">
                     <div itemprop="name" class="hide-text">Dish Cooking Studio</div>
-                    <meta itemprop="openingHours" class="is--hidden" content="Mo,Tu,We,Th,Fr 11:00-18:00" datetime="Mo,Tu,We,Th,Fr 11:00-18:00">
                     <div itemtype="http://schema.org/GeoCoordinates" itemscope="" itemprop="geo">
                         <meta itemprop="latitude" content="43.655060">
                         <meta itemprop="longitude" content="-79.413375">
@@ -64,7 +63,9 @@
                     <p>Phone: <span itemprop="telephone"><a href="tel:+14169205559">416-920-5559</a></span></p>
                     <p class="hide-text"><span>Email:</span> <span itemprop="email">info@dishcookingstudio.com</span></p>
                     <p class="hide-text">Url: <span itemprop="url">https://www.dishcookingstudio.com/</span></p>
-                </div>  
+                    <meta itemprop="openingHours" class="is--hidden" content="Mo,Tu,We,Th,Fr 11:00-18:00" datetime="Mo,Tu,We,Th,Fr 11:00-18:00">
+                    <p class="store--hours">Store Hours: Mon - Fri, 11am - 6pm</p>
+                </div>
             </div>
             <div class="footer-area footer-span-6">
                 <h3 class="footer--subtitle">Online</h3>
@@ -86,7 +87,7 @@
         <p class="source-org copyright"><a href="/about-dish/cancellation-policy/">Cancellation Policy</a> &nbsp;&mdash;&nbsp; <a href="/privacy-policy/">Privacy Policy</a> &nbsp;&mdash;&nbsp; <a href="/terms-and-conditions/">Terms &amp; Conditions</a><br>&copy; <?php echo date('Y'); ?> <?php bloginfo( 'name' ); ?>. All Rights Reserved</p>      
     </footer>
 </div>
-<!-- <script src="/assets/js/core/base.min.js" async></script> -->
+<script src="/assets/js/core/base.min.js" async></script>
 
 <?php wp_footer(); ?>
 

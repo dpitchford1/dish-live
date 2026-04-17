@@ -483,9 +483,11 @@ final class RecurrenceManager {
 			if ( in_array( $key, $skip, true ) ) {
 				continue;
 			}
-			foreach ( $values as $value ) {
-				add_post_meta( $child_id, $key, maybe_unserialize( $value ) );
-			}
+			// Use update_post_meta (not add_post_meta) so that if a save hook fires
+			// concurrently on the child, the second write overwrites rather than
+			// stacking a duplicate row. For meta keys that genuinely allow multiple
+			// values this plugin does not use any — all dish_* keys are single-value.
+			update_post_meta( $child_id, $key, maybe_unserialize( $values[0] ) );
 		}
 
 		// Override with child-specific datetime.

@@ -261,8 +261,9 @@ final class Settings {
 		$int_keys = [
 			'checkout_timer_minutes', 'classes_per_page', 'max_classes_per_day',
 			'spots_left_threshold',
-			'classes_page', 'booking_page', 'booking_details_page', 'enquiry_page', 'profile_page',
-			'login_page', 'register_page', 'chefs_page',
+			'classes_page', 'formats_page', 'chefs_page',
+			'booking_page', 'booking_details_page', 'enquiry_page', 'profile_page',
+			'login_page', 'register_page',
 		];
 
 		// Checkbox / boolean fields (present = true, absent = false).
@@ -478,14 +479,15 @@ final class Settings {
 		add_settings_section( 'dish_pages', '', '__return_null', $page );
 
 		$page_labels = [
-			'classes_page'         => __( 'Classes listing page', 'dish-events' ),
+			'classes_page'         => __( 'Calendar page — /classes/calendar/', 'dish-events' ),
+			'formats_page'         => __( 'Formats archive hero — /classes/formats/', 'dish-events' ),
+			'chefs_page'           => __( 'Chefs page — /classes/chefs/', 'dish-events' ),
 			'booking_page'         => __( 'Checkout page', 'dish-events' ),
 			'booking_details_page' => __( 'Booking details page', 'dish-events' ),
 			'enquiry_page'         => __( 'Enquiry / Contact page', 'dish-events' ),
 			'profile_page'         => __( 'My account page', 'dish-events' ),
 			'login_page'           => __( 'Login page', 'dish-events' ),
 			'register_page'        => __( 'Register page', 'dish-events' ),
-			'chefs_page'           => __( 'Chefs listing page', 'dish-events' ),
 		];
 
 		foreach ( $page_labels as $key => $label ) {
@@ -645,8 +647,8 @@ final class Settings {
 		$this->field( $page, 'dish_urls', 'chef_slug', __( 'Chef URL slug', 'dish-events' ), [ $this, 'render_text' ], [
 			'desc' => __( 'e.g. "chef"', 'dish-events' ),
 		] );
-		$this->field( $page, 'dish_urls', 'class_format_slug', __( 'Class format taxonomy slug', 'dish-events' ), [ $this, 'render_text' ], [
-			'desc' => __( 'e.g. "class-format". Changing this will flush rewrite rules.', 'dish-events' ),
+		$this->field( $page, 'dish_urls', 'class_format_slug', __( 'Class format base path', 'dish-events' ), [ $this, 'render_text' ], [
+			'desc' => __( 'Slash-separated path used as the base for all format and class template URLs. e.g. "classes/formats" → /classes/formats/hands-on/ and /classes/formats/hands-on/thai-night/. Changing this will flush rewrite rules.', 'dish-events' ),
 		] );
 
 		add_settings_section(

@@ -55,9 +55,17 @@ final class MetaDescription {
 				if (is_array($post_type)) {
 					$post_type = reset($post_type);
 				}
-				$post_type_obj = get_post_type_object($post_type);
-				if ($post_type_obj) {
-					$description = $post_type_obj->description;
+				// For dish_format archive, prefer the formats_page excerpt.
+				if ( 'dish_format' === $post_type && class_exists( 'Dish\\Events\\Admin\\Settings' ) ) {
+					$formats_page_id = (int) \Dish\Events\Admin\Settings::get( 'formats_page', 0 );
+					if ( $formats_page_id && has_excerpt( $formats_page_id ) ) {
+						$description = strip_tags( get_the_excerpt( $formats_page_id ) );
+					}
+				} else {
+					$post_type_obj = get_post_type_object($post_type);
+					if ($post_type_obj) {
+						$description = $post_type_obj->description;
+					}
 				}
 			} elseif (is_author()) {
 				$author = get_queried_object();

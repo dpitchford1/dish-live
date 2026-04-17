@@ -9,6 +9,9 @@
 
 <script>var doc = window.document; doc.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'has-js enhanced';</script>
 
+<!-- <link rel="preload" href="/assets/fonts/poppins/poppins-light.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/brandon-grotesque/BrandonGrotesque-Light.woff2" as="font" type="font/woff2" crossorigin> -->
+
 <?php /* inject critical css inline */ ?>
 <?php Basecamp_Frontend::output_critical_css( ABSPATH . 'assets/css/build/critical-css.min.css' ); ?>
 
@@ -16,7 +19,7 @@
 <link rel="stylesheet" href="/assets/css/build/a-dish-base.min.css" media="screen">
 <link rel="stylesheet" href="/assets/css/build/a-dish-global.min.css" media="screen">
 
-<link rel="stylesheet" href="/assets/css/resources/dish-events.min.css" media="screen">
+<!-- <link rel="stylesheet" href="/assets/css/resources/dish-events.min.css" media="screen"> -->
 
 <?php /* css files 
 <link rel="stylesheet" href="/assets/css/build/normalize.min.css" media="screen"> */ ?>
@@ -44,10 +47,17 @@
 <meta name="robots" content="noindex, nofollow, NOODP, noydir">
 <?php if ( is_front_page() ) : ?><link rel="home" title="Home page" href="/"><?php endif ?>
 
-<?php wp_head(); ?>
+<?php wp_head(); 
+
+// Dynamic login / account link — reads plugin page settings.
+$login_page_id   = (int) \Dish\Events\Admin\Settings::get( 'login_page',   0 );
+$profile_page_id = (int) \Dish\Events\Admin\Settings::get( 'profile_page', 0 );
+$login_url       = $login_page_id   ? get_permalink( $login_page_id )   : wp_login_url();
+$account_url     = $profile_page_id ? get_permalink( $profile_page_id ) : admin_url();
+?>
 
 </head>
-<body <?php body_class(); ?> id="page-body" data-off-screen="hidden">
+<body <?php Basecamp_Frontend::body_class(); ?> id="page-body" data-off-screen="hidden">
 <a href="#global-header" id="exit-off-canvas" class="exit-offcanvas" aria-controls="global-header"><span class="hide-text">Hide Menu</span></a>
 <?php /* accessibility nav */ ?>
 <a class="quick-links" href="#main-content">Skip to Main Content</a>
@@ -57,26 +67,21 @@
 
 <?php /* Header Start */ ?>
 <div class="region is--fixed global-header" data-nav-slide="slide" id="global-header">
-	<header class="brand-header fluid ov cf">
-        <?php if ( is_front_page() ) : ?>
+	<header class="brand-header fluid ov">
+        <?php if ( is_front_page() || is_page_template( 'page-dish-home.php' ) ) : ?>
             <div class="brand brand-fs" id="logo"><span class="is--logo">Dish Cooking Studio</span></div>
         <?php else : ?>
             <div class="brand brand-fs" id="logo"><a class="is--logo" href="/" rel="home">Dish Cooking Studio</a></div>
         <?php endif ?>
+        
         <?php /* Global Menus */ ?>
         <div class="menu-global">
-            <div class="cf" role="navigation" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
-            <?php /*<h2 class="hide-text">Main Menu</h2>*/ ?>
-            <?php if ( is_front_page() ) : ?>
-                <!--<div class="menu-logo"></div>-->
-            <?php else : ?>
-                <!--<a class="menu-logo" href="/" rel="home" aria-label="Home button"></a>-->
-            <?php endif ?>
+            <div class="" role="navigation" itemscope itemtype="http://www.schema.org/SiteNavigationElement">
                 <?php 
                     wp_nav_menu( 
                         array(
                             'theme_location'  => 'primary',
-                            'menu_class' => 'navigation-global is--flex-list',
+                            'menu_class' => 'navigation-global',
                             'menu_id' => 'primary-menu',
                             'container' => 'ul'
                         )
@@ -84,6 +89,34 @@
                 ?>
             </div>
         </div>
+        <?php /* Utility Nav */ ?>
+	    <nav class="menu-utilities" itemscope itemtype="http://www.schema.org/SiteNavigationElement" aria-label="Utility Navigation">
+	        <p class="hide-text">Submenu:</p>
+		    <?php 
+				wp_nav_menu( 
+					array(
+						'theme_location'  => 'utility',
+						'menu_class' => 'utility-menu',
+						'menu_id' => 'utility-menu',
+						'container' => false
+					)
+				);
+            ?>
+            <ul class="utility-menu utility-menu--account">
+                <?php if ( is_user_logged_in() ) : ?>
+                    <li class="menu-item menu-item--account">
+                        <a href="<?php echo esc_url( $account_url ); ?>"><?php esc_html_e( 'My Account', 'dish-events' ); ?></a>
+                    </li>
+                    <li class="menu-item menu-item--logout">
+                        <a href="<?php echo esc_url( wp_logout_url( home_url() ) ); ?>"><?php esc_html_e( 'Log Out', 'dish-events' ); ?></a>
+                    </li>
+                <?php else : ?>
+                    <li class="menu-item menu-item--login">
+                        <a href="<?php echo esc_url( $login_url ); ?>"><?php esc_html_e( 'Login', 'dish-events' ); ?></a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+	    </nav>
     </header>
 </div>
 <?php /* Header End */ ?>

@@ -32,7 +32,8 @@ final class FormatPost {
 	 */
 	public function register(): void {
 		$settings = (array) get_option( 'dish_settings', [] );
-		$slug     = sanitize_title( $settings['class_format_slug'] ?? 'classes' );
+		$raw_slug = $settings['class_format_slug'] ?? 'classes/formats';
+		$slug     = implode( '/', array_map( 'sanitize_title', explode( '/', $raw_slug ) ) );
 
 		$labels = [
 			'name'                  => __( 'Formats',                       'dish-events' ),

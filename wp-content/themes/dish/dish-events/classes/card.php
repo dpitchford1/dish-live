@@ -63,7 +63,7 @@ $title         = $template_post ? $template_post->post_title : get_the_title( $c
 $date_label    = $start ? DateHelper::to_display( $start ) : '';
 $thumb_id      = get_post_thumbnail_id( $class->ID ) ?: ( $template_post ? get_post_thumbnail_id( $template_post->ID ) : 0 );
 $thumb_html = $thumb_id
-	? wp_get_attachment_image( (int) $thumb_id, 'basecamp-img-s', false, [ 'class' => 'dish-card__img', 'loading' => 'lazy' ] )
+	? wp_get_attachment_image( (int) $thumb_id, 'basecamp-img-s', false, [ 'class' => 'card__img', 'loading' => 'lazy' ] )
 	: '';
 
 $is_private   = (bool) get_post_meta( $class->ID, 'dish_is_private', true );
@@ -79,72 +79,63 @@ $format_color = $format_post ? ( (string) get_post_meta( $format_id, 'dish_forma
 $spots_class = '';
 $spots_label = '';
 if ( $is_private ) {
-	$spots_class = 'dish-card__spots--private';
+	$spots_class = 'card-spots--private';
 	$spots_label = __( 'Booked', 'dish-events' );
 } elseif ( $capacity > 0 ) {
 	if ( $remaining <= 0 ) {
-		$spots_class = 'dish-card__spots--sold-out';
+		$spots_class = 'card-spots--soldout';
 		$spots_label = __( 'Sold out', 'dish-events' );
 	} elseif ( $remaining <= 3 ) {
-		$spots_class = 'dish-card__spots--low';
+		$spots_class = 'card-spots--low';
 		/* translators: %d: number of spots left */
-		$spots_label = sprintf( _n( '%d spot left', '%d spots left', $remaining, 'dish-events' ), $remaining );
+		$spots_label = sprintf( _n( '%d spot left', '%d spots left!', $remaining, 'dish-events' ), $remaining );
 	} else {
 		/* translators: %d: number of spots remaining */
 		$spots_label = sprintf( _n( '%d spot available', '%d spots available', $remaining, 'dish-events' ), $remaining );
 	}
 }
 ?>
-<article class="dish-card dish-class-card" id="dish-class-<?php echo esc_attr( $class->ID ); ?>">
-
+<article class="cards full--card" id="dish-class-<?php echo esc_attr( $class->ID ); ?>">
 	<?php if ( $thumb_html ) : ?>
-		<a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__image-link" tabindex="-1" aria-hidden="true">
-			<?php echo $thumb_html; // Already escaped by wp_get_attachment_image. ?>
-		</a>
+		<a href="<?php echo esc_url( $card_url ); ?>" class="card--img" tabindex="-1" aria-hidden="true"><?php echo $thumb_html; // Already escaped by wp_get_attachment_image. ?></a>
 	<?php endif; ?>
 
-	<div class="dish-card__body">
+	<div class="card--body">
 		<?php if ( empty( $suppress_format_pill ) ) : ?>
 			<?php dish_the_format_pill( $format_post, $format_color ); ?>
 		<?php endif; ?>
 		<?php if ( $date_label ) : ?>
-			<time class="dish-card__date" datetime="<?php echo esc_attr( $start ? DateHelper::format( $start, 'c' ) : '' ); ?>">
-				<?php echo esc_html( $date_label ); ?>
-			</time>
+			<time class="card--date" datetime="<?php echo esc_attr( $start ? DateHelper::format( $start, 'c' ) : '' ); ?>"><?php echo esc_html( $date_label ); ?></time>
 		<?php endif; ?>
 
-		<h3 class="dish-card__title">
-			<a href="<?php echo esc_url( $card_url ); ?>">
-				<?php echo esc_html( $title ); ?>
-			</a>
-		</h3>
+		<h3 class="card-title"><a href="<?php echo esc_url( $card_url ); ?>"><?php echo esc_html( $title ); ?></a></h3>
 
-		<div class="dish-card__meta">
-			<?php if ( $price_label && $spots_class !== 'dish-card__spots--sold-out' && ! $is_enquiry ) : ?>
-				<span class="dish-card__price"><?php echo esc_html( $price_label ); ?></span>
+		<div class="card--meta">
+			<?php if ( $price_label && $spots_class !== 'card-spots--soldout' && ! $is_enquiry ) : ?>
+				<span class="card--price"><?php echo esc_html( $price_label ); ?> - </span>
 			<?php endif; ?>
 
 			<?php if ( $spots_label && ! $is_enquiry ) : ?>
-				<span class="dish-card__spots <?php echo esc_attr( $spots_class ); ?>">
+				<span class="card--spots <?php echo esc_attr( $spots_class ); ?>">
 					<?php echo esc_html( $spots_label ); ?>
 				</span>
 			<?php endif; ?>
 
-			<?php if ( $spots_class === 'dish-card__spots--sold-out' && ! $is_enquiry ) : ?>
+			<?php if ( $spots_class === 'card-spots--soldout' && ! $is_enquiry ) : ?>
 				<span class="dish-waitlist-hint"><?php esc_html_e( 'Waitlist coming soon', 'dish-events' ); ?></span>
 			<?php endif; ?>
 		</div>
 
 		<?php if ( $is_private ) : ?>
-			<span class="dish-card__link button button--disabled" aria-disabled="true">
+			<span class="button button--disabled" aria-disabled="true">
 				<?php esc_html_e( 'Private event', 'dish-events' ); ?>
 			</span>
 		<?php elseif ( $is_enquiry ) : ?>
-			<a href="<?php echo esc_url( dish_get_enquiry_url() ); ?>" class="dish-card__link button button--secondary">
+			<a href="<?php echo esc_url( dish_get_enquiry_url() ); ?>" class="button button--secondary">
 				<?php esc_html_e( 'Enquire to Book', 'dish-events' ); ?>
 			</a>
-		<?php elseif ( $spots_class !== 'dish-card__spots--sold-out' && $book_url ) : ?>
-			<a href="<?php echo esc_url( $book_url ); ?>" class="dish-card__link button button--primary">
+		<?php elseif ( $spots_class !== 'card-spots--soldout' && $book_url ) : ?>
+			<a href="<?php echo esc_url( $book_url ); ?>" class="button button--primary">
 				<?php esc_html_e( 'Book Now', 'dish-events' ); ?>
 			</a>
 		<?php endif; ?>

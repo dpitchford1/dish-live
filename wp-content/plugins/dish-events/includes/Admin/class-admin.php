@@ -74,6 +74,14 @@ final class Admin {
 		$format_meta_box = new FormatMetaBox();
 		$format_meta_box->register_hooks( $this->loader );
 
+		// Homepage content blocks meta box — three title+text blocks for page-dish-home.
+		$homepage_meta_box = new HomepageMetaBox();
+		$homepage_meta_box->register_hooks( $this->loader );
+
+		// Contact Form meta box — CF7 shortcode per page using the Contact Template.
+		$contact_meta_box = new ContactMetaBox();
+		$contact_meta_box->register_hooks( $this->loader );
+
 		// dish_chef CPT columns — thumbnail and role.
 		$chef_columns = new ChefColumns();
 		$chef_columns->register_hooks( $this->loader );

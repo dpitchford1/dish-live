@@ -15,7 +15,7 @@ use Dish\Events\Data\ClassRepository;
 use Dish\Events\Frontend\Frontend;
 ?>
 <aside class="aside">
-
+    <h2 class="section-subtitle">More Dish</h2>
     <?php /* ── Class Formats ────────────────────────────────────────────── */ ?>
     <?php
     $formats = get_posts( [

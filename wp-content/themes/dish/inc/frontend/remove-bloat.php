@@ -53,6 +53,23 @@ final class RemoveBloat {
 		remove_action( 'wp_body_open',        'wp_global_styles_render_svg_filters' );
 
         add_filter( 'should_load_separate_core_block_assets', '__return_false' );
+
+		// Hide the admin bar on the frontend for anyone who cannot edit posts
+		// (i.e. subscribers and customers). Admins/editors are unaffected.
+		add_filter( 'show_admin_bar', [ __CLASS__, 'hide_admin_bar_for_subscribers' ] );
+	}
+
+	/**
+	 * Show the admin bar only to users with backend access (edit_posts capability).
+	 *
+	 * @param bool $show Whether to show the admin bar.
+	 * @return bool
+	 */
+	public static function hide_admin_bar_for_subscribers( bool $show ): bool {
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+		return current_user_can( 'edit_posts' ) ? $show : false;
 	}
 
 	/**

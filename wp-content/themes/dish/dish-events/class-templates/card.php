@@ -66,38 +66,34 @@ if ( ! empty( $next_arr ) ) {
 	$next_date  = $next_start ? DateHelper::format( $next_start, 'j M Y' ) : '';
 }
 ?>
-<article class="dish-card dish-template-card<?php echo $is_featured ? ' dish-card--featured' : ''; ?>" id="template-<?php echo esc_attr( $template->ID ); ?>">
+<article class="cards full--card dish-template-card<?php echo $is_featured ? ' dish-card--featured' : ''; ?>" id="template-<?php echo esc_attr( $template->ID ); ?>">
 	<?php if ( $is_featured ) : ?>
-		<span class="dish-card__featured-badge" aria-label="<?php esc_attr_e( 'Featured', 'dish-events' ); ?>"><?php esc_html_e( 'Featured', 'dish-events' ); ?></span>
-	<?php endif; ?>
+		<span class="card--featured-badge" aria-label="<?php esc_attr_e( 'Featured', 'dish-events' ); ?>"><?php esc_html_e( 'Featured', 'dish-events' ); ?></span>
+	<?php endif; ?> 
 
 	<?php if ( has_post_thumbnail( $template->ID ) ) : ?>
-		<a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__image-link" tabindex="-1" aria-hidden="true">
-			<?php echo wp_get_attachment_image( get_post_thumbnail_id( $template->ID ), 'basecamp-img-s', false, [ 'class' => 'dish-card__img', 'loading' => 'lazy' ] ); ?>
+		<a href="<?php echo esc_url( $card_url ); ?>" class="card--img" tabindex="-1" aria-hidden="true">
+			<?php echo wp_get_attachment_image( get_post_thumbnail_id( $template->ID ), 'basecamp-img-s', false, [ 'class' => 'card__img', 'loading' => 'lazy' ] ); ?>
 		</a>
 	<?php endif; ?>
 
-	<div class="dish-card__body">
+	<div class="card--body">
 		<?php if ( empty( $suppress_format_pill ) ) : ?>
 			<?php dish_the_format_pill( $format_post, $format_color ); ?>
 		<?php endif; ?>
 
-		<h3 class="dish-card__title">
-			<a href="<?php echo esc_url( $card_url ); ?>">
-				<?php echo esc_html( $template->post_title ); ?>
-			</a>
-		</h3>
+		<h3 class="card-title"><a href="<?php echo esc_url( $card_url ); ?>"><?php echo esc_html( $template->post_title ); ?></a></h3>
 
 		<?php if ( $template->post_excerpt ) : ?>
-			<p class="dish-card__excerpt"><?php echo esc_html( $template->post_excerpt ); ?></p>
+			<p class="card--excerpt"><?php echo esc_html( $template->post_excerpt ); ?></p>
 		<?php endif; ?>
 
-		<div class="dish-card__meta">
+		<div class="card--meta">
 			<?php if ( $price_label && ! empty( $next_arr ) ) : ?>
-				<span class="dish-card__price"><?php echo esc_html( $price_label ); ?></span>
+				<span class="card--price"><?php echo esc_html( $price_label ); ?></span>
 			<?php endif; ?>
 			<?php if ( $next_date ) : ?>
-				<span class="dish-card__next-date">
+				<span class="card--date">
 					<?php
 					/* translators: %s: next session date */
 					printf( esc_html__( 'Next: %s', 'dish-events' ), esc_html( $next_date ) );
@@ -106,9 +102,7 @@ if ( ! empty( $next_arr ) ) {
 			<?php endif; ?>
 		</div>
 
-		<a href="<?php echo esc_url( $card_url ); ?>" class="dish-card__link button">
-			<?php esc_html_e( 'View Class', 'dish-events' ); ?>
-		</a>
+		<a href="<?php echo esc_url( $card_url ); ?>" class="button button--secondary"><?php esc_html_e( 'View Class', 'dish-events' ); ?></a>
 	</div>
 
 </article>

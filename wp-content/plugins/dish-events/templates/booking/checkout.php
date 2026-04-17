@@ -205,7 +205,7 @@ get_header();
 			<div class="dish-checkout__error dish-notice dish-notice--error">
 				<p><?php echo esc_html( $error ); ?></p>
 				<p>
-					<a href="<?php echo esc_url( wp_get_referer() ?: home_url( '/' ) ); ?>" class="button">
+					<a href="<?php echo esc_url( wp_get_referer() ?: home_url( '/' ) ); ?>" class="button button--secondary">
 						<?php esc_html_e( '← Go back', 'dish-events' ); ?>
 					</a>
 				</p>

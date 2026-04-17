@@ -69,6 +69,11 @@ final class MenuView {
 			$format_id = (int) get_post_meta( $template_id, 'dish_format_id', true );
 			$format    = $format_id ? get_post( $format_id ) : null;
 
+			// Skip instances belonging to a private format — those are calendar-only.
+			if ( $format && get_post_meta( $format->ID, 'dish_format_is_private', true ) ) {
+				continue;
+			}
+
 			// Chef names: guest chef name takes priority over linked dish_chef posts.
 			$is_guest_chef   = (bool) get_post_meta( $template_id, 'dish_is_guest_chef', true );
 			$guest_chef_name = $is_guest_chef
@@ -126,10 +131,18 @@ final class MenuView {
 	}
 
 	/**
-	 * Shortcode: [dish_menus limit="200" orderby="title"]
+	 * Shortcode: [dish_menus limit="200" orderby="title" format="" private_only="0"]
 	 *
 	 * Renders a catalogue of all published class-template menus.
 	 * No booking links — suitable for use alongside a third-party booking system.
+	 *
+	 * Attributes:
+	 *   limit          (int)    Max templates to return. Default 200.
+	 *   orderby        (string) WP orderby value. Default 'title'.
+	 *   exclude_format (string) Comma-separated format slugs to exclude manually.
+	 *   format         (string) Single format slug — show only templates from this format.
+	 *                           When set, the private exclusion is bypassed for that format.
+	 *   private_only   (bool)   When '1', show only templates from private formats.
 	 *
 	 * If a future dish_class instance exists for a template its start timestamp
 	 * is surfaced as read-only "Next class" metadata so visitors know the class
@@ -140,12 +153,14 @@ final class MenuView {
 	 */
 	public static function render_all( $atts = [] ): string {
 		$atts = shortcode_atts(
-			[ 'limit' => 200, 'orderby' => 'title', 'exclude_format' => 'private-events' ],
+			[ 'limit' => 200, 'orderby' => 'title', 'exclude_format' => '', 'format' => '', 'private_only' => '0' ],
 			(array) $atts,
 			'dish_menus'
 		);
 
-		// Build a list of format slugs to exclude (comma-separated attribute).
+		$filter_format_slug   = sanitize_title( (string) $atts['format'] );
+		$private_only         = (bool) $atts['private_only'];
+		// Optional manual slug exclusion list (comma-separated attribute).
 		$exclude_format_slugs = array_filter( array_map( 'trim', explode( ',', (string) $atts['exclude_format'] ) ) );
 
 		// All published templates, alphabetical by default.
@@ -196,10 +211,26 @@ final class MenuView {
 
 		$entries = [];
 		foreach ( $templates as $template ) {
-			$format_id = (int) get_post_meta( $template->ID, 'dish_format_id', true );
-			$format    = $format_id ? get_post( $format_id ) : null;
+			$format_id  = (int) get_post_meta( $template->ID, 'dish_format_id', true );
+			$format     = $format_id ? get_post( $format_id ) : null;
+			$is_private = $format && (bool) get_post_meta( $format->ID, 'dish_format_is_private', true );
 
-			// Skip templates whose format slug is in the exclusion list.
+			// format="slug" — include only templates from this one format (bypasses private exclusion).
+			if ( $filter_format_slug ) {
+				if ( ! $format || $format->post_name !== $filter_format_slug ) {
+					continue;
+				}
+			// private_only="1" — include only templates from private formats.
+			} elseif ( $private_only ) {
+				if ( ! $is_private ) {
+					continue;
+				}
+			// Default: skip private formats entirely.
+			} elseif ( $is_private ) {
+				continue;
+			}
+
+			// Skip templates whose format slug is in the manual exclusion list.
 			if ( $format && ! empty( $exclude_format_slugs ) && in_array( $format->post_name, $exclude_format_slugs, true ) ) {
 				continue;
 			}

@@ -27,7 +27,7 @@ if ( ! isset( $classes ) || ! is_array( $classes ) ) {
 $booked_counts    = $booked_counts    ?? [];
 $ticket_types_map = $ticket_types_map ?? [];
 ?>
-<div class="dish-classes-archive">
+<div class="dish-archive">
 
 	<?php if ( empty( $classes ) ) : ?>
 

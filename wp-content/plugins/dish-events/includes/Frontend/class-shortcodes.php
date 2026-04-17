@@ -43,11 +43,12 @@ final class Shortcodes {
 	 * Register all [dish_*] shortcodes.
 	 */
 	public function register(): void {
-		add_shortcode( 'dish_classes',         [ ClassView::class,  'render_archive' ] );
-		add_shortcode( 'dish_chefs',           [ ChefView::class,   'render_archive' ] );
-		add_shortcode( 'dish_formats',         [ FormatView::class, 'render_archive' ] );
-		add_shortcode( 'dish_upcoming_menus',  [ MenuView::class,   'render_upcoming' ] );
-		add_shortcode( 'dish_menus',           [ MenuView::class,   'render_all'      ] );
+		add_shortcode( 'dish_classes',         [ ClassView::class,  'render_archive'    ] );
+		add_shortcode( 'dish_chefs',           [ ChefView::class,   'render_archive'    ] );
+		add_shortcode( 'dish_formats',         [ FormatView::class, 'render_archive'    ] );
+		add_shortcode( 'dish_class_types',     [ FormatView::class, 'render_class_types'] );
+		add_shortcode( 'dish_upcoming_menus',  [ MenuView::class,   'render_upcoming'   ] );
+		add_shortcode( 'dish_menus',           [ MenuView::class,   'render_all'        ] );
 		add_shortcode( 'dish_login',    [ $this, 'render_login'    ] );
 		add_shortcode( 'dish_register', [ $this, 'render_register' ] );
 		add_shortcode( 'dish_profile',  [ $this, 'render_profile'  ] );

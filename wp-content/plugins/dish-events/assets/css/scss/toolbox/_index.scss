@@ -1,0 +1,6 @@
+@forward 'variables' hide $themes, $text-settings;
+@forward 'mixins-master';
+@forward 'theme';
+
+// If you later split variables/functions, forward them here too, e.g.:
+// @forward 'functions';

@@ -3,12 +3,13 @@
 ====================================================================== */
 .mini-card {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 1.5rem;
 }
 .mini-card--image{
     width: 200px;
     height: 200px;
+    margin: 0 auto;
 }
 .mini-card--content{
     //width: auto;
@@ -23,8 +24,242 @@
 }
 
 .simple--mini{
-    border-bottom: 1px solid #7f54b3;
+    border-bottom: 1px dotted #bbb;
+    //background-color: #ddd;
+    padding: 0 .5rem 1rem;
+    margin-bottom: .8rem;
+
+    .card--title{
+        margin: 0;
+        font-size: 1.25rem;
+    }
+    .card--role{
+        font-size: .875rem;
+        margin: 0;
+        font-style: italic;
+        color: #ccc;
+    }
 }
+.simple--mini:last-child{
+    border-bottom: 0 none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+// Shared card styles
+.cards{
+
+    .card--img {
+        display: block;
+        overflow: hidden;
+    }
+    img{
+        display: block;
+        height: 100%;
+        object-fit: cover;
+        // transition: transform 0.3s ease;
+    }
+    // &.format--card {
+    //     border-top: 4px solid var( --format-color, #c0392b );
+    // }
+    &.format--card img {
+        border-top: 4px solid var( --format-color, #c0392b );
+        position: relative;
+    }
+    &.format--card {
+
+        // .card--img:before { 
+        //     background-color: var( --format-color, #c0392b );
+        //     height: 25px;
+        //     content: "";
+        //     position: absolute;
+        //     top: 5px;
+        //     left: 5px;
+        //     width: 15px;
+        //     z-index: 1;
+        //     display: block;
+        // }
+        .card-title{
+            position: relative;
+            padding-left: 1.15rem;
+        }
+        .card-title:before{
+            background-color: var( --format-color, #c0392b );
+            height: .4em;
+            content: "";
+            position: absolute;
+            top: .375em;
+            left: 0;
+            width: .4em;
+            z-index: 1;
+            display: block;
+            border-radius: 50%;
+        }
+    }
+}
+
+.full--card {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+    border: 1px solid #eee;
+
+    .card--img {
+        aspect-ratio: 16 / 9;
+        padding: 1px;
+        border: 1px solid transparent;
+    }
+    .card--body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 1.25rem;
+        gap: .5rem;
+    }
+    .card--date {
+        display: block;
+        color: var( --dish-primary );
+        font-size: .8125rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+    }
+    .card--meta {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        flex-wrap: wrap;
+    }
+    .card--price {
+        font-weight: 300;
+    }
+
+    .card--spots {
+        font-size: .8725rem;
+        color: #777;
+    }
+    .card-spots--low      { color: var( --dish-warn );   }
+    .card-spots--soldout { color: var( --dish-danger );  font-weight: 600; } 
+}
+.formats--private .full--card {
+    border: 0 none;
+}
+
+/* Card excerpt */
+.dish-card__excerpt {
+	color: var( --dish-muted );
+	font-size: .9rem;
+	margin: 0;
+	flex: 1;
+	-webkit-line-clamp: 3;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+
+/* List card layout -- Simple card layout with square image on left and content on right
+====================================================================== */
+.list-card{
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    padding: 0 .5rem 1rem;
+    margin-bottom: .8rem;
+
+    .card--img{
+        width: 200px;
+        height: 200px;
+    }
+    .card--content{
+        padding-top: .5rem;
+    }
+    .card--title{
+        margin: 0;
+        font-size: 1.25rem;
+    }
+    .card--role{
+        font-size: .875rem;
+        margin: 0;
+        font-style: italic;
+        color: #ccc;
+    }
+}
+
+/* List card layout -- Card layout with 1/3 2/3 split content on right
+====================================================================== */
+.dish--menus {
+	display: flex;
+	flex-direction: column;
+	gap: 2.5rem;
+    padding-top: 2rem;
+	margin: 0 auto;
+}
+.split-grid--card {
+	display: grid;
+	grid-template-columns: 280px 1fr;
+	gap: 0;
+	overflow: hidden;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid #eee;
+
+    .card--img{
+        display: block;
+	    overflow: hidden;
+
+        img{
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            // transition: transform 0.3s ease;
+        }
+    }
+
+    .card--content{
+        padding: 1.75rem 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .card--date{
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var( --dish-accent, #c0392b );
+        margin: 0;
+    }
+    .card--meta{
+        margin-bottom: 1rem;
+    }
+    .card--format{
+        margin: 0 0 .25rem;
+    }
+    .menu--list{
+        padding-left: 1.5rem;
+        margin: 0;
+        li{
+            margin-bottom: .25rem;
+        }
+    }
+    .card--flags{
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid #eee;
+    }
+    .dietary--flags{
+        margin: 0 0 0.25rem;
+    }
+
+    .dietary--disclaimer{
+        margin-top: .7rem;
+    }
+    
+
+}
+// .split-grid--card:hover img {
+// 	transform: scale( 1.03 );
+// }
+
 
 /* Min width 480px
 ---------------------------------------------- */
@@ -44,6 +279,7 @@
 @mixin bp-768() { 
     // min-width: 48em
 
+    
 }
 
 /* Min width 920px
@@ -51,12 +287,20 @@
 @mixin bp-920() { 
     // min-width: 57.5em
 
+    
 }
 
 /* Min width 1024px
 ---------------------------------------------- */
 @mixin bp-1024() { 
 
+    .mini-card {
+        flex-direction: row;
+    }
+    .mini-card--image{
+        margin: 0;
+    }
+    
 }
 
 /* Min width 1280px

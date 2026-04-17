@@ -36,35 +36,35 @@
 }
 
 // general card styles
-.card--item{
-    text-transform: uppercase;
+// .card--item{
+//     text-transform: uppercase;
 
-    picture{ display: block;}
-}
-.card--img{
-    object-fit: cover;
-    object-position: center;
-    transition: transform 0.3s ease-in-out;
-}
-.card--img:hover{
-    transform: scale(1.05);
-}
-.card--caption{
-    color: #fff;
-    font-size: 1.5rem;
-    text-shadow: 0 0 5px rgba(0, 0, 0, .8);
+//     picture{ display: block;}
+// }
+// .card--img{
+//     object-fit: cover;
+//     object-position: center;
+//     transition: transform 0.3s ease-in-out;
+// }
+// .card--img:hover{
+//     transform: scale(1.05);
+// }
+// .card--caption{
+//     color: #fff;
+//     font-size: 1.5rem;
+//     text-shadow: 0 0 5px rgba(0, 0, 0, .8);
 
-    & :hover{
-        color: #fff;
-    }
-}
-.card--link{
+//     & :hover{
+//         color: #fff;
+//     }
+// }
+// .card--link{
 
-    .card--caption{
-        font-size: clamp(1.4rem,1.2rem + 2vw,2.2rem);
-    }
+//     .card--caption{
+//         font-size: clamp(1.4rem,1.2rem + 2vw,2.2rem);
+//     }
 
-}
+// }
 
 // variables
 $anim-speed: 0.3s;

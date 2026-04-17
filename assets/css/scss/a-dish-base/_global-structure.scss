@@ -1,17 +1,22 @@
 /* $ Files includes: Only global structure styles - wrappers, body content padding, etc.
 ====================================================================== */
 
+body{
+    // border-top: 2px solid var(--dish-primary);
+    padding-top: 3.75rem;
+}
+
 /* Fluid wrapper for main content - identical to site wrapper - fine grained adjustments for responsive breakpoints */
 .fluid{
-    padding-left: 5%;
-    padding-right: 5%;
+    padding-left: 3%;
+    padding-right: 3%;
     margin-left: auto;
     margin-right: auto;
     width: 100%;
     }
 .fluid-content{
-    padding-left: 5%;
-    padding-right: 5%;
+    padding-left: 3%;
+    padding-right: 3%;
     }
 
 /* all purpose wrappers - used for blocks of content */
@@ -32,11 +37,22 @@
     margin-bottom: 5vh;
     }
 
+.aside-section{
+    margin-bottom: 3rem;
+    }
+
+.inner--content{
+    padding-top: 1.5rem;
+    padding-bottom: 1rem;
+    }
+
+
+
 /* Body Content - enhanced selector dictates layout for when JS is enabled
 ---------------------------------------------- */
 // pad the top to give room for the header
 .has--padding{
-    padding-top: 5rem;
+    padding-top: 3rem;
     }
 
 /* Min width 480px
@@ -62,7 +78,9 @@
     .has--padding{
         padding-top: 5.5rem;
         }
-
+    body{
+        padding-top: 3.75rem;
+    }
 }
 
 /* Min width 920px
@@ -73,7 +91,7 @@
     /* Body Content
     ---------------------------------------------- */
     .has--padding{
-        padding-top: 6rem;
+        padding-top: 3rem;
         }
         
 }
@@ -120,6 +138,16 @@
             padding-right: 2.5rem;
         }
     }
+    // .inner--content{
+    //     padding-top: 2.5rem;
+    //     padding-bottom: 1rem;
+    // }
+    .has--aside .inner--content, .has--aside .aside{
+        padding-top: 2.5rem;
+    }
+    .subnav + .has--aside .inner--content, .subnav + .has--aside .aside{
+        padding-top: 1rem;
+    }
 
 }
 
@@ -131,12 +159,7 @@
     /* Body Content
     ---------------------------------------------- */
     .has--padding{
-        padding-top: 7.5rem;
-        }
-    
-    .fluid-content{
-        padding-left: 10%;
-        padding-right: 10%;
+        padding-top: 3rem;
         }
 
 }
@@ -144,7 +167,10 @@
 /* Min width 1440px
 ---------------------------------------------- */
 @mixin bp-1440() { 
-
+    .fluid-content{
+        padding-left: 8%;
+        padding-right: 8%;
+        }
 }
 
 /* Min width 1600px

@@ -28,8 +28,10 @@ use Dish\Events\Data\FormatRepository;
  */
 final class TicketTypeAdmin {
 
-	const PAGE_SLUG  = 'dish-ticket-types';
-	const NONCE_SAVE = 'dish_ticket_type_save';
+	const PAGE_SLUG    = 'dish-ticket-types';
+	const NONCE_SAVE   = 'dish_ticket_type_save';
+	const NONCE_EXPORT = 'dish_ticket_type_export';
+	const NONCE_IMPORT = 'dish_ticket_type_import';
 
 	// -------------------------------------------------------------------------
 	// Menu registration
@@ -67,9 +69,19 @@ final class TicketTypeAdmin {
 		$action = sanitize_key( $_GET['action'] ?? '' );
 		$id     = absint( $_GET['id'] ?? 0 );
 
-		// POST — add/edit form submission.
+		// POST — add/edit form submission or import.
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
+			if ( 'import' === $action ) {
+				$this->handle_import();
+				return;
+			}
 			$this->handle_save();
+			return;
+		}
+
+		// GET: export JSON download — streams and exits.
+		if ( 'export' === $action ) {
+			$this->handle_export();
 			return;
 		}
 
@@ -97,6 +109,133 @@ final class TicketTypeAdmin {
 			$this->handle_bulk( $bulk );
 			return;
 		}
+	}
+
+	// -------------------------------------------------------------------------
+	// Export / Import
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Stream all ticket types as a JSON file download.
+	 * format_id is replaced with the format post_name (slug) for portability.
+	 */
+	private function handle_export(): void {
+		check_admin_referer( self::NONCE_EXPORT );
+
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$rows = $wpdb->get_results(
+			"SELECT * FROM {$wpdb->prefix}dish_ticket_types ORDER BY format_id ASC, name ASC",
+			ARRAY_A
+		);
+
+		// Swap format_id (DB int) → format_slug (portable).
+		$slug_cache = [];
+		foreach ( $rows as &$row ) {
+			$fid = (int) $row['format_id'];
+			if ( $fid && ! isset( $slug_cache[ $fid ] ) ) {
+				$post = get_post( $fid );
+				$slug_cache[ $fid ] = $post instanceof \WP_Post ? $post->post_name : '';
+			}
+			$row['format_slug'] = $fid ? ( $slug_cache[ $fid ] ?? '' ) : '';
+			unset( $row['id'], $row['format_id'] ); // strip non-portable fields
+		}
+		unset( $row );
+
+		$json     = wp_json_encode( $rows, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
+		$filename = 'dish-ticket-types-' . gmdate( 'Y-m-d' ) . '.json';
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+		header( 'Content-Length: ' . strlen( (string) $json ) );
+		header( 'Pragma: no-cache' );
+		echo $json; // phpcs:ignore WordPress.Security.EscapeOutput
+		exit;
+	}
+
+	/**
+	 * Handle JSON file upload and insert ticket types.
+	 * Existing types with the same name + format are skipped (no duplicates).
+	 */
+	private function handle_import(): void {
+		check_admin_referer( self::NONCE_IMPORT );
+
+		global $wpdb;
+
+		$base = admin_url( 'edit.php?post_type=dish_class&page=' . self::PAGE_SLUG );
+
+		if ( empty( $_FILES['dish_import_file']['tmp_name'] ) ) {
+			wp_safe_redirect( add_query_arg( 'import_error', 'no_file', $base ) );
+			exit;
+		}
+
+		$raw = file_get_contents( sanitize_text_field( $_FILES['dish_import_file']['tmp_name'] ) );
+		$data = $raw ? json_decode( $raw, true ) : null;
+
+		if ( ! is_array( $data ) || empty( $data ) ) {
+			wp_safe_redirect( add_query_arg( 'import_error', 'invalid_json', $base ) );
+			exit;
+		}
+
+		// Build format slug → ID map.
+		$format_posts = get_posts( [ 'post_type' => 'dish_format', 'post_status' => 'publish', 'posts_per_page' => -1, 'no_found_rows' => true ] );
+		$format_map   = [];
+		foreach ( $format_posts as $fp ) {
+			$format_map[ $fp->post_name ] = $fp->ID;
+		}
+
+		$now      = current_time( 'mysql' );
+		$inserted = 0;
+		$skipped  = 0;
+
+		foreach ( $data as $row ) {
+			if ( ! is_array( $row ) || empty( $row['name'] ) ) {
+				$skipped++;
+				continue;
+			}
+
+			$format_slug = sanitize_key( $row['format_slug'] ?? '' );
+			$format_id   = $format_slug && isset( $format_map[ $format_slug ] ) ? (int) $format_map[ $format_slug ] : 0;
+
+			// Skip exact duplicates (same name + format).
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$exists = $wpdb->get_var( $wpdb->prepare(
+				"SELECT id FROM {$wpdb->prefix}dish_ticket_types WHERE name = %s AND format_id = %d LIMIT 1",
+				sanitize_text_field( $row['name'] ),
+				$format_id
+			) );
+			if ( $exists ) {
+				$skipped++;
+				continue;
+			}
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$wpdb->insert(
+				$wpdb->prefix . 'dish_ticket_types',
+				[
+					'format_id'          => $format_id,
+					'name'               => sanitize_text_field( $row['name'] ),
+					'description'        => wp_kses_post( $row['description'] ?? '' ),
+					'price_cents'        => (int) ( $row['price_cents'] ?? 0 ),
+					'sale_price_cents'   => isset( $row['sale_price_cents'] ) ? (int) $row['sale_price_cents'] : null,
+					'capacity'           => isset( $row['capacity'] ) ? (int) $row['capacity'] : null,
+					'show_remaining'     => (int) ( $row['show_remaining'] ?? 0 ),
+					'min_per_booking'    => (int) ( $row['min_per_booking'] ?? 1 ),
+					'per_ticket_fees'    => $row['per_ticket_fees'] ?? null,
+					'per_booking_fees'   => $row['per_booking_fees'] ?? null,
+					'booking_starts'     => $row['booking_starts'] ?? null,
+					'show_booking_dates' => (int) ( $row['show_booking_dates'] ?? 0 ),
+					'is_active'          => (int) ( $row['is_active'] ?? 1 ),
+					'created_at'         => $now,
+					'updated_at'         => $now,
+				]
+			);
+			$inserted++;
+		}
+
+		wp_safe_redirect( add_query_arg( [ 'imported' => $inserted, 'skipped' => $skipped ], $base ) );
+		exit;
 	}
 
 	// -------------------------------------------------------------------------
@@ -149,6 +288,9 @@ final class TicketTypeAdmin {
 		<a href="<?php echo esc_url( add_query_arg( 'action', 'add', $base ) ); ?>" class="page-title-action">
 			<?php esc_html_e( 'Add New', 'dish-events' ); ?>
 		</a>
+		<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'action', 'export', $base ), self::NONCE_EXPORT ) ); ?>" class="page-title-action">
+			<?php esc_html_e( 'Export JSON', 'dish-events' ); ?>
+		</a>
 		<hr class="wp-header-end">
 
 		<?php if ( ! empty( $_GET['updated'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification ?>
@@ -162,6 +304,33 @@ final class TicketTypeAdmin {
 		<?php if ( ! empty( $_GET['error'] ) && $_GET['error'] === 'in_use' ) : // phpcs:ignore WordPress.Security.NonceVerification ?>
 			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'This ticket type cannot be deleted because it is linked to one or more Class Templates or Bookings.', 'dish-events' ); ?></p></div>
 		<?php endif; ?>
+
+		<?php // phpcs:ignore WordPress.Security.NonceVerification
+		if ( isset( $_GET['imported'] ) ) : ?>
+			<div class="notice notice-success is-dismissible"><p>
+				<?php printf(
+					esc_html__( '%1$d ticket type(s) imported, %2$d skipped (already exist).', 'dish-events' ),
+					(int) $_GET['imported'], // phpcs:ignore WordPress.Security.NonceVerification
+					(int) ( $_GET['skipped'] ?? 0 ) // phpcs:ignore WordPress.Security.NonceVerification
+				); ?>
+			</p></div>
+		<?php endif; ?>
+
+		<?php // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! empty( $_GET['import_error'] ) ) : ?>
+			<div class="notice notice-error is-dismissible"><p>
+				<?php echo 'no_file' === $_GET['import_error'] // phpcs:ignore WordPress.Security.NonceVerification
+					? esc_html__( 'Import failed: no file uploaded.', 'dish-events' )
+					: esc_html__( 'Import failed: invalid JSON file.', 'dish-events' ); ?>
+			</p></div>
+		<?php endif; ?>
+
+		<form method="post" enctype="multipart/form-data" style="margin-bottom:1.5em;display:flex;align-items:center;gap:.75em;">
+			<?php wp_nonce_field( self::NONCE_IMPORT ); ?>
+			<input type="hidden" name="action" value="import">
+			<input type="file" name="dish_import_file" accept=".json" required style="font-size:13px;">
+			<?php submit_button( __( 'Import JSON', 'dish-events' ), 'secondary', 'dish_import_submit', false ); ?>
+		</form>
 
 		<?php if ( empty( $all_rows ) ) : ?>
 			<p><?php esc_html_e( 'No ticket types found. Add one to get started.', 'dish-events' ); ?></p>

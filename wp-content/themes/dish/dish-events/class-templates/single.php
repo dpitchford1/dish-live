@@ -146,21 +146,32 @@ while ( have_posts() ) :
 	?>
 
 <?php /* ── Hero ─────────────────────────────────────────── */ ?>
-<?php if ( has_post_thumbnail() ) : ?>
-<div class="hero">
-    <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
+<section class="global--hero">
+    <div class="hero--wrapper">
+    <?php if ( has_post_thumbnail() ) : ?>
+
+        <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
         'landscape_size' => 'basecamp-img-xl',
         'loading'        => 'eager',
         'fetchpriority'  => 'high',
+        'img_class'      => 'hero--img size-basecamp-img-xl',
     ] ); ?>
-</div>
-<?php endif; ?>
+
+    <?php endif; ?>
+        <div class="hero--text-block">
+            <div class="hero--content">
+                <h1 class="hero--heading"><?php the_title(); ?></h1>
+            </div>
+        </div>
+    </div>
+</section>
+<?php /* ── Breadcrumb ─────────────────────────────────────────── */ ?>
 <div class="fluid-content breadcrumb"><?php dish_the_breadcrumb(); ?></div>
 
 <div class="content--region has--aside fluid-content">
 <?php /* ── Main Content ─────────────────────────────────────────── */ ?>
 <main id="main-content" class="main--content">
-    <h1 class="dish-template-title"><?php the_title(); ?></h1>
+    
     
     <header class="dish-template-headers dish-containers">
     <?php if ( has_excerpt() ) : ?>
@@ -204,13 +215,18 @@ initGallery();
         <div class="swiper dish-template-swiper">
             <div class="swiper-wrapper">
                 <?php foreach ( $gallery_ids as $gid ) :
-                $alt = (string) get_post_meta( $gid, '_wp_attachment_image_alt', true );
+                    $alt    = (string) get_post_meta( $gid, '_wp_attachment_image_alt', true );
+                    $img_html = wp_get_attachment_image( $gid, 'basecamp-img-sm', false, [ 'alt' => $alt, 'loading' => 'lazy' ] );
+                    if ( ! $img_html ) {
+                        $img_html = wp_get_attachment_image( $gid, 'full', false, [ 'alt' => $alt, 'loading' => 'lazy' ] );
+                    }
+                    if ( ! $img_html ) continue;
             ?>
                 <div class="swiper-slide">
                     <figure class="dish-template-swiper__item">
-                        <?php echo wp_get_attachment_image( $gid, 'basecamp-img-xl', false, [ 'alt' => $alt, 'loading' => 'lazy' ] ); ?>
-                        </figure>
-                    </div>
+                        <?php echo $img_html; // Already escaped by wp_get_attachment_image. ?>
+                    </figure>
+                </div>
                 <?php endforeach; ?>
             </div>
             <div class="swiper-pagination"></div>
@@ -225,8 +241,6 @@ initGallery();
     </article>
 <?php endif; ?>
     </section>
-
-
 
 
 <?php /* ── Details panels ─────────────────────────────────────────── */ ?>
@@ -285,7 +299,7 @@ initGallery();
 </main>
 
     <aside class="aside class--aside">
-        <h3 class="dish-template-title dish-template-title--secondary"><?php esc_html_e( 'Class Ingredients', 'dish-events' ); ?></h3>
+        <h3 class="card-title"><?php esc_html_e( 'Class Details', 'dish-events' ); ?></h3>
         
         <?php /* ── Class Meta ─────────────────────────────────────────── */ ?>
     <?php if ( ! $display_class && ( ( ! $is_enquiry && $price_cents ) || $capacity ) ) : ?>
