@@ -25,11 +25,11 @@ $team  = ChefRepository::query( [ 'team_only'    => true ] );
 
 <main id="main-content" class="main--content fluid">
 
-    <h2 class="">
+    <h2 class="page-heading">
         <?php esc_html_e( 'Meet the Team', 'dish-events' ); ?>
     </h2>
     <?php if ( get_the_archive_description() ) : ?>
-        <div class="">
+        <div class="archive-description">
             <?php the_archive_description(); ?>
         </div>
     <?php endif; ?>
@@ -48,7 +48,7 @@ $team  = ChefRepository::query( [ 'team_only'    => true ] );
 <?php if ( ! empty( $chefs ) ) : ?>
     <section class="">
         <?php if ( ! empty( $team ) ) : ?>
-            <h3 class=""><?php esc_html_e( 'The Chefs', 'dish-events' ); ?></h3>
+            <h3 class="section-heading"><?php esc_html_e( 'The Chefs', 'dish-events' ); ?></h3>
         <?php endif; ?>
         <div class="grid-general grid--4col">
             <?php foreach ( $chefs as $chef ) : ?>
@@ -60,7 +60,7 @@ $team  = ChefRepository::query( [ 'team_only'    => true ] );
 
 <?php if ( ! empty( $team ) ) : ?>
     <section class="">
-        <h3 class=""><?php esc_html_e( 'The Team', 'dish-events' ); ?></h3>
+        <h3 class="section-heading"><?php esc_html_e( 'The Team', 'dish-events' ); ?></h3>
         <div class="grid-general grid--4col">
             <?php foreach ( $team as $chef ) : ?>
                 <?php include \Dish\Events\Frontend\Frontend::locate( 'chefs/card.php' ); ?>

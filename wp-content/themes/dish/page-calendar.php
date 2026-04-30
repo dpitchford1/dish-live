@@ -16,7 +16,6 @@
 
 <?php /* ── Hero ─────────────────────────────────────────── */ ?>
 <section class="global--hero">
-    <div class="hero--wrapper">
     <?php if ( has_post_thumbnail() ) : ?>
 
         <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
@@ -25,18 +24,17 @@
         'fetchpriority'  => 'high',
         'img_class'      => 'hero--img size-basecamp-img-xl',
     ] ); ?>
-
     <?php endif; ?>
-        <div class="hero--text-block animate-slide-down">
+    <div class="hero--wrapper">
+        <div class="hero--text-block">
+            <div class="hero--cta">
             <div class="hero--content">
                 <h1 class="hero--heading"><?php the_title(); ?></h1>
-            <?php if ( has_excerpt() ) : ?>
-                <p class="hero--excerpt"><?php // the_excerpt(); ?></p>
-            <?php endif; ?>
             </div> 
             <div class="hero-buttons">
                 <a href="<?php echo esc_url( get_post_type_archive_link( 'dish_format' ) ); ?>" class="button button--primary"><?php esc_html_e( 'Class Formats', 'dish-events' ); ?></a>
                 <a href="/classes/class-menus/" class="button button--primary"><?php esc_html_e( 'Class Menus', 'dish-events' ); ?></a>
+            </div>
             </div>
         </div>
     </div>
@@ -45,8 +43,10 @@
 <main id="main-content" class="main--content inner--content">
 
     <section class="content-region fluid-content">
-        <article class="entry--content content-region fluid-content"><?php the_content(); ?></article>
+        <article class="entry--content entry--blurb text--centered"><?php the_content(); ?></article>
         <?php echo do_shortcode( '[dish_classes view="calendar"]' ); ?>
+
+        <p class="text--centered"><strong><a href="/about-dish/cancellation-policy/">Please review our cancellation policy for classes</a>.</strong></p>
     </section> 
 <?php endif; ?><?php /* ── end while have_posts */ ?>
 </main>

@@ -22,27 +22,24 @@ get_header();
 
 <?php /* ── Hero ─────────────────────────────────────────── */ ?>
 <section class="global--hero">
-    <div class="hero--wrapper">
     <?php if ( has_post_thumbnail() ) : ?>
-
         <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
         'landscape_size' => 'basecamp-img-xl',
         'loading'        => 'eager',
         'fetchpriority'  => 'high',
         'img_class'      => 'hero--img size-basecamp-img-xl',
     ] ); ?>
-
     <?php endif; ?>
-        <div class="hero--text-block animate-slide-down">
+    <div class="hero--wrapper">
+        <div class="hero--text-block">
+            <div class="hero--cta">
             <div class="hero--content">
                 <h1 class="hero--heading"><?php the_title(); ?></h1>
-            <?php if ( has_excerpt() ) : ?>
-                <p class="hero-excerpt"><?php // the_excerpt(); ?></p>
-            <?php endif; ?>
             </div>
             <div class="hero-buttons">
                 <a href="/classes/calendar/" class="button button--primary"><?php esc_html_e( 'View Calendar', 'dish-events' ); ?></a>
                 <a href="<?php echo esc_url( get_post_type_archive_link( 'dish_format' ) ); ?>" class="button button--primary"><?php esc_html_e( 'Class Formats', 'dish-events' ); ?></a>
+            </div>
             </div>
         </div>
     </div>
@@ -79,7 +76,7 @@ $_has_blocks = (bool) array_filter( $_blocks, fn( $b ) => $b['title'] !== '' || 
                     <h3 class="section-title"><?php echo esc_html( $_block['title'] ); ?></h3>
                 <?php endif; ?>
                 <?php if ( $_block['text'] !== '' ) : ?>
-                    <div class="region__text"><?php echo wp_kses_post( $_block['text'] ); ?></div>
+                    <p><?php echo wp_kses_post( $_block['text'] ); ?></p>
                 <?php endif; ?>
             </div>
             <?php endif; ?>
@@ -113,12 +110,12 @@ $promo_pages = array_filter( [
                 <?php echo wp_get_attachment_image( get_post_thumbnail_id( $promo_page->ID ), 'basecamp-img-sq-sm', false, [ 'loading' => 'lazy', 'class' => 'mini-card--image' ] ); ?> 
             <?php endif; ?>
             <div class="mini-card--content">
-            <h2 class="section-title"><a href="<?php echo esc_url( get_permalink( $promo_page->ID ) ); ?>"><?php echo esc_html( get_the_title( $promo_page->ID ) ); ?></a></h2>
+                <h2 class="section-title"><a href="<?php echo esc_url( get_permalink( $promo_page->ID ) ); ?>"><?php echo esc_html( get_the_title( $promo_page->ID ) ); ?></a></h2>
             <?php $excerpt = get_the_excerpt( $promo_page ); ?>
             <?php if ( $excerpt ) : ?>
                 <p><?php echo esc_html( $excerpt ); ?></p>
             <?php endif; ?>
-            <a href="<?php echo esc_url( get_permalink( $promo_page->ID ) ); ?>" class=""><?php esc_html_e( 'More about', 'basecamp' ); ?> <?php echo esc_html( get_the_title( $promo_page->ID ) ); ?></a>
+                <a href="<?php echo esc_url( get_permalink( $promo_page->ID ) ); ?>" class=""><?php esc_html_e( 'More about our', 'basecamp' ); ?> <?php echo esc_html( get_the_title( $promo_page->ID ) ); ?></a>
             </div>
         </div>
         <?php endforeach; ?>
@@ -131,7 +128,7 @@ $promo_pages = array_filter( [
 $formats = get_posts( [
 	'post_type'      => 'dish_format',
 	'post_status'    => 'publish',
-	'posts_per_page' => 3,
+	'posts_per_page' => 4,
 	'orderby'        => 'menu_order',
 	'order'          => 'ASC',
 	'meta_query'     => [
@@ -151,14 +148,12 @@ $formats = get_posts( [
 <?php if ( ! empty( $formats ) ) : ?>
 <section class="content-region fluid-content">
     <h2 class="section-heading"><?php esc_html_e( 'Class Formats', 'dish-events' ); ?></h2>
-    <div class="grid-general grid--3col">
+    <div class="grid-general grid--4col">
         <?php foreach ( $formats as $format ) : ?>
             <?php include Frontend::locate( 'formats/card.php' ); ?>
         <?php endforeach; ?>
     </div>
-    <p class="region">
-        <a href="<?php echo esc_url( get_post_type_archive_link( 'dish_format' ) ); ?>" class="button button--primary"><?php esc_html_e( 'View All Formats', 'dish-events' ); ?></a>
-    </p>
+    <p class="region"><a href="<?php echo esc_url( get_post_type_archive_link( 'dish_format' ) ); ?>" class="button button--primary"><?php esc_html_e( 'View All Formats', 'dish-events' ); ?></a></p>
 </section>
 <?php endif; ?>
 

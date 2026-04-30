@@ -2,8 +2,9 @@
  /* $ Article Content - WP entry content 
 ====================================================================== */
 
-.inner--content .entry--content{
-    
+.entry--content{
+    line-height: 1.5;
+
     h2{
         margin-bottom: 1.3rem;
         overflow: hidden;
@@ -13,29 +14,42 @@
         line-height: 1.3;
     }
     h3{
-        margin-bottom: .75rem;
+        margin-bottom: 1.1rem;
         overflow: hidden;
         clear: both;
         font-size: clamp(1.2rem, calc(1.5rem + 1vw), 1.8rem);
-        letter-spacing: -.1rem;
-        line-height: 1.3;
+        letter-spacing: -.09rem;
+        line-height: 1.4;
     }
     p + h3{
         margin-top: 1.2rem;
     }
+
+    h4{
+        margin-bottom: .75rem;
+        overflow: hidden;
+        clear: both;
+        font-size: clamp(1.2rem, calc(1.5rem + 1vw), 1.4rem);
+        letter-spacing: -.1rem;
+        line-height: 1.3;
+    }
 }
 
 .entry--blurb{
+
+    margin-bottom: 1.8rem;
     h2{
         margin-bottom: 1.3rem;
         font-size: clamp(1.2rem, calc(1.5rem + 1vw), 2.2rem);
         line-height: 1.3;
     }
+    p{
+        margin-bottom: .5rem;
+    }
 }
 
-.entry--content{
-
-    line-height: 1.5; 
+// Article Images.
+.entry--content{ 
 
     .alignleft{
         max-width: 100%;
@@ -53,6 +67,16 @@
         margin-bottom: 1.5rem;
     }
 }
+// General image styles for article content - can be used for images within the content or as standalone images within the article
+.general--img{
+    margin-bottom: 1.5rem;
+    display: block;
+    padding: 2px;
+    border: 1px solid #ccc;
+    object-fit: cover;
+    object-position: center;
+}
+
 
 body:not(.page--calendar) .entry-content{
     a{
@@ -60,12 +84,8 @@ body:not(.page--calendar) .entry-content{
     }
 }
 
-// .contact--wrap{
-    
-    
-// }
+// Contact page specific styles
 .contact--info{
-    // border-left: 1px solid #f58226;
     padding-left: 1rem;
 
     .contact--wrap{
@@ -80,14 +100,6 @@ body:not(.page--calendar) .entry-content{
     margin-bottom: 0;
 }
 
-.general--img{
-    margin-bottom: 1.5rem;
-    display: block;
-    padding: 2px;
-    border: 1px solid #eee;
-    object-fit: cover;
-    object-position: center;
-}
 
 /* Min width 480px
 ---------------------------------------------- */
@@ -120,9 +132,8 @@ body:not(.page--calendar) .entry-content{
 ---------------------------------------------- */
 @mixin bp-1024() { 
 
+    // Article Images.
     .entry--content{
-
-        // line-height: 1.5;
 
         .alignleft{
             float: left;
@@ -136,6 +147,7 @@ body:not(.page--calendar) .entry-content{
         }
     }
 
+    // Contact page specific styles
     .contact--info{
         padding-left: 3rem;
 
@@ -150,6 +162,15 @@ body:not(.page--calendar) .entry-content{
 @mixin bp-1280() { 
     // min-width: 80em
 
+
+    .grid--2col .entry--content{
+        padding-right: 1rem;
+    }
+    // Bump up font size for article content
+    .entry--content{
+        font-size: clamp(1rem, calc(0.875rem + 0.5vw), 1.125rem);
+        line-height: 1.6;
+        }
 }
 
 /* Min width 1440px

@@ -26,7 +26,7 @@ $card_color  = (string) get_post_meta( $format->ID, 'dish_format_color', true ) 
 <article class="cards full--card format--card" id="format-<?php echo esc_attr( $format->ID ); ?>" style="--format-color:<?php echo esc_attr( $card_color ); ?>">
     <div class="grid-general grid--2col">
 	<?php if ( $card_thumb ) : ?>
-		<a href="<?php echo esc_url( $card_url ); ?>" class="card--img" tabindex="-1" aria-hidden="true"><?php echo wp_get_attachment_image( get_post_thumbnail_id( $format->ID ), 'basecamp-img-s', false, [ 'class' => 'card__img', 'loading' => 'lazy' ] ); ?></a>
+		<a href="<?php echo esc_url( $card_url ); ?>" class="card--img" tabindex="-1" aria-hidden="true"><?php echo wp_get_attachment_image( get_post_thumbnail_id( $format->ID ), 'basecamp-img-sm', false, [ 'class' => 'card__img', 'loading' => 'lazy' ] ); ?></a>
 	<?php endif; ?>
 
 	<div class="card--body">

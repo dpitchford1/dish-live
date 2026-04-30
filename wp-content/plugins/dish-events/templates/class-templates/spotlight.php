@@ -158,6 +158,28 @@ if ( ! empty( $next_class ) ) {
 				<?php endif; ?>
 			</div>
 
+			<?php
+			// Related Recipe — look for a recipe flagged as spotlight in the
+			// dish-recipes plugin (cross-plugin, read by meta key only).
+			if ( post_type_exists( 'dish_recipe' ) ) :
+				$spotlight_recipes = get_posts( [
+					'post_type'      => 'dish_recipe',
+					'post_status'    => 'publish',
+					'posts_per_page' => 1,
+					'fields'         => 'ids',
+					'meta_query'     => [ [ 'key' => 'dish_recipe_is_spotlight', 'value' => '1' ] ],
+				] );
+				if ( ! empty( $spotlight_recipes ) ) :
+					$recipe_id  = $spotlight_recipes[0];
+					$recipe_url = get_permalink( $recipe_id );
+				?>
+				<p class="spotlight-related-recipe">
+					<?php esc_html_e( 'Related Recipe:', 'dish-events' ); ?>
+					<a href="<?php echo esc_url( $recipe_url ); ?>"><?php echo esc_html( get_the_title( $recipe_id ) ); ?></a>
+				</p>
+				<?php endif; ?>
+			<?php endif; ?>
+
 		</div><!-- .spotlight--content -->
 	</div><!-- .grid-general -->
 </section>

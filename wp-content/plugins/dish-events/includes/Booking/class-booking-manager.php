@@ -64,6 +64,15 @@ final class BookingManager {
 			);
 		}
 
+		// Reject bookings for past class instances.
+		$start_ts = (int) get_post_meta( $class_id, 'dish_start_datetime', true );
+		if ( \Dish\Events\Helpers\DateHelper::is_past( $start_ts ) ) {
+			return new WP_Error(
+				'class_in_past',
+				__( 'This class has already taken place and cannot be booked.', 'dish-events' )
+			);
+		}
+
 		// Validate availability.
 		$available = CapacityManager::get_available( $class_id );
 		if ( $available < $qty ) {
@@ -222,10 +231,12 @@ final class BookingManager {
 		/**
 		 * Fires after a new booking has been created successfully.
 		 *
-		 * @param int $booking_id  dish_booking post ID.
-		 * @param int $class_id    dish_class post ID.
-		 * @param int $qty         Number of tickets booked.
-		 * @param int $total_cents Total charged in integer cents.
+		 * Hook args:
+		 *   int $booking_id  dish_booking post ID.
+		 *   int $class_id    dish_class post ID.
+		 *   int $qty         Number of tickets booked.
+		 *   int $total_cents Total charged in integer cents.
+		 *
 		 * @since 1.0.2
 		 */
 		do_action( 'dish_booking_created', $booking_id, $class_id, $qty, $total_cents );

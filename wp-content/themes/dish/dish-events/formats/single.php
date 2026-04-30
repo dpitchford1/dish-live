@@ -46,21 +46,21 @@ while ( have_posts() ) :
 
 <?php /* ── Hero ─────────────────────────────────────────── */ ?>
 <section class="global--hero">
+<?php if ( has_post_thumbnail() ) : ?>
+    <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
+    'landscape_size' => 'basecamp-img-xl',
+    'loading'        => 'eager',
+    'fetchpriority'  => 'high',
+    'img_class'      => 'hero--img size-basecamp-img-xl',
+] ); ?>
+<?php endif; ?>
     <div class="hero--wrapper">
-    <?php if ( has_post_thumbnail() ) : ?>
-
-        <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
-        'landscape_size' => 'basecamp-img-xl',
-        'loading'        => 'eager',
-        'fetchpriority'  => 'high',
-        'img_class'      => 'hero--img size-basecamp-img-xl',
-    ] ); ?>
-
-    <?php endif; ?>
         <div class="hero--text-block">
+            <div class="hero--cta">
             <div class="hero--content">
-                <h1 class="hero--heading">Class Format: <?php the_title(); ?></h1>
+                <h1 class="hero--heading"><?php echo esc_html( sprintf( __( 'Class Format: %s', 'dish-events' ), get_the_title() ) ); ?></h1>
             </div>
+           </div>
         </div>
     </div>
 </section>
@@ -68,8 +68,7 @@ while ( have_posts() ) :
 <div class="fluid-content breadcrumb"><?php dish_the_breadcrumb(); ?></div>
 
 <?php /* ── Main Content ─────────────────────────────────────────── */ ?>
-<main id="main-content" class="main--content fluid-content inner--content">
-    <!-- <h1 class="dish-format-title"><?php echo esc_html( sprintf( __( 'Class Format: %s', 'dish-events' ), get_the_title() ) ); ?></h1> -->
+<main id="main-content" class="main--content fluid-content event--region">
 
     <?php /* ── If featured exists ───────── */ ?>
     <?php if ( ! empty( $featured_templates ) ) : ?>
@@ -83,8 +82,9 @@ while ( have_posts() ) :
             </article>
         <?php endif; ?>
         
-        <div class="dish-template-listing dish-template-listing--featured">
-            <h3 class="section-title">Featured Class Type</h3>
+        <div class="featured-sidebar--type">
+            <!-- <h3 class="card-title">Word on the street:</h3> -->
+            <h3 class="card-title"><?php echo esc_html( sprintf( __( 'Word on the street:', 'dish-events' ), get_the_title() ) ); ?></h3>
             <?php $suppress_format_pill = true; ?>
             <?php foreach ( $featured_templates as $template ) : ?>
                 <?php include locate_template( 'dish-events/class-templates/card.php' ); ?>
@@ -133,9 +133,9 @@ while ( have_posts() ) :
         <?php if ( ! empty( $standard_templates ) ) : ?>
             <section class="dish-template-listings dish-template-listing--standards">
                 <h2 class="section-heading">
-                    <?php echo esc_html( sprintf( __( 'Our %s Classes', 'dish-events' ), $format_title ) ); /* translators: %s: format name e.g. "Hands On" */?>
+                    <?php echo esc_html( sprintf( __( 'Other %s Classes', 'dish-events' ), $format_title ) ); /* translators: %s: format name e.g. "Hands On" */?>
                 </h2>
-                <div class="grid-general grid--3col">
+                <div class="grid-general grid--4col">
                     <?php $suppress_format_pill = true; ?>
                     <?php foreach ( $standard_templates as $template ) : ?>
                         <?php include locate_template( 'dish-events/class-templates/card.php' ); ?>

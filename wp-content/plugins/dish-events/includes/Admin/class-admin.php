@@ -39,6 +39,11 @@ final class Admin {
 		$this->loader->add_action( 'admin_init',  $settings, 'register_settings' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $settings, 'enqueue_assets' );
 
+		// Bust the Google Reviews transient whenever dish_settings is saved, so a
+		// new API key or Place ID takes effect immediately without waiting for the
+		// 12-hour TTL to expire.
+		$this->loader->add_action( 'update_option_' . Settings::OPTION, new \Dish\Events\Core\GoogleReviews(), 'bust_cache_hook' );
+
 		// Class list table columns, filters, and bulk actions.
 		$columns = new ClassColumns();
 		$columns->register_hooks( $this->loader );
@@ -116,6 +121,11 @@ final class Admin {
 
 		// Documentation viewer — Dish Events → Documentation.
 		DishDocs::init();
+
+		// Dashboard widgets — at-a-glance plugin data on the WP dashboard.
+		$dashboard_widgets = new DashboardWidgets();
+		$this->loader->add_action( 'wp_dashboard_setup', $dashboard_widgets, 'register' );
+		$this->loader->add_action( 'admin_head',         $dashboard_widgets, 'inline_styles' );
 
 		// Reorder the submenu at late priority, after all items are registered.
 		$this->loader->add_action( 'admin_menu', $this, 'reorder_menu', 999 );

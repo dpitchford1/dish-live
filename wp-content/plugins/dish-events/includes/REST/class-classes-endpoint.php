@@ -330,8 +330,7 @@ final class ClassesEndpoint {
 				'backgroundColor' => $color,
 				'borderColor'     => $color,
 				'extendedProps'   => [
-					'is_private'      => $is_private,
-					'format'          => $format,
+					'is_private'      => $is_private,				'is_past'         => $start_ts > 0 && $start_ts < time(),					'format'          => $format,
 					'spots_remaining' => $remaining,
 					'price_cents'     => $ticket ? (int) $ticket->price_cents : 0,
 					'booking_url'     => ( ! $is_private && $booking_page_url && ( $tpl['booking_type'] ?? 'online' ) !== 'enquiry' )

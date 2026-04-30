@@ -38,21 +38,21 @@ while ( have_posts() ) :
 
 <?php /* ── Hero ─────────────────────────────────────────── */ ?>
 <section class="global--hero">
+<?php if ( has_post_thumbnail() ) : ?>
+    <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
+    'landscape_size' => 'basecamp-img-xl',
+    'loading'        => 'eager',
+    'fetchpriority'  => 'high',
+    'img_class'      => 'hero--img size-basecamp-img-xl',
+] ); ?>
+<?php endif; ?>
     <div class="hero--wrapper">
-    <?php if ( has_post_thumbnail() ) : ?>
-
-        <?php Basecamp_Frontend::picture( get_post_thumbnail_id(), [
-        'landscape_size' => 'basecamp-img-xl',
-        'loading'        => 'eager',
-        'fetchpriority'  => 'high',
-        'img_class'      => 'hero--img size-basecamp-img-xl',
-    ] ); ?>
-
-    <?php endif; ?>
         <div class="hero--text-block">
+            <div class="hero--cta">
             <div class="hero--content">
                 <h1 class="hero--heading"><?php the_title(); ?></h1>
             </div>
+           </div>
         </div>
     </div>
 </section>
@@ -62,7 +62,7 @@ while ( have_posts() ) :
 <?php /* ── Main Content ─────────────────────────────────────────── */ ?>
 <div class="content--region has--aside fluid-content">
 
-    <main id="main-content" class="main--content">
+    <main id="main-content" class="main--content inner--content">
 		<section id="post-<?php the_ID(); ?>" <?php post_class( 'private-event' ); ?>>
 
             <div class="private-event__hero-content">

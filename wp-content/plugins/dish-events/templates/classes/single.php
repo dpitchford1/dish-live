@@ -56,6 +56,7 @@ while ( have_posts() ) :
 	$remaining   = $capacity > 0 ? max( 0, $capacity - $booked ) : 0;
 	$is_sold_out = $capacity > 0 && $remaining <= 0;
 	$is_private  = (bool) get_post_meta( $class_id, 'dish_is_private', true );
+	$is_past     = DateHelper::is_past( $start );
 
 	// Seats already booked by the current logged-in user for this instance.
 	$my_seats = 0;
@@ -191,7 +192,11 @@ while ( have_posts() ) :
 
 			<?php // Booking CTA ?>
 			<div class="dish-class-booking dish-container">
-				<?php if ( $is_private ) : ?>
+				<?php if ( $is_past ) : ?>
+					<p class="dish-booking-past">
+						<?php esc_html_e( 'This class has already taken place.', 'dish-events' ); ?>
+					</p>
+				<?php elseif ( $is_private ) : ?>
 					<p class="dish-booking-private">
 						<?php esc_html_e( 'Private event', 'dish-events' ); ?>
 					</p>

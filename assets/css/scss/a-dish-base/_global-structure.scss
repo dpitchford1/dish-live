@@ -1,22 +1,22 @@
 /* $ Files includes: Only global structure styles - wrappers, body content padding, etc.
 ====================================================================== */
 
-body{
-    // border-top: 2px solid var(--dish-primary);
-    padding-top: 3.75rem;
-}
+// body{
+//     // border-top: 2px solid var(--dish-primary);
+//     padding-top: 3.75rem;
+// }
 
 /* Fluid wrapper for main content - identical to site wrapper - fine grained adjustments for responsive breakpoints */
 .fluid{
-    padding-left: 3%;
-    padding-right: 3%;
+    padding-left: 5%;
+    padding-right: 5%;
     margin-left: auto;
     margin-right: auto;
     width: 100%;
     }
 .fluid-content{
-    padding-left: 3%;
-    padding-right: 3%;
+    padding-left: 5%;
+    padding-right: 5%;
     }
 
 /* all purpose wrappers - used for blocks of content */
@@ -33,27 +33,37 @@ body{
     padding-bottom: 1rem;
     width: 100%;
     }
-.content--region{
-    margin-bottom: 5vh;
-    }
+// .content--region{
+//     margin-bottom: 5vh;
+//     }
 
 .aside-section{
-    margin-bottom: 3rem;
+    margin: 0 0 2rem;
     }
 
 .inner--content{
-    padding-top: 1.5rem;
     padding-bottom: 1rem;
     }
 
+.content--utility{
+    padding-top: 1.2rem;
+    padding-bottom: .8rem;
+    line-height: normal;
+    z-index: 0;
+}
 
+.has--aside, .event--region{
+    padding-top: 4vh;
 
-/* Body Content - enhanced selector dictates layout for when JS is enabled
----------------------------------------------- */
-// pad the top to give room for the header
-.has--padding{
-    padding-top: 3rem;
+    // move to bp-1024
+    .aside{
+        padding-top: .7rem;
     }
+}
+
+body .breadcrumb + .has--aside, body .breadcrumb + .event--region{
+    padding-top: 3vh;
+}
 
 /* Min width 480px
 ---------------------------------------------- */
@@ -65,7 +75,6 @@ body{
 ---------------------------------------------- */
 @mixin bp-600() { 
     
-    
 }
 
 /* Min width 768px
@@ -75,9 +84,6 @@ body{
 
     /* Body Content
     ---------------------------------------------- */
-    .has--padding{
-        padding-top: 5.5rem;
-        }
     body{
         padding-top: 3.75rem;
     }
@@ -87,12 +93,6 @@ body{
 ---------------------------------------------- */
 @mixin bp-920() { 
     // min-width: 57.5em
-
-    /* Body Content
-    ---------------------------------------------- */
-    .has--padding{
-        padding-top: 3rem;
-        }
         
 }
 
@@ -102,14 +102,6 @@ body{
 
 
     // Layout Target: 2 column layout with aside - main content and sidebar
-    // body:has(.aside) {
-    //     .main--content {
-    //         background-color: #aaa;
-    //     }
-    //     .aside {
-    //         background-color: #eee;
-    //     }
-    // }
     .has--aside {
         display: flex;
         flex-direction: row;
@@ -132,21 +124,11 @@ body{
             flex-shrink: 1;
             align-self: auto;
             flex-basis: 23%;
-            padding-top: 4vh;
+            // padding-top: 4vh;
         }
         .class-content{
             padding-right: 2.5rem;
         }
-    }
-    // .inner--content{
-    //     padding-top: 2.5rem;
-    //     padding-bottom: 1rem;
-    // }
-    .has--aside .inner--content, .has--aside .aside{
-        padding-top: 2.5rem;
-    }
-    .subnav + .has--aside .inner--content, .subnav + .has--aside .aside{
-        padding-top: 1rem;
     }
 
 }
@@ -155,12 +137,6 @@ body{
 ---------------------------------------------- */
 @mixin bp-1280() { 
     // min-width: 80em
-
-    /* Body Content
-    ---------------------------------------------- */
-    .has--padding{
-        padding-top: 3rem;
-        }
 
 }
 

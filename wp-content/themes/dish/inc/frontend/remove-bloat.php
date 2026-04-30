@@ -35,6 +35,10 @@ final class RemoveBloat {
 		add_filter( 'bloginfo_url',           [ __CLASS__, 'remove_pingback_url' ], 11, 2 );
 		add_filter( 'wp_img_tag_add_auto_sizes', '__return_false' );
 
+		// Contact Form 7: dequeue its scripts/styles on pages that don't contain a CF7 shortcode.
+		// Prevents wp-i18n and wp-hooks from loading globally on every page.
+		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'conditionally_load_cf7' ], 99 );
+
 		remove_action( 'wp_head', 'feed_links',                  2 );
 		remove_action( 'wp_head', 'feed_links_extra',            3 );
 		remove_action( 'wp_head', 'rsd_link' );
@@ -132,6 +136,8 @@ final class RemoveBloat {
         wp_deregister_style( 'global-styles-inline-css' );
         wp_dequeue_style( 'global-styles-inline-css' );
 
+        wp_dequeue_style( 'quick-and-easy-faqs' );
+
         // wp_deregister_style( 'dish-events' );
         // wp_dequeue_style( 'dish-events' );
 
@@ -162,6 +168,43 @@ final class RemoveBloat {
 	 */
 	public static function remove_pingback_url( string $output, string $property ): ?string {
 		return ( 'pingback_url' === $property ) ? null : $output;
+	}
+
+	/**
+	 * Dequeue Contact Form 7 scripts and styles on pages that don't need them.
+	 *
+	 * CF7 loads wp-i18n → wp-hooks on every page by default. We explicitly
+	 * define the slugs that contain forms and dequeue CF7 everywhere else.
+	 *
+	 * @return void
+	 */
+	public static function conditionally_load_cf7(): void {
+		if ( ! function_exists( 'wpcf7_enqueue_scripts' ) ) {
+			return;
+		}
+
+		$cf7_page_slugs = [ 'contact-us' ];
+
+		// Allow the current page and any of its ancestors to load CF7.
+		$post = get_post();
+		if ( is_page( $cf7_page_slugs ) ) {
+			return;
+		}
+		if ( $post instanceof \WP_Post && $post->post_parent ) {
+			$ancestors = get_post_ancestors( $post );
+			foreach ( $ancestors as $ancestor_id ) {
+				if ( in_array( get_post_field( 'post_name', $ancestor_id ), $cf7_page_slugs, true ) ) {
+					return;
+				}
+			}
+		}
+
+		wp_dequeue_script( 'contact-form-7' );
+		wp_deregister_script( 'contact-form-7' );
+		wp_dequeue_script( 'swv' );
+		wp_deregister_script( 'swv' );
+		wp_dequeue_style( 'contact-form-7' );
+		wp_deregister_style( 'contact-form-7' );
 	}
 }
 

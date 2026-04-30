@@ -228,6 +228,7 @@ final class Settings {
 			'currency', 'currency_symbol', 'currency_position',
 			'venue_name', 'venue_address', 'venue_city', 'venue_province', 'venue_postal_code',
 			'venue_gmap_api_key', 'venue_lat', 'venue_lng',
+			'google_reviews_place_id', 'google_reviews_api_key',
 			'studio_name', 'studio_email', 'studio_phone',
 			'default_cal_view',
 			'active_gateway', 'paypal_mode', 'paypal_client_id',
@@ -444,6 +445,15 @@ final class Settings {
 		] );
 		$this->field( $page, 'dish_venue', 'venue_hours', __( 'Hours of operation', 'dish-events' ), [ $this, 'render_textarea' ], [
 			'desc' => __( 'One line per day range, e.g.<br><code>Monday–Friday 09:00–17:00</code><br><code>Saturday 10:00–15:00</code><br>Used for schema.org LocalBusiness structured data.', 'dish-events' ),
+		] );
+
+		add_settings_section( 'dish_venue_reviews', __( 'Google Reviews', 'dish-events' ), '__return_null', $page );
+
+		$this->field( $page, 'dish_venue_reviews', 'google_reviews_place_id', __( 'Place ID', 'dish-events' ), [ $this, 'render_text' ], [
+			'desc' => __( 'Your Google Business Place ID. Find it at <a href="https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder" target="_blank" rel="noopener">Place ID Finder</a>.', 'dish-events' ),
+		] );
+		$this->field( $page, 'dish_venue_reviews', 'google_reviews_api_key', __( 'Places API key', 'dish-events' ), [ $this, 'render_text' ], [
+			'desc' => __( 'Server-restricted API key with the <strong>Places API</strong> enabled. This key is never sent to the browser.', 'dish-events' ),
 		] );
 	}
 

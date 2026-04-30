@@ -1,38 +1,83 @@
 
  /* $ Heros 
 ====================================================================== */
-.hero{
+/* Hero structure */
+.global--hero{
+    position: relative;
     width: 100%;
-    max-height: 30vh;
-    height: 100%;
-    overflow: hidden;
+    z-index: 1;
+    display: flex;
+    height: 100vh;
+    max-height: 100vh;
     box-shadow: 0px 5px 6px 0px rgba(0,0,0,0.3);
-    z-index: 2;
+    color: #fff;
+    box-sizing: content-box;
+    justify-content: center; /* horizontal */
+    align-items: center;     /* vertical */
+    overflow: hidden;
 
-    .size-basecamp-img-xl{
+    /* Text block inside hero */
+    .hero--text-block{
+        z-index: 5;
         width: 100%;
-        max-height: 100vh;
-        object-fit: cover;
-        display: block;
+        height: 100%;
+        text-align: center;
+        display: grid;
+        align-items: center;
     }
-}
-.hero + .main--content, .hero + .has--aside{
-    padding-top: 4vh;
-}
-
-// .has--buttons{
+    .hero--wrapper{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 5;
+    }
+    picture{ width: 100%; }
+    .hero--img{ 
+        height: 100vh;
+        object-fit: cover;
+        object-position: center;
+    }
+    // text wrapper
+    .hero--cta{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    .hero--content{
+        margin-bottom: 2rem;
+    }
+    p{
+        font-size: .9rem;
+        margin: 0 auto;
+        width: 80%;
+    }
+    // .hero--excerpt{
+    //     font-size: clamp( 1rem, 2vw, 1.25rem );
+    //     line-height: 1.5;
+    //     margin-bottom: 2rem;
+    //     text-shadow: 1px 3px 5px rgba(0,0,0,0.74);
+    //     text-align: center;
+    // }
     
-//     .hero-buttons{
-//         position: absolute;
-//         top: 45%;
-//         left: 50%;
-//         transform: translateX(-50%);
-//         display: flex;
-//         gap: 1rem;
-//         z-index: 2;
-//     }
-// }
+}
 
+/* Primary Hero heading - used on full screen images and sliders */
+.hero--heading{
+    font-size: clamp(2.6rem, calc(3rem + 1vw), 6.5rem);
+    line-height: 1.1;
+    letter-spacing: -1px;
+    color: #fff;
+    text-shadow: 3px 3px 9px rgba(0, 0, 0, .9);
+    font-weight: 700;
+    width: 85%;
+    margin: 0 auto;
+}
+
+// Hero structure for pages with feature content - smaller hero with text overlaid on the image, used on article pages and event pages
 .has--feature-content{
 
     .hero-feature--content{
@@ -102,75 +147,15 @@
         margin-bottom: 0;
         padding-bottom: 0;  
     }
+    .spotlight-meta{
+        font-weight: 600;
+    }
+    .spotlight-actions{
+        margin-bottom: 1.3rem;
+    }
 }
 
-/* Hero structure */
-.global--hero{
-    position: relative;
-    width: 100%;
-    z-index: 1;
-    display: flex;
-    height: 100vh;
-    max-height: 100vh;
-    box-shadow: 0px 5px 6px 0px rgba(0,0,0,0.3);
-    color: #fff;
 
-    /* Text block inside hero - animated */
-    .hero--text-block{
-        position: absolute;
-        top: 4vh;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 5;
-        width: 90%;
-
-        animation-name: fade-in-down;
-        animation-duration: .7s;
-        animation-timing-function: ease-in;
-        animation-delay: .3s;
-        animation-iteration-count: 1;
-        animation-direction: normal;
-        animation-fill-mode: both;
-        text-align: center;
-    }
-    .hero--content{
-        margin-bottom: 2rem;
-    }
-    p{
-        font-size: .9rem;
-        margin: 0 auto;
-        width: 80%;
-    }
-    .hero--excerpt{
-        font-size: clamp( 1rem, 2vw, 1.25rem );
-        line-height: 1.5;
-        margin-bottom: 2rem;
-        text-shadow: 1px 3px 5px rgba(0,0,0,0.74);
-        text-align: center;
-    }
-    
-}
-.hero--wrapper{
-    width: 100%;
-}
-.hero--img{ 
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-    object-position: center;
-}
-
-/* Primary Hero heading - used on full screen images and sliders */
-.hero--heading{
-    font-size: clamp(2.6rem, calc(3rem + 1vw), 6.5rem);
-    line-height: 1.1;
-    letter-spacing: -1px;
-    color: #fff;
-    text-shadow: 3px 3px 9px rgba(0, 0, 0, .9);
-    font-weight: 700;
-    width: 85%;
-    margin: 0 auto;
-}
 
 
 /* Min width 480px
@@ -216,9 +201,12 @@
         height: 40vh;
         max-height: 40vh;
 
-        .hero--text-block{
-            position: absolute;
-            top: 17vh;
+        // .hero--text-block{
+        //     position: absolute;
+        //     top: 17vh;
+        // }
+        .hero--img{ 
+            height: 100%;
         }
     }
 
@@ -236,7 +224,16 @@
 ---------------------------------------------- */
 @mixin bp-1280() { 
     // min-width: 80em
+    // .hero--heading{
+    //     font-weight: bold;
+    // }
 
+    .spotlight-wrapper{
+        .region{
+            padding-left: .7rem;
+            padding-right: .7rem;
+        }
+    }
 }
 
 /* Min width 1440px

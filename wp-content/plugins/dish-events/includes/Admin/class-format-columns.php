@@ -36,10 +36,11 @@ final class FormatColumns {
 	 */
 	public function add_columns( array $columns ): array {
 		$new = [
-			'cb'               => $columns['cb'],
-			'dish_thumb'       => '',
-			'title'            => $columns['title'],
-			'dish_color'       => __( 'Colour', 'dish-events' ),
+			'cb'                => $columns['cb'],
+			'dish_thumb'        => __( 'IMG', 'dish-events' ),
+			'title'             => $columns['title'],
+			'dish_color'        => __( 'Colour', 'dish-events' ),
+			'dish_visibility'   => __( 'Visibility', 'dish-events' ),
 			'dish_ticket_types' => __( 'Ticket Types', 'dish-events' ),
 		];
 
@@ -83,6 +84,15 @@ final class FormatColumns {
 					);
 				} else {
 					echo '<span style="color:#999">&mdash;</span>';
+				}
+				break;
+
+			case 'dish_visibility':
+				$is_private = (bool) get_post_meta( $post_id, 'dish_format_is_private', true );
+				if ( $is_private ) {
+					echo '<span style="color:#92400e;background:#fef9c3;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">Private</span>';
+				} else {
+					echo '<span style="color:#065f46;background:#d1fae5;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">Public</span>';
 				}
 				break;
 

@@ -68,6 +68,36 @@ if ( is_admin() ) {
 	require_once __DIR__ . '/inc/admin/basecamp-media.php';
 }
 
+// Replace the WP logo on the login screen with the Dish logo.
+// login_enqueue_scripts fires outside is_admin(), so this must live outside that gate.
+add_action( 'login_enqueue_scripts', function () {
+	?>
+	<style>
+		#login h1 a, .login h1 a {
+			background-image: url(<?php echo esc_url( home_url( '/assets/img/logos/screenshot.png' ) ); ?>);
+			height: 150px;
+			width: 300px;
+			background-size: 300px auto;
+			background-repeat: no-repeat;
+		}
+	</style>
+	<?php
+} );
+// Note: login_enqueue_scripts fires outside is_admin(), so this must live outside that gate.
+add_action( 'login_enqueue_scripts', function () {
+	?>
+	<style>
+		#login h1 a, .login h1 a {
+			background-image: url(<?php echo esc_url( home_url( '/assets/img/logos/screenshot.png' ) ); ?>);
+			height: 150px;
+			width: 300px;
+			background-size: 300px auto;
+			background-repeat: no-repeat;
+		}
+	</style>
+	<?php
+} );
+
 // ---------------------------------------------------------------------------
 // SEO
 // ---------------------------------------------------------------------------

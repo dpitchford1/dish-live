@@ -1,0 +1,232 @@
+/* ==========================================================================
+   Dish Recipes — Admin Meta Box Styles
+   ========================================================================== */
+
+.dish-recipe-meta-box {
+  margin-top: 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   Tab navigation
+   -------------------------------------------------------------------------- */
+
+.dish-meta-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #c3c4c7;
+  margin-bottom: 1.5rem;
+}
+
+.dish-meta-tab-btn {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid transparent;
+  border-bottom: none;
+  background: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: #2c3338;
+  margin-bottom: -1px;
+}
+
+.dish-meta-tab-btn:hover {
+  background: #f0f0f1;
+}
+
+.dish-meta-tab-btn.is-active {
+  background: #fff;
+  border-color: #c3c4c7;
+  color: #1d2327;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Tab panels
+   -------------------------------------------------------------------------- */
+
+.dish-meta-tab-panel {
+  display: none;
+}
+
+.dish-meta-tab-panel.is-active {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   Form rows
+   -------------------------------------------------------------------------- */
+
+.dish-meta-row {
+  margin-bottom: 1rem;
+}
+
+.dish-meta-row label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.dish-meta-row--inline {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.dish-meta-row--inline > div {
+  flex: 1;
+  min-width: 140px;
+}
+
+.dish-meta-hint {
+  color: #646970;
+  font-style: italic;
+  font-size: 12px;
+  margin: 0 0 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   Section blocks (ingredient + method)
+   -------------------------------------------------------------------------- */
+
+.dish-section-block {
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: #fafafa;
+}
+
+.dish-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.dish-section-heading {
+  flex: 1;
+}
+
+.dish-section-drag,
+.dish-row-drag {
+  cursor: grab;
+  color: #646970;
+}
+
+.dish-section-block.dish-dragging,
+.dish-ingredient-row.dish-dragging,
+.dish-method-step.dish-dragging {
+  opacity: 0.4;
+  outline: 2px dashed #2271b1;
+}
+
+.dish-sort-placeholder {
+  background: #e8f0fe;
+  border: 2px dashed #2271b1;
+  border-radius: 3px;
+  visibility: visible !important;
+}
+
+/* --------------------------------------------------------------------------
+   Ingredient rows
+   -------------------------------------------------------------------------- */
+
+.dish-ingredient-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: nowrap;
+}
+
+.dish-ing-qty {
+  width: 60px;
+}
+
+.dish-ing-unit {
+  width: 90px;
+}
+
+.dish-ing-item {
+  flex: 2;
+  min-width: 140px;
+}
+
+.dish-ing-note {
+  flex: 1;
+  min-width: 100px;
+}
+
+/* --------------------------------------------------------------------------
+   Method steps
+   -------------------------------------------------------------------------- */
+
+.dish-method-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem;
+}
+
+.dish-method-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.dish-method-step textarea {
+  flex: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Dietary checkboxes
+   -------------------------------------------------------------------------- */
+
+.dish-checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.5rem;
+}
+
+.dish-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: normal;
+}
+
+/* --------------------------------------------------------------------------
+   Related classes select
+   -------------------------------------------------------------------------- */
+
+.dish-template-select {
+  width: 100%;
+  max-width: 500px;
+}
+
+/* --------------------------------------------------------------------------
+   Remove buttons
+   -------------------------------------------------------------------------- */
+
+.dish-remove-red {
+  color: #b32d2e;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.dish-remove-red:hover {
+  color: #8c1919;
+}
+
+/* --------------------------------------------------------------------------
+   Add buttons
+   -------------------------------------------------------------------------- */
+
+.dish-add-ingredient,
+.dish-add-step {
+  margin-top: 0.5rem;
+}
+
+#dish-add-ingredient-section,
+#dish-add-method-section {
+  margin-top: 0.75rem;
+}

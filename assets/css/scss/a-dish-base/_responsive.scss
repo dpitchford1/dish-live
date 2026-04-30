@@ -2,10 +2,14 @@
 @use 'global-structure';
 @use 'global-header';
 @use 'global-navigation';
-//@use 'header';
-@use 'typography';
 @use 'global-footer';
 @use 'grid-global';
+@use 'typography';
+
+@use 'utilities';
+@use 'heros';
+
+
 
 @mixin all() {
 
@@ -13,81 +17,99 @@
         @include global-structure.bp-480();
         @include global-header.bp-480();
         @include global-navigation.bp-480();
-        @include typography.bp-480();
         @include global-footer.bp-480();
         @include grid-global.bp-480();
+        @include typography.bp-480();
+        @include utilities.bp-480();
+        @include heros.bp-480();
     }
 
     @include respond-to(600) {
         @include global-structure.bp-600();
         @include global-header.bp-600();
         @include global-navigation.bp-600();
-        @include typography.bp-600();
         @include global-footer.bp-600();
         @include grid-global.bp-600();
+        @include typography.bp-600();
+        @include utilities.bp-600();
+        @include heros.bp-600();
     }
 
     @include respond-to(768) {
         @include global-structure.bp-768();
         @include global-header.bp-768();
         @include global-navigation.bp-768();
-        @include typography.bp-768();
         @include global-footer.bp-768();
         @include grid-global.bp-768();
+        @include typography.bp-768();
+        @include utilities.bp-768();
+        @include heros.bp-768();
     }
 
     @include respond-to(920) {
         @include global-structure.bp-920();
         @include global-header.bp-920();
         @include global-navigation.bp-920();
-        @include typography.bp-920();
-        @include grid-global.bp-920();
         @include global-footer.bp-920();
+        @include grid-global.bp-920();
+        @include typography.bp-920();
+        @include utilities.bp-920();
+        @include heros.bp-920();
     }
 
     @include respond-to(1024) {
         @include global-structure.bp-1024();
         @include global-header.bp-1024();
         @include global-navigation.bp-1024();
-        @include typography.bp-1024();
         @include global-footer.bp-1024();
         @include grid-global.bp-1024();
+        @include typography.bp-1024();
+        @include utilities.bp-1024();
+        @include heros.bp-1024();
     }
 
     @include respond-to(1280) {
         @include global-structure.bp-1280();
         @include global-header.bp-1280();
         @include global-navigation.bp-1280();
-        @include typography.bp-1280();
         @include global-footer.bp-1280();
         @include grid-global.bp-1280();
+        @include typography.bp-1280();
+        @include utilities.bp-1280();
+        @include heros.bp-1280();
     }
 
     @include respond-to(1440) {
         @include global-structure.bp-1440();
         @include global-header.bp-1440();
         @include global-navigation.bp-1440();
-        @include typography.bp-1440();
         @include global-footer.bp-1440();
         @include grid-global.bp-1440();
+        @include typography.bp-1440();
+        @include utilities.bp-1440();
+        @include heros.bp-1440();
     }
 
     @include respond-to(1600) {
         @include global-structure.bp-1600();
         @include global-header.bp-1600();
         @include global-navigation.bp-1600();
-        @include typography.bp-1600();
         @include global-footer.bp-1600();
         @include grid-global.bp-1600();
+        @include typography.bp-1600();
+        @include utilities.bp-1600();
+        @include heros.bp-1600();
     }
 
     @include respond-to(2100) {
         @include global-structure.bp-2100();
         @include global-header.bp-2100();
         @include global-navigation.bp-2100();
-        @include typography.bp-2100();
         @include global-footer.bp-2100();
         @include grid-global.bp-2100();
+        @include typography.bp-2100();
+        @include utilities.bp-2100();
+        @include heros.bp-2100();
     }
 
 }

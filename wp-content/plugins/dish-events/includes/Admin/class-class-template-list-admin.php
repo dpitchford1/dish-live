@@ -166,8 +166,9 @@ final class ClassTemplateListAdmin {
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
 					<tr>
-						<th style="width:40%"><?php esc_html_e( 'Title', 'dish-events' ); ?></th>
+					<th style="width:35%"><?php esc_html_e( 'Title', 'dish-events' ); ?></th>
 						<th style="width:20%"><?php esc_html_e( 'Ticket Type', 'dish-events' ); ?></th>
+						<th style="width:10%"><?php esc_html_e( 'Featured', 'dish-events' ); ?></th>
 						<th style="width:12%"><?php esc_html_e( 'Status', 'dish-events' ); ?></th>
 						<th style="width:15%"><?php esc_html_e( 'Date', 'dish-events' ); ?></th>
 					</tr>
@@ -193,6 +194,7 @@ final class ClassTemplateListAdmin {
 					][ $tpl->post_status ] ?? esc_html( $tpl->post_status );
 
 					$status_color = $tpl->post_status === 'publish' ? '#00a32a' : '#787c82';
+					$is_featured  = (bool) get_post_meta( $tpl->ID, 'dish_is_featured', true );
 				?>
 					<tr>
 						<td>
@@ -226,6 +228,11 @@ final class ClassTemplateListAdmin {
 							</div>
 						</td>
 						<td><?php echo esc_html( $ticket_label ); ?></td>
+						<td>
+							<?php if ( $is_featured ) : ?>
+								<span style="color:#92400e;background:#fef9c3;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">&#9733; <?php esc_html_e( 'Featured', 'dish-events' ); ?></span>
+							<?php endif; ?>
+						</td>
 						<td>
 							<span style="color:<?php echo esc_attr( $status_color ); ?>">
 								&#9679; <?php echo esc_html( $status_label ); ?>

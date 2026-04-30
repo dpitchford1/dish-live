@@ -10,11 +10,9 @@
 .global-header--ss{ 
     box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.15);
     min-height: 60px;
-    // padding: .275rem 3% .375rem;
     top: 0;
     display: flex;
     z-index: 5;
-    // background-color: #191919;
     background-color: #f7f7f7;
     }
 
@@ -24,9 +22,7 @@
     overflow: visible;
     padding-top: .5rem;
     z-index: 4;
-    // background-color: #232323;
     background-color: #f6f6f6;
-    // background-color: #9371d4;
     }
 
 .brand-header{
@@ -69,9 +65,9 @@
     }
   
 .brand-ss {
-    height: 50px;
-    margin: 10px 0 0 10px;
-    width: 90px;
+    height: 40px;
+    margin: 14px 0 0 3%;
+    width: 70px;
     mix-blend-mode: difference;
     }
 

@@ -39,7 +39,7 @@ $has_thumb = has_post_thumbnail( $chef->ID );
 	<?php endif; ?>
 	<div class="dish-card__body">
 
-		<h3 class="card-title"><a href="<?php echo esc_url( $card_url ); ?>"><?php echo esc_html( $chef->post_title ); ?></a></h3>
+		<h4 class="card-title"><a href="<?php echo esc_url( $card_url ); ?>"><?php echo esc_html( $chef->post_title ); ?></a></h4>
 
 		<?php if ( $role ) : ?>
 			<p class="dish-chef-card__role"><?php echo esc_html( $role ); ?></p>

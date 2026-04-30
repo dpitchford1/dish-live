@@ -48,33 +48,32 @@ $private_formats = get_posts( array_merge( $_base_args, [
 <?php /* ── Hero ─────────────────────────────────────────── */ ?>
 <?php if ( $_formats_page && has_post_thumbnail( $_formats_page ) ) : ?>
 <section class="global--hero">
+<?php Basecamp_Frontend::picture( get_post_thumbnail_id( $_formats_page ), [
+    'landscape_size' => 'basecamp-img-xl',
+    'loading'        => 'eager',
+    'fetchpriority'  => 'high',
+    'img_class'      => 'hero--img size-basecamp-img-xl',
+] ); ?>
     <div class="hero--wrapper">
-    <?php Basecamp_Frontend::picture( get_post_thumbnail_id( $_formats_page ), [
-        'landscape_size' => 'basecamp-img-xl',
-        'loading'        => 'eager',
-        'fetchpriority'  => 'high',
-        'img_class'      => 'hero--img size-basecamp-img-xl',
-    ] ); ?>
         <div class="hero--text-block">
+            <div class="hero--cta">
             <div class="hero--content">
                 <h1 class="hero--heading"><?php echo $_formats_page ? esc_html( get_the_title( $_formats_page ) ) : esc_html__( 'Class Formats', 'dish-events' ); ?></h1>
-            <?php if ( has_excerpt() ) : ?> 
-                <p class="hero-excerpt"><?php // echo esc_html( get_the_excerpt( $_formats_page ) ); ?></p>
-            <?php endif; ?>
             </div>
+           </div>
         </div>
     </div>
 </section>
 <?php endif; ?>
 
-<main id="main-content" class="main--content fluid-content inner--content">
+<main id="main-content" class="main--content fluid-content event--region">
 
     <?php if ( ! $_formats_page || ! has_post_thumbnail( $_formats_page ) ) : ?>
         <!-- <h1 class="dish-archive-title"><?php echo $_formats_page ? esc_html( get_the_title( $_formats_page ) ) : esc_html__( 'Class Formats', 'dish-events' ); ?></h1> -->
     <?php endif; ?>
 
 	<?php if ( $_formats_page ) : ?>
-		<article class="entry--content content-region fluid-content">
+		<article class="entry--content entry--blurb">
 			<?php echo wp_kses_post( apply_filters( 'the_content', get_post_field( 'post_content', $_formats_page ) ) ); ?>
 		</article>
 	<?php endif; ?>

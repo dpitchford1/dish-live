@@ -68,7 +68,7 @@ function the_subnav(): void {
 	}
 
 	?>
-	<nav class="subnav fluid-content" aria-label="<?php echo esc_attr( get_the_title( $parent ) ); ?> navigation">
+	<nav class="subnav fluid-content content--utility" aria-label="<?php echo esc_attr( get_the_title( $parent ) ); ?> navigation">
 		<ul class="subnav-list is--flex-list">
 			<?php
 			$parent_is_current = ( (int) $parent->ID === $current_id );

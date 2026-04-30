@@ -118,18 +118,18 @@ if ( $start_epoch && $class_title ) {
 get_header();
 ?>
 
-<main id="main-content" class="">
+<main id="main-content" class="main--content inner--content">
 	<div class="dish-container dish-confirmation">
 
 		<!-- ── Success header ──────────────────────────────────────────────── -->
 		<div class="dish-confirmation__hero">
 			<div class="dish-confirmation__icon" aria-hidden="true">✓</div>
-			<h2 class="dish-confirmation__title"><?php esc_html_e( "You're booked!", 'dish-events' ); ?></h2>
+			<h2 class="section-heading"><?php esc_html_e( "You're booked!", 'dish-events' ); ?></h2>
 			<p class="dish-confirmation__subtitle">
 				<?php
 				printf(
 					/* translators: %s: customer first name */
-					esc_html__( 'Thanks %s — we look forward to cooking with you.', 'dish-events' ),
+					esc_html__( 'Thanks %s — we look forward to cooking with you!', 'dish-events' ),
 					esc_html( strtok( $customer_name, ' ' ) ?: $customer_name )
 				);
 				?>
@@ -146,34 +146,24 @@ get_header();
 
 			<h2 class="dish-confirmation__class-name"><?php echo esc_html( $class_title ); ?></h2>
 
-			<ul class="dish-confirmation__meta">
+			<ul class="icon-list--default">
 
 				<?php if ( $date_label ) : ?>
-					<li class="dish-confirmation__meta-item">
-						<span class="dish-confirmation__meta-icon" aria-hidden="true">📅</span>
-						<time datetime="<?php echo esc_attr( DateHelper::format( $start_epoch, 'c' ) ); ?>">
-							<?php echo esc_html( $date_label ); ?>
-						</time>
+					<li class="ico--date">
+						<time datetime="<?php echo esc_attr( DateHelper::format( $start_epoch, 'c' ) ); ?>"><?php echo esc_html( $date_label ); ?></time>
 					</li>
 				<?php endif; ?>
 
 				<?php if ( $time_label ) : ?>
-					<li class="dish-confirmation__meta-item">
-						<span class="dish-confirmation__meta-icon" aria-hidden="true">🕐</span>
-						<?php echo esc_html( $time_label ); ?>
-					</li>
+					<li class="ico--time"><?php echo esc_html( $time_label ); ?></li>
 				<?php endif; ?>
 
 				<?php if ( ! empty( $chefs ) ) : ?>
-					<li class="dish-confirmation__meta-item">
-						<span class="dish-confirmation__meta-icon" aria-hidden="true">👨‍🍳</span>
-						<?php echo esc_html( implode( ', ', array_map( fn( $c ) => $c->post_title, $chefs ) ) ); ?>
-					</li>
+					<li class="ico--person">Chef: <?php echo esc_html( implode( ', ', array_map( fn( $c ) => $c->post_title, $chefs ) ) ); ?></li>
 				<?php endif; ?>
 
 				<?php if ( ! empty( $settings['venue_name'] ) ) : ?>
-					<li class="dish-confirmation__meta-item">
-						<span class="dish-confirmation__meta-icon" aria-hidden="true">📍</span>
+					<li class="ico--location">
 						<?php echo esc_html( $settings['venue_name'] ); ?>
 						<?php if ( ! empty( $settings['venue_address'] ) ) : ?>
 							— <?php echo esc_html( $settings['venue_address'] ); ?>
@@ -181,8 +171,7 @@ get_header();
 					</li>
 				<?php endif; ?>
 
-				<li class="dish-confirmation__meta-item">
-					<span class="dish-confirmation__meta-icon" aria-hidden="true">🎟</span>
+				<li class="ico--ticket">
 					<?php echo esc_html( sprintf(
 						/* translators: %d: number of tickets */
 						_n( '%d ticket', '%d tickets', $ticket_qty, 'dish-events' ),
@@ -192,13 +181,10 @@ get_header();
 						— <?php echo esc_html( MoneyHelper::cents_to_display( $total_cents ) ); ?>
 					<?php endif; ?>
 				</li>
-
 			</ul>
 
 			<?php if ( $total_cents ) : ?>
-				<p class="dish-confirmation__payment-note">
-					<?php esc_html_e( 'Payment is due at the studio on the day of your class.', 'dish-events' ); ?>
-				</p>
+				<p class="dish-confirmation__payment-note"><?php esc_html_e( 'Payment is due at the studio on the day of your class.', 'dish-events' ); ?></p>
 			<?php endif; ?>
 
 		</div><!-- .dish-confirmation__card -->

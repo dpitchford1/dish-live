@@ -153,6 +153,8 @@ CREATE TABLE {$wpdb->prefix}dish_checkout_fields (
 			'venue_lat'                    => '',
 			'venue_lng'                    => '',
 			'venue_gmap_api_key'           => '',
+			'google_reviews_place_id'      => '',
+			'google_reviews_api_key'       => '',
 
 			// -----------------------------------------------------------------
 			// Studio / Organizer (single — stored as settings, not a CPT/taxonomy)
@@ -279,5 +281,7 @@ CREATE TABLE {$wpdb->prefix}dish_checkout_fields (
 		if ( ! wp_next_scheduled( 'dish_cleanup_expired_bookings' ) ) {
 			wp_schedule_event( time(), 'dish_every_15_minutes', 'dish_cleanup_expired_bookings' );
 		}
+
+		GoogleReviews::schedule();
 	}
 }

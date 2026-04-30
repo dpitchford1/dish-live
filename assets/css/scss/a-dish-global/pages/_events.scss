@@ -1,0 +1,159 @@
+
+ /* $ Events / Classes Plugin 
+====================================================================== */
+// Dietary flags and disclaimers block with content
+.dietary--flags{
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+    margin-bottom: 2rem;
+    p{
+        margin-bottom: .3rem;
+        }
+}
+
+// Class instance booking panel - has active classes
+.class--instance-panel{
+    border: 1px solid var( --dish-primary );
+    padding: 1.25rem 1.5rem 1.5rem;
+
+    .sold--out {
+        color: var( --dish-danger );
+    }
+
+    .item--low {
+            color: var( --dish-warn );
+    }
+    .button{
+        margin-top: .7rem;
+    }
+}
+
+// Class instance booking panel - no active classes
+.overview--table {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5rem 1.5rem;
+	list-style: none;
+	margin: 1rem 0 1.5rem;
+	padding: 0;
+
+    li{
+        display: flex;
+        flex-direction: column;
+        gap: .125rem;
+    }
+    .label{
+        font-size: .875rem;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        font-weight: 600;
+    }
+    .value{
+        font-weight: 600;
+    }
+}
+
+.mini-list--chef{
+    display: flex;
+	align-items: center;
+	gap: .75rem;
+	padding: .625rem .875rem;
+	border: 1px solid var( --dish-border );
+	background: var( --dish-card-bg );
+}
+
+
+.recipe-ingredient-section, .recipe-single__method{
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var( --dish-border );
+    // .section--title{
+    //     font-size: 1.125rem;
+    //     font-weight: 600;
+    //     margin-bottom: .75rem;
+    // }
+}
+.ingredient--qty-unit{
+    // font-size: .875rem;
+    color: var( --dish-secondary );
+    min-width: 5rem;
+    text-align: right;
+    margin-right: 1.2rem;
+}
+// .ingredient--qty-unit:empty{
+//     display: none;
+// }
+.ingredient--note{
+    font-size: .875rem;
+    font-style: normal;
+    margin-top: .25rem;
+}
+.card--category{
+    display: inline-block;
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    font-weight: 600;
+    color: var( --dish-primary );
+}
+
+
+/* Min width 480px
+---------------------------------------------- */
+@mixin bp-480() { 
+
+}
+
+/* Min width 600px
+---------------------------------------------- */
+@mixin bp-600() { 
+    // min-width: 37.5em
+    
+}
+
+/* Min width 768px
+---------------------------------------------- */
+@mixin bp-768() { 
+    // min-width: 48em
+
+}
+
+/* Min width 920px
+---------------------------------------------- */
+@mixin bp-920() { 
+    // min-width: 57.5em
+
+}
+
+/* Min width 1024px
+---------------------------------------------- */
+@mixin bp-1024() { 
+
+}
+
+/* Min width 1280px
+---------------------------------------------- */
+@mixin bp-1280() { 
+    // min-width: 80em
+
+}
+
+/* Min width 1440px
+---------------------------------------------- */
+@mixin bp-1440() { 
+
+}
+
+/* Min width 1600px
+---------------------------------------------- */
+@mixin bp-1600() { 
+
+}
+
+/* Min width 2100px
+---------------------------------------------- */
+@mixin bp-2100() { 
+    // min-width: 131.25em
+
+}
+

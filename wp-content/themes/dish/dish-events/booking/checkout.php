@@ -197,411 +197,377 @@ if ( $session ) {
 
 get_header();
 ?>
+<div class="content--region has--aside fluid-content">
+<?php /* ── Main Content ─────────────────────────────────────────── */ ?>
+<main id="main-content" class="main--content inner--content">
 
-<main id="main-content" class="">
-	<div class="dish-container dish-checkout">
+    <?php if ( $error ) : ?>
+        <div class="dish-checkout__error dish-notice dish-notice--error">
+            <p><?php echo esc_html( $error ); ?></p>
+            <p><a href="<?php echo esc_url( wp_get_referer() ?: home_url( '/' ) ); ?>" class="button">
+                    <?php esc_html_e( '← Go back', 'dish-events' ); ?></a></p>
+        </div>
+    <?php else : ?>
 
-		<?php if ( $error ) : ?>
-			<div class="dish-checkout__error dish-notice dish-notice--error">
-				<p><?php echo esc_html( $error ); ?></p>
-				<p>
-					<a href="<?php echo esc_url( wp_get_referer() ?: home_url( '/' ) ); ?>" class="button">
-						<?php esc_html_e( '← Go back', 'dish-events' ); ?>
-					</a>
-				</p>
-			</div>
-		<?php else : ?>
+    <?php /* ── Countdown timer ──────────────────────────────────────────── */ ?>
+    <div class="dish-checkout__timer" id="dish-timer" aria-live="polite" aria-atomic="true">
+        <span class="dish-checkout__timer-icon" aria-hidden="true">⏱</span>
+        <span class="dish-checkout__timer-label"><?php esc_html_e( 'Spot held for', 'dish-events' ); ?></span>
+        <span class="dish-checkout__timer-countdown" id="dish-timer-countdown">--:--</span>
+    </div>
 
-			<!-- ── Countdown timer ──────────────────────────────────────────── -->
-			<div class="dish-checkout__timer" id="dish-timer" aria-live="polite" aria-atomic="true">
-				<span class="dish-checkout__timer-icon" aria-hidden="true">⏱</span>
-				<span class="dish-checkout__timer-label"><?php esc_html_e( 'Spot held for', 'dish-events' ); ?></span>
-				<span class="dish-checkout__timer-countdown" id="dish-timer-countdown">--:--</span>
-			</div>
+    <?php /* ── Checkout form ────────────────────────────────────────── */ ?>
+    <div class="checkout-form--wrapper">
+        <form id="dish-checkout-form" class="checkout--form" method="post" novalidate>
 
-			<div class="dish-checkout__layout">
+            <?php wp_nonce_field( 'dish_checkout', 'nonce' ); ?>
+            <input type="hidden" name="session_key"    value="<?php echo esc_attr( $session_key ); ?>">
+            <input type="hidden" name="ticket_type_id" value="<?php echo esc_attr( $ticket_type_id ); ?>">
+            <input type="hidden" name="action"         value="dish_process_booking">
 
-				<!-- ── Class summary (sidebar) ──────────────────────────────── -->
-				<aside class="dish-checkout__summary">
-					<h2 class="dish-checkout__summary-title">
-						<?php esc_html_e( 'Your booking', 'dish-events' ); ?>
-					</h2>
+        <?php /* ── Number of tickets ──────────────────────── */ ?>
+        <?php if ( $max_qty > 1 ) : ?>
+            <fieldset class="checkout--fieldset">
+                <legend class="checkout--legend"><?php esc_html_e( 'Number of tickets', 'dish-events' ); ?></legend>
+                <div class="form--row">
+                    <label for="dish-qty" class="form--label"><?php esc_html_e( 'Tickets', 'dish-events' ); ?> </label>
+                    <?php /* Changing qty reloads the page with ?qty=N so BookingManager
+                    initiates a fresh hold with the correct quantity. */ ?>
+                    <select id="dish-qty" name="qty" class="form--select">
+                        <?php for ( $i = 1; $i <= $max_qty; $i++ ) : ?>
+                            <option value="<?php echo esc_attr( $i ); ?>" <?php selected( $qty, $i ); ?>>
+                                <?php echo esc_html( $i ); ?>
+                            </option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+            </fieldset>
+        <?php else : ?>
+            <input type="hidden" name="qty" value="1">
+        <?php endif; ?>
 
-					<?php if ( $template && has_post_thumbnail( $template_id ) ) : ?>
-						<div class="dish-checkout__summary-image">
-							<?php echo get_the_post_thumbnail( $template_id, 'medium', [ 'class' => 'dish-checkout__summary-thumb' ] ); ?>
-						</div>
-					<?php endif; ?>
+            <?php /* ── Your details ───────────────────────────────── */ ?>
+            <fieldset class="checkout--fieldset">
+                <legend class="checkout--legend">
+                    <?php esc_html_e( 'Your details', 'dish-events' ); ?>
+                </legend>
 
-					<h3 class="dish-checkout__class-name"><?php echo esc_html( $class_title ); ?></h3>
+                <div class="form--row">
+                    <label for="dish-customer-name" class="form--label">
+                        <?php esc_html_e( 'Full name', 'dish-events' ); ?>
+                        <span class="form--required" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="dish-customer-name"
+                        name="customer_name"
+                        class="form--input"
+                        autocomplete="name"
+                        required
+                        value="<?php echo esc_attr( is_user_logged_in() ? wp_get_current_user()->display_name : '' ); ?>"
+                    >
+                </div>
 
-					<ul class="dish-checkout__meta">
-						<?php if ( $date_label ) : ?>
-							<li class="dish-checkout__meta-item">
-								<span class="dish-checkout__meta-icon" aria-hidden="true">📅</span>
-								<time datetime="<?php echo esc_attr( DateHelper::format( $start_epoch, 'c' ) ); ?>">
-									<?php echo esc_html( $date_label ); ?>
-								</time>
-							</li>
-						<?php endif; ?>
+                <div class="form--row">
+                    <label for="dish-customer-email" class="form--label">
+                        <?php esc_html_e( 'Email address', 'dish-events' ); ?>
+                        <span class="form--required" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        type="email"
+                        id="dish-customer-email"
+                        name="customer_email"
+                        class="form--input"
+                        autocomplete="email"
+                        required
+                        value="<?php echo esc_attr( is_user_logged_in() ? wp_get_current_user()->user_email : '' ); ?>"
+                    >
+                </div>
 
-						<?php if ( $time_label ) : ?>
-							<li class="dish-checkout__meta-item">
-								<span class="dish-checkout__meta-icon" aria-hidden="true">🕐</span>
-								<?php echo esc_html( $time_label ); ?>
-							</li>
-						<?php endif; ?>
+                <div class="form--row">
+                    <label for="dish-customer-phone" class="form--label">
+                        <?php esc_html_e( 'Phone number', 'dish-events' ); ?>
+                        <span class="form--optional">(<?php esc_html_e( 'optional', 'dish-events' ); ?>)</span>
+                    </label>
+                    <input
+                        type="tel"
+                        id="dish-customer-phone"
+                        name="customer_phone"
+                        class="form--input"
+                        autocomplete="tel"
+                    >
+                </div>
+            </fieldset>
 
-						<?php if ( ! empty( $chefs ) ) : ?>
-							<li class="dish-checkout__meta-item">
-								<span class="dish-checkout__meta-icon" aria-hidden="true">👨‍🍳</span>
-								<?php echo esc_html( implode( ', ', array_map( fn( $c ) => $c->post_title, $chefs ) ) ); ?>
-							</li>
-						<?php endif; ?>
-					</ul>
+            <?php if ( ! is_user_logged_in() ) : ?>
+            <?php /* ── Create an account ──────────────────────── */ ?>
+            <div class="form--row form--row--create-account">
+                <label class="form--label form--label--checkbox">
+                    <input
+                        type="checkbox"
+                        id="dish-create-account"
+                        name="create_account"
+                        value="1"
+                    >
+                    <?php esc_html_e( 'Create an account for easier future bookings', 'dish-events' ); ?>
+                </label>
+            </div>
 
-					<?php if ( $price_cents ) : ?>
-					<?php if ( ! empty( $fee_lines ) ) : ?>
-						<div class="dish-checkout__price-row">
-							<span class="dish-checkout__price-label" id="dish-ticket-label">
-								<?php echo esc_html(
-									sprintf(
-										/* translators: %d: quantity */
-										_n( '%d ticket', '%d tickets', $qty, 'dish-events' ),
-										$qty
-									)
-								); ?>
-							</span>
-							<span class="dish-checkout__price-subtotal" id="dish-ticket-subtotal">
-								<?php echo esc_html( MoneyHelper::cents_to_display( $price_cents * $qty ) ); ?>
-							</span>
-						</div>
-						<?php foreach ( $fee_lines as $i => $fee ) : ?>
-						<div class="dish-checkout__price-row dish-checkout__price-row--fee"
-							data-fee-index="<?php echo $i; ?>"
-							data-fee-amount="<?php echo (int) $fee['amount_cents']; ?>"
-							data-per-ticket="<?php echo $fee['per_ticket'] ? '1' : '0'; ?>">
-							<span class="dish-checkout__price-label"><?php echo esc_html( $fee['label'] ); ?></span>
-							<span class="dish-checkout__fee-amount"><?php echo esc_html(
-								MoneyHelper::cents_to_display(
-									$fee['per_ticket'] ? $fee['amount_cents'] * $qty : $fee['amount_cents']
-								)
-							); ?></span>
-						</div>
-						<?php endforeach; ?>
-						<div class="dish-checkout__price-row dish-checkout__price-row--total">
-							<span class="dish-checkout__price-label"><?php esc_html_e( 'Total', 'dish-events' ); ?></span>
-							<span class="dish-checkout__price-total" id="dish-total-display">
-								<?php echo esc_html( MoneyHelper::cents_to_display( $total_cents ) ); ?>
-							</span>
-						</div>
-					<?php else : ?>
-						<div class="dish-checkout__price-row">
-							<span class="dish-checkout__price-label" id="dish-ticket-label">
-								<?php echo esc_html(
-									sprintf(
-										/* translators: %d: quantity */
-										_n( '%d ticket', '%d tickets', $qty, 'dish-events' ),
-										$qty
-									)
-								); ?>
-							</span>
-							<span class="dish-checkout__price-total" id="dish-total-display">
-								<?php echo esc_html( MoneyHelper::cents_to_display( $total_cents ) ); ?>
-							</span>
-						</div>
-					<?php endif; ?>
-					<?php endif; ?>
-				</aside><!-- .dish-checkout__summary -->
+            <fieldset id="dish-account-fields" class="checkout--fieldset checkout-fieldset--account" hidden>
+                <legend class="checkout--legend">
+                    <?php esc_html_e( 'Account details', 'dish-events' ); ?>
+                </legend>
 
-				<!-- ── Checkout form ────────────────────────────────────────── -->
-				<div class="dish-checkout__form-wrap">
-					<form id="dish-checkout-form" class="dish-checkout__form" method="post" novalidate>
+                <div class="form--row">
+                    <label for="dish-account-username" class="form--label">
+                        <?php esc_html_e( 'Username', 'dish-events' ); ?>
+                        <span class="form--required" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="dish-account-username"
+                        name="account_username"
+                        class="form--input"
+                        autocomplete="username"
+                        autocapitalize="none"
+                        spellcheck="false"
+                    >
+                </div>
 
-						<?php wp_nonce_field( 'dish_checkout', 'nonce' ); ?>
-						<input type="hidden" name="session_key"    value="<?php echo esc_attr( $session_key ); ?>">
-						<input type="hidden" name="ticket_type_id" value="<?php echo esc_attr( $ticket_type_id ); ?>">
-						<input type="hidden" name="action"         value="dish_process_booking">
+                <div class="form--row">
+                    <label for="dish-account-password" class="form--label">
+                        <?php esc_html_e( 'Password', 'dish-events' ); ?>
+                        <span class="form--required" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        type="password"
+                        id="dish-account-password"
+                        name="account_password"
+                        class="form--input"
+                        autocomplete="new-password"
+                        minlength="8"
+                    >
+                    <p class="description"><?php esc_html_e( 'Minimum 8 characters.', 'dish-events' ); ?></p>
+                </div>
+            </fieldset>
+            <?php endif; ?>
 
-						<!-- ── Number of tickets ──────────────────────── -->
-						<?php if ( $max_qty > 1 ) : ?>
-							<fieldset class="dish-checkout__fieldset">
-								<legend class="dish-checkout__legend">
-									<?php esc_html_e( 'Number of tickets', 'dish-events' ); ?>
-								</legend>
-								<div class="dish-form-row">
-									<label for="dish-qty" class="dish-form-label">
-										<?php esc_html_e( 'Tickets', 'dish-events' ); ?>
-									</label>
-									<!-- Changing qty reloads the page with ?qty=N so BookingManager -->
-									<!-- initiates a fresh hold with the correct quantity. -->
-									<select id="dish-qty" name="qty" class="dish-form-select">
-										<?php for ( $i = 1; $i <= $max_qty; $i++ ) : ?>
-											<option value="<?php echo esc_attr( $i ); ?>" <?php selected( $qty, $i ); ?>>
-												<?php echo esc_html( $i ); ?>
-											</option>
-										<?php endfor; ?>
-									</select>
-								</div>
-							</fieldset>
-						<?php else : ?>
-							<input type="hidden" name="qty" value="1">
-						<?php endif; ?>
+            <?php /* ── Attendee fields ────────────────────────────── */ ?>
+            <?php if ( ! empty( $checkout_fields ) ) :
+                // Separate per-booking and per-attendee fields.
+                $per_booking  = array_filter( $checkout_fields, fn( $f ) => empty( $f['apply_per_attendee'] ) );
+                $per_attendee = array_filter( $checkout_fields, fn( $f ) => ! empty( $f['apply_per_attendee'] ) );
+            ?>
 
-						<!-- ── Your details ───────────────────────────────── -->
-						<fieldset class="dish-checkout__fieldset">
-							<legend class="dish-checkout__legend">
-								<?php esc_html_e( 'Your details', 'dish-events' ); ?>
-							</legend>
+                <?php if ( $per_booking ) : ?>
+                    <fieldset class="checkout--fieldset">
+                        <legend class="checkout--legend">
+                            <?php esc_html_e( 'Additional information', 'dish-events' ); ?>
+                        </legend>
+                        <?php foreach ( $per_booking as $idx => $field ) :
+                            $fid   = 'dish-field-' . $idx;
+                            $fname = 'attendees[0][field_' . $idx . ']';
+                        ?>
+                            <div class="form--row">
+                                <label for="<?php echo esc_attr( $fid ); ?>" class="form--label">
+                                    <?php echo esc_html( $field['label'] ); ?>
+                                    <?php if ( $field['is_required'] ) : ?>
+                                        <span class="form--required" aria-hidden="true">*</span>
+                                    <?php endif; ?>
+                                </label>
+                                <?php if ( 'textarea' === $field['field_type'] ) : ?>
+                                    <textarea
+                                        id="<?php echo esc_attr( $fid ); ?>"
+                                        name="<?php echo esc_attr( $fname ); ?>"
+                                        class="form--textarea"
+                                        <?php echo $field['is_required'] ? 'required' : ''; ?>
+                                    ></textarea>
+                                <?php else : ?>
+                                    <input
+                                        type="text"
+                                        id="<?php echo esc_attr( $fid ); ?>"
+                                        name="<?php echo esc_attr( $fname ); ?>"
+                                        class="form--input"
+                                        <?php echo $field['is_required'] ? 'required' : ''; ?>
+                                    >
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </fieldset>
+                <?php endif; ?>
 
-							<div class="dish-form-row">
-								<label for="dish-customer-name" class="dish-form-label">
-									<?php esc_html_e( 'Full name', 'dish-events' ); ?>
-									<span class="dish-form-required" aria-hidden="true">*</span>
-								</label>
-								<input
-									type="text"
-									id="dish-customer-name"
-									name="customer_name"
-									class="dish-form-input"
-									autocomplete="name"
-									required
-									value="<?php echo esc_attr( is_user_logged_in() ? wp_get_current_user()->display_name : '' ); ?>"
-								>
-							</div>
+                <?php if ( $per_attendee ) : ?>
+                    <?php for ( $t = 0; $t < $qty; $t++ ) : ?>
+                        <fieldset class="checkout--fieldset dish-checkout__attendee-fieldset" data-ticket="<?php echo esc_attr( $t ); ?>">
+                            <legend class="checkout--legend">
+                                <?php
+                                if ( $qty > 1 ) {
+                                    echo esc_html( sprintf(
+                                        /* translators: %d: ticket number */
+                                        __( 'Ticket %d – attendee details', 'dish-events' ),
+                                        $t + 1
+                                    ) );
+                                } else {
+                                    esc_html_e( 'Attendee details', 'dish-events' );
+                                }
+                                ?>
+                            </legend>
+                            <?php foreach ( $per_attendee as $idx => $field ) :
+                                $fid   = 'dish-attendee-' . $t . '-field-' . $idx;
+                                $fname = 'attendees[' . $t . '][field_' . $idx . ']';
+                            ?>
+                                <div class="form--row">
+                                    <label for="<?php echo esc_attr( $fid ); ?>" class="form--label">
+                                        <?php echo esc_html( $field['label'] ); ?>
+                                        <?php if ( $field['is_required'] ) : ?>
+                                            <span class="form--required" aria-hidden="true">*</span>
+                                        <?php endif; ?>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="<?php echo esc_attr( $fid ); ?>"
+                                        name="<?php echo esc_attr( $fname ); ?>"
+                                        class="form--input"
+                                        <?php echo $field['is_required'] ? 'required' : ''; ?>
+                                    >
+                                </div>
+                            <?php endforeach; ?>
+                        </fieldset>
+                    <?php endfor; ?>
+                <?php endif; ?>
 
-							<div class="dish-form-row">
-								<label for="dish-customer-email" class="dish-form-label">
-									<?php esc_html_e( 'Email address', 'dish-events' ); ?>
-									<span class="dish-form-required" aria-hidden="true">*</span>
-								</label>
-								<input
-									type="email"
-									id="dish-customer-email"
-									name="customer_email"
-									class="dish-form-input"
-									autocomplete="email"
-									required
-									value="<?php echo esc_attr( is_user_logged_in() ? wp_get_current_user()->user_email : '' ); ?>"
-								>
-							</div>
+            <?php endif; ?>
+            <?php /* checkout_fields */ ?>
 
-							<div class="dish-form-row">
-								<label for="dish-customer-phone" class="dish-form-label">
-									<?php esc_html_e( 'Phone number', 'dish-events' ); ?>
-									<span class="dish-form-optional">(<?php esc_html_e( 'optional', 'dish-events' ); ?>)</span>
-								</label>
-								<input
-									type="tel"
-									id="dish-customer-phone"
-									name="customer_phone"
-									class="dish-form-input"
-									autocomplete="tel"
-								>
-							</div>
-						</fieldset>
+            <?php if ( $terms_enabled ) : ?>
+                <?php /* ── Terms & Conditions ──────────────────── */ ?>
+                <div class="form--row form--row--terms">
+                    <label class="form--label form--label--checkbox">
+                        <input type="checkbox" id="dish-terms" name="terms_accepted" value="1" required>
+                        <span class="form--terms-label"><?php echo wp_kses( $terms_label, [ 'a' => [ 'href' => [], 'target' => [], 'rel' => [] ], 'strong' => [], 'em' => [] ] ); ?></span>
+                        <span class="form--required" aria-hidden="true">*</span>
+                    </label>
+                </div>
+            <?php endif; ?>
 
-						<?php if ( ! is_user_logged_in() ) : ?>
-						<!-- ── Create an account ──────────────────────── -->
-						<div class="dish-form-row dish-form-row--create-account">
-							<label class="dish-form-label dish-form-label--checkbox">
-								<input
-									type="checkbox"
-									id="dish-create-account"
-									name="create_account"
-									value="1"
-								>
-								<?php esc_html_e( 'Create an account for easier future bookings', 'dish-events' ); ?>
-							</label>
-						</div>
+            <?php /* ── Payment stub ───────────────────────────────── */ ?>
+            <div class="dish-checkout__payment">
+                <p class="dish-checkout__payment-note"><?php esc_html_e( 'Payment will be collected at the studio. Your spot is reserved when you submit this form.', 'dish-events' ); ?></p>
+            </div>
 
-						<fieldset
-							id="dish-account-fields"
-							class="dish-checkout__fieldset dish-checkout__fieldset--account"
-							hidden
-						>
-							<legend class="dish-checkout__legend">
-								<?php esc_html_e( 'Account details', 'dish-events' ); ?>
-							</legend>
+            <?php /* ── Submit ─────────────────────────────────────── */ ?>
+            <div class="dish-checkout__submit-row" id="dish-submit-area">
+                <div class="dish-checkout__form-error" id="form--error" hidden></div>
 
-							<div class="dish-form-row">
-								<label for="dish-account-username" class="dish-form-label">
-									<?php esc_html_e( 'Username', 'dish-events' ); ?>
-									<span class="dish-form-required" aria-hidden="true">*</span>
-								</label>
-								<input
-									type="text"
-									id="dish-account-username"
-									name="account_username"
-									class="dish-form-input"
-									autocomplete="username"
-									autocapitalize="none"
-									spellcheck="false"
-								>
-							</div>
+                <button type="submit" class="dish-checkout__submit button button--primary" id="dish-submit-btn">
+                    <?php if ( $price_cents ) : ?>
+                        <?php
+                        echo esc_html( sprintf(
+                            /* translators: %s: total price */
+                            __( 'Reserve my spot — %s', 'dish-events' ),
+                            MoneyHelper::cents_to_display( $total_cents )
+                        ) );
+                        ?>
+                    <?php else : ?>
+                        <?php esc_html_e( 'Reserve my spot', 'dish-events' ); ?>
+                    <?php endif; ?>
+                </button>
 
-							<div class="dish-form-row">
-								<label for="dish-account-password" class="dish-form-label">
-									<?php esc_html_e( 'Password', 'dish-events' ); ?>
-									<span class="dish-form-required" aria-hidden="true">*</span>
-								</label>
-								<input
-									type="password"
-									id="dish-account-password"
-									name="account_password"
-									class="dish-form-input"
-									autocomplete="new-password"
-									minlength="8"
-								>
-								<p class="description"><?php esc_html_e( 'Minimum 8 characters.', 'dish-events' ); ?></p>
-							</div>
-						</fieldset>
-						<?php endif; ?>
+                <p class="dish-checkout__back"><a href="<?php echo esc_url( wp_get_referer() ?: home_url( '/' ) ); ?>"><?php esc_html_e( '← Back to class details', 'dish-events' ); ?></a></p>
+            </div>
 
-						<!-- ── Attendee fields ────────────────────────────── -->
-						<?php if ( ! empty( $checkout_fields ) ) :
-							// Separate per-booking and per-attendee fields.
-							$per_booking  = array_filter( $checkout_fields, fn( $f ) => empty( $f['apply_per_attendee'] ) );
-							$per_attendee = array_filter( $checkout_fields, fn( $f ) => ! empty( $f['apply_per_attendee'] ) );
-						?>
-
-							<?php if ( $per_booking ) : ?>
-								<fieldset class="dish-checkout__fieldset">
-									<legend class="dish-checkout__legend">
-										<?php esc_html_e( 'Additional information', 'dish-events' ); ?>
-									</legend>
-									<?php foreach ( $per_booking as $idx => $field ) :
-										$fid   = 'dish-field-' . $idx;
-										$fname = 'attendees[0][field_' . $idx . ']';
-									?>
-										<div class="dish-form-row">
-											<label for="<?php echo esc_attr( $fid ); ?>" class="dish-form-label">
-												<?php echo esc_html( $field['label'] ); ?>
-												<?php if ( $field['is_required'] ) : ?>
-													<span class="dish-form-required" aria-hidden="true">*</span>
-												<?php endif; ?>
-											</label>
-											<?php if ( 'textarea' === $field['field_type'] ) : ?>
-												<textarea
-													id="<?php echo esc_attr( $fid ); ?>"
-													name="<?php echo esc_attr( $fname ); ?>"
-													class="dish-form-textarea"
-													<?php echo $field['is_required'] ? 'required' : ''; ?>
-												></textarea>
-											<?php else : ?>
-												<input
-													type="text"
-													id="<?php echo esc_attr( $fid ); ?>"
-													name="<?php echo esc_attr( $fname ); ?>"
-													class="dish-form-input"
-													<?php echo $field['is_required'] ? 'required' : ''; ?>
-												>
-											<?php endif; ?>
-										</div>
-									<?php endforeach; ?>
-								</fieldset>
-							<?php endif; ?>
-
-							<?php if ( $per_attendee ) : ?>
-								<?php for ( $t = 0; $t < $qty; $t++ ) : ?>
-									<fieldset class="dish-checkout__fieldset dish-checkout__attendee-fieldset" data-ticket="<?php echo esc_attr( $t ); ?>">
-										<legend class="dish-checkout__legend">
-											<?php
-											if ( $qty > 1 ) {
-												echo esc_html( sprintf(
-													/* translators: %d: ticket number */
-													__( 'Ticket %d – attendee details', 'dish-events' ),
-													$t + 1
-												) );
-											} else {
-												esc_html_e( 'Attendee details', 'dish-events' );
-											}
-											?>
-										</legend>
-										<?php foreach ( $per_attendee as $idx => $field ) :
-											$fid   = 'dish-attendee-' . $t . '-field-' . $idx;
-											$fname = 'attendees[' . $t . '][field_' . $idx . ']';
-										?>
-											<div class="dish-form-row">
-												<label for="<?php echo esc_attr( $fid ); ?>" class="dish-form-label">
-													<?php echo esc_html( $field['label'] ); ?>
-													<?php if ( $field['is_required'] ) : ?>
-														<span class="dish-form-required" aria-hidden="true">*</span>
-													<?php endif; ?>
-												</label>
-												<input
-													type="text"
-													id="<?php echo esc_attr( $fid ); ?>"
-													name="<?php echo esc_attr( $fname ); ?>"
-													class="dish-form-input"
-													<?php echo $field['is_required'] ? 'required' : ''; ?>
-												>
-											</div>
-										<?php endforeach; ?>
-									</fieldset>
-								<?php endfor; ?>
-							<?php endif; ?>
-
-						<?php endif; ?>
-						<!-- /checkout_fields -->
-
-						<?php if ( $terms_enabled ) : ?>
-							<!-- ── Terms & Conditions ──────────────────── -->
-							<div class="dish-form-row dish-form-row--terms">
-								<label class="dish-form-label dish-form-label--checkbox">
-									<input
-										type="checkbox"
-										id="dish-terms"
-										name="terms_accepted"
-										value="1"
-										required
-									>
-									<span class="dish-form-terms-label"><?php echo wp_kses( $terms_label, [ 'a' => [ 'href' => [], 'target' => [], 'rel' => [] ], 'strong' => [], 'em' => [] ] ); ?></span>
-									<span class="dish-form-required" aria-hidden="true">*</span>
-								</label>
-							</div>
-						<?php endif; ?>
-
-						<!-- ── Payment stub ───────────────────────────────── -->
-						<div class="dish-checkout__payment">
-							<p class="dish-checkout__payment-note">
-								<?php esc_html_e( 'Payment will be collected at the studio. Your spot is reserved when you submit this form.', 'dish-events' ); ?>
-							</p>
-						</div>
-
-						<!-- ── Submit ─────────────────────────────────────── -->
-						<div class="dish-checkout__submit-row" id="dish-submit-area">
-							<div class="dish-checkout__form-error" id="dish-form-error" hidden></div>
-
-							<button type="submit" class="dish-checkout__submit button button--primary" id="dish-submit-btn">
-								<?php if ( $price_cents ) : ?>
-									<?php
-									echo esc_html( sprintf(
-										/* translators: %s: total price */
-										__( 'Reserve my spot — %s', 'dish-events' ),
-										MoneyHelper::cents_to_display( $total_cents )
-									) );
-									?>
-								<?php else : ?>
-									<?php esc_html_e( 'Reserve my spot', 'dish-events' ); ?>
-								<?php endif; ?>
-							</button>
-
-							<p class="dish-checkout__back">
-								<a href="<?php echo esc_url( wp_get_referer() ?: home_url( '/' ) ); ?>">
-									<?php esc_html_e( '← Back to class details', 'dish-events' ); ?>
-								</a>
-							</p>
-						</div>
-
-					</form>
-				</div><!-- .dish-checkout__form-wrap -->
-
-			</div><!-- .dish-checkout__layout -->
+        </form>
+    </div><!-- .dish-checkout__form-wrap -->
 
 		<?php endif; ?>
-
-	</div><!-- .dish-container -->
 </main>
+<?php /* ── Class summary (sidebar) ──────────────────────────────── */ ?>
+<aside class="checkout--summary"> 
+    <h2 class="card-title"><?php esc_html_e( 'Your booking', 'dish-events' ); ?></h2>
 
+    <?php if ( $template && has_post_thumbnail( $template_id ) ) : ?>
+        <div class="dish-checkout__summary-image">
+            <?php echo get_the_post_thumbnail( $template_id, 'medium', [ 'class' => 'dish-checkout__summary-thumb' ] ); ?>
+        </div>
+    <?php endif; ?>
+    
+    <div class="checkout--meta">
+    <h3 class=""><?php echo esc_html( $class_title ); ?></h3>
+
+    <ul class="icon-list--default">
+        <?php if ( $date_label ) : ?>
+            <li class="ico--date">
+                <time datetime="<?php echo esc_attr( DateHelper::format( $start_epoch, 'c' ) ); ?>">
+                    <?php echo esc_html( $date_label ); ?>
+                </time>
+            </li>
+        <?php endif; ?>
+
+        <?php if ( $time_label ) : ?>
+            <li class="ico--time">
+                <?php echo esc_html( $time_label ); ?>
+            </li>
+        <?php endif; ?>
+
+        <?php if ( ! empty( $chefs ) ) : ?>
+            <li class="ico--person">
+                Chef: <?php echo esc_html( implode( ', ', array_map( fn( $c ) => $c->post_title, $chefs ) ) ); ?>
+            </li>
+        <?php endif; ?>
+    </ul>
+    </div>
+    <?php if ( $price_cents ) : ?>
+    <?php if ( ! empty( $fee_lines ) ) : ?>
+        <div class="checkout-price--row">
+            <span class="label" id="dish-ticket-label">
+                <?php echo esc_html(
+                    sprintf(
+                        /* translators: %d: quantity */
+                        _n( '%d ticket', '%d tickets', $qty, 'dish-events' ),
+                        $qty
+                    )
+                ); ?>
+            </span>
+            <span class="subtotal" id="dish-ticket-subtotal">
+                <?php echo esc_html( MoneyHelper::cents_to_display( $price_cents * $qty ) ); ?>
+            </span>
+        </div>
+        <?php foreach ( $fee_lines as $i => $fee ) : ?>
+        <div class="checkout-price--row"
+            data-fee-index="<?php echo $i; ?>"
+            data-fee-amount="<?php echo (int) $fee['amount_cents']; ?>"
+            data-per-ticket="<?php echo $fee['per_ticket'] ? '1' : '0'; ?>">
+            <span class="label"><?php echo esc_html( $fee['label'] ); ?></span>
+            <span class="subtotal"><?php echo esc_html(
+                MoneyHelper::cents_to_display(
+                    $fee['per_ticket'] ? $fee['amount_cents'] * $qty : $fee['amount_cents']
+                )
+            ); ?></span>
+        </div>
+        <?php endforeach; ?>
+        <div class="checkout-price--row">
+            <span class="label"><?php esc_html_e( 'Total', 'dish-events' ); ?></span>
+            <span class="total" id="dish-total-display">
+                <?php echo esc_html( MoneyHelper::cents_to_display( $total_cents ) ); ?>
+            </span>
+        </div>
+    <?php else : ?>
+        <div class="checkout-price--row">
+            <span class="label" id="dish-ticket-label">
+                <?php echo esc_html(
+                    sprintf(
+                        /* translators: %d: quantity */
+                        _n( '%d ticket', '%d tickets', $qty, 'dish-events' ),
+                        $qty
+                    )
+                ); ?>
+            </span>
+            <span class="total" id="dish-total-display">
+                <?php echo esc_html( MoneyHelper::cents_to_display( $total_cents ) ); ?>
+            </span>
+        </div>
+    <?php endif; ?>
+    <?php endif; ?>
+</aside><!-- .dish-checkout__summary -->
+</div>
 <?php get_footer(); ?>

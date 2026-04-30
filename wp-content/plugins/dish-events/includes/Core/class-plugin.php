@@ -152,6 +152,10 @@ final class Plugin {
 		$shortcodes = new \Dish\Events\Frontend\Shortcodes();
 		$shortcodes->register_hooks( $this->loader );
 
+		// Google Reviews — server-side transient fetch + [dish_reviews] shortcode.
+		// The cron refresh fires twice daily; the API is never called from the browser.
+		$this->loader->add_action( \Dish\Events\Core\GoogleReviews::CRON_HOOK, new \Dish\Events\Core\GoogleReviews(), 'refresh' );
+
 		// View classes (ClassView, ChefView, FormatView) are static — no instantiation needed.
 		// They are autoloaded by the PSR-4 loader on first use.
 

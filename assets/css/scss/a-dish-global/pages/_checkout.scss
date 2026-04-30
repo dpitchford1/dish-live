@@ -1,6 +1,515 @@
 
  /* $ Checkout Flow 
 ====================================================================== */
+/* ── Notice / Error Banner ─────────────────────────────────────────── */
+.dish-notice {
+        display: flex;
+        align-items: flex-start;
+        gap: .75rem;
+        padding: .875rem 1.25rem;
+        border-radius: var( --dish-radius );
+        font-size: .9375rem;
+        line-height: 1.55;
+        margin-bottom: 1.5rem;
+}
+
+.dish-notice--error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+}
+
+.dish-notice--error a {
+        color: #991b1b;
+        font-weight: 600;
+        text-decoration: underline;
+}
+
+.dish-checkout__error {
+        margin-bottom: 1.5rem;
+}
+
+/* ── Countdown Timer Strip ─────────────────────────────────────────── */
+
+.dish-checkout__timer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        padding: .625rem 1.25rem;
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        font-size: .9rem;
+        font-weight: 600;
+        color: #92400e;
+        margin-bottom: 1.75rem;
+        text-align: center;
+}
+
+.dish-checkout__timer-icon {
+        font-size: 1rem;
+        line-height: 1;
+        flex-shrink: 0;
+}
+
+.dish-checkout__timer-countdown {
+        font-variant-numeric: tabular-nums;
+        font-weight: 700;
+        color: var( --dish-danger );
+}
+
+/* ── Summary Sidebar ───────────────────────────────────────────────── */
+
+.checkout--summary {
+    position: sticky;
+    top: 5rem;
+    background: var( --dish-card-bg );
+    border: 1px solid var( --dish-border );
+    box-shadow: var( --dish-card-shadow );
+    overflow: hidden;
+
+    .card-title {
+        padding: 1rem 1.25rem .75rem;
+        margin: 0;
+    }
+}
+
+.dish-checkout__summary-image {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #f3f4f6;
+}
+
+.dish-checkout__summary-thumb {
+    height: 100%;
+    object-fit: cover;
+    display: block; 
+}
+
+.checkout--meta{
+    
+    padding: .8rem 1.25rem .7rem;
+
+    h3{
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+}
+.dish-checkout__class-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        padding: 1rem 1.25rem .5rem;
+        margin: 0;
+}
+
+/* Price row */
+.checkout-price--row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: .875rem 1.25rem;
+    border-top: 1px solid var( --dish-border );
+    background: #f9fafb;
+
+    .label{
+        font-size: .9rem;
+        font-weight: 500;
+    }
+    .total{
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var( --dish-primary );}
+}
+
+/* ── Form Wrapper ──────────────────────────────────────────────────── */
+
+.checkout-form--wrapper {
+    min-width: 0;
+    
+    .checkout--form {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+}
+
+
+
+/* ── Fieldsets & Legends ───────────────────────────────────────────── */
+
+// .checkout--fieldset {
+//     border: none;
+//     padding: 0;
+//     margin: 0 0 1.75rem;
+// }
+
+.checkout-fieldset--account {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    padding: 1.25rem;
+    margin-top: .5rem;
+}
+
+.checkout--legend {
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0;
+    width: 100%;
+    border-bottom: 1px solid var( --dish-border );
+}
+
+/* ── Form Rows ─────────────────────────────────────────────────────── */
+
+.form--row {
+    display: flex;
+    flex-direction: column;
+    gap: .375rem;
+}
+
+.form--row:last-child {
+    margin-bottom: 0;
+}
+
+/* Checkbox rows: horizontal alignment */
+.form--row--create-account,
+.form--row--terms {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: .625rem;
+        padding: .75rem;
+        background: #f9fafb;
+        border: 1px solid var( --dish-border );
+        border-radius: var( --dish-radius );
+        margin-bottom: 1.1rem;
+}
+
+.form--row--create-account input[type="checkbox"],
+.form--row--terms input[type="checkbox"] {
+        margin-top: .25rem;
+        flex-shrink: 0;
+        width: 1.1rem;
+        height: 1.1rem;
+        accent-color: var( --dish-primary );
+        cursor: pointer;
+}
+
+/* ── Labels ────────────────────────────────────────────────────────── */
+
+.form--label {
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.form--label--checkbox {
+    font-weight: 500;
+    cursor: pointer;
+    flex: 1;
+    font-size: .9rem;
+    line-height: 1.5;
+}
+
+.form--required {
+    color: var( --dish-danger );
+    margin-left: .15em;
+    font-weight: 700;
+}
+
+.form--optional {
+    font-size: .8rem;
+    font-weight: 400;
+    color: var( --dish-muted );
+    margin-left: .25em;
+}
+
+.form--terms-label {
+    font-size: .875rem;
+    color: var( --dish-text );
+    line-height: 1.5;
+}
+
+.form--terms-label a {
+    color: var( --dish-primary );
+    text-decoration: underline;
+}
+
+/* ── Inputs, Selects, Textareas ────────────────────────────────────── */
+
+.form--input,
+.form--select,
+.form--textarea {
+    padding: .625rem .875rem;
+    font-family: inherit;
+    background: var( --dish-input-bg );
+    border: 1.5px solid var( --dish-input-border );
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.form--input:focus,
+.form--select:focus,
+.form--textarea:focus {
+    outline: none;
+    border-color: var( --dish-primary );
+    box-shadow: 0 0 0 3px color-mix( in srgb, var( --dish-primary ) 18%, transparent );
+}
+
+.form--input::placeholder,
+.form--textarea::placeholder {
+    color: #9ca3af;
+}
+
+.form--select {
+    background-image: url( "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E" );
+    background-repeat: no-repeat;
+    background-position: right .75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+}
+
+.form--textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* ── Attendee Fieldsets ────────────────────────────────────────────── */
+
+.dish-checkout__attendee-fieldset {
+    background: #f9fafb;
+    border: 1px solid var( --dish-border );
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.dish-checkout__attendee-fieldset .dish-checkout__legend {
+    font-size: .9rem;
+    color: var( --dish-muted );
+}
+
+/* ── Payment Section ───────────────────────────────────────────────── */
+
+.dish-checkout__payment {
+    padding: 1rem 1.25rem;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    margin-bottom: 1.75rem;
+}
+
+.dish-checkout__payment-note {
+    margin: 0;
+    font-size: .9rem;
+    color: #166534;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+/* ── Submit Row ────────────────────────────────────────────────────── */
+
+.dish-checkout__submit-row {
+    display: flex;
+    flex-direction: column;
+    gap: .875rem;
+    align-items: stretch;
+}
+
+.dish-checkout__form-error {
+    padding: .75rem 1rem;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    font-size: .9rem;
+    color: #991b1b;
+    font-weight: 500;
+}
+
+/* Submit button — layer dish-button--primary styles onto .button.button--primary */
+.dish-checkout__submit {
+    padding: .875rem 1.5rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+.dish-checkout__submit:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.dish-checkout__back {
+    text-align: center;
+    margin: 0;
+}
+.dish-checkout__back a,
+.dish-checkout__back .button {
+    font-size: .875rem;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────── */
+
+// @media ( max-width: 900px ) {
+//         .dish-checkout__layout {
+//                 grid-template-columns: 1fr;
+//         }
+
+//         .dish-checkout__summary {
+//                 position: static;
+//                 order: -1;           
+//         }
+// }
+
+// @media ( max-width: 640px ) {
+//         .dish-checkout-page {
+//                 padding: 1.5rem 0 3rem;
+//         }
+
+//         .dish-checkout__timer {
+//                 font-size: .8rem;
+//         }
+// }
+
+/* ==========================================================================
+   Booking Confirmation Page
+   ========================================================================== */
+
+.dish-confirmation-page {
+        padding: 3rem 0 5rem;
+}
+
+.dish-confirmation {
+        max-width: 600px;
+}
+
+/* -- Hero / success header ------------------------------------------------- */
+
+.dish-confirmation__hero {
+        text-align: center;
+        padding: 2rem 0 2.5rem;
+}
+
+.dish-confirmation__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: color-mix( in srgb, var( --dish-success ) 12%, transparent );
+    color: var( --dish-success );
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 1.25rem;
+}
+
+/* -- Booking card ---------------------------------------------------------- */
+
+.dish-confirmation__card {
+    background: var( --dish-card-bg );
+    border: 1px solid var( --dish-border );
+    border-radius: var( --dish-radius-lg );
+    box-shadow: var( --dish-card-shadow );
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.75rem;
+}
+
+.dish-confirmation__ref {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-bottom: .875rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var( --dish-border );
+}
+
+.dish-confirmation__ref-label {
+    font-size: .875rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    font-weight: 600;
+}
+
+.dish-confirmation__ref-value {
+    font-weight: 700;
+    color: var( --dish-primary );
+}
+
+.dish-confirmation__class-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 1.25rem;
+}
+
+/* -- Meta list (date / time / chef / venue / tickets) ---------------------- */
+
+.dish-confirmation__payment-note {
+    font-size: .875rem;
+    font-style: italic;
+    margin: 0;
+    padding-top: 1rem;
+    border-top: 1px solid var( --dish-border );
+}
+
+/* -- Add to calendar ------------------------------------------------------- */
+
+.dish-confirmation__calendar {
+    background: var( --dish-card-bg );
+    border: 1px solid var( --dish-border );
+    border-radius: var( --dish-radius-lg );
+    box-shadow: var( --dish-card-shadow );
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.75rem;
+    text-align: center;
+}
+
+.dish-confirmation__calendar-title {
+    font-weight: 600;
+    margin: 0 0 1rem;
+}
+
+.dish-confirmation__calendar-actions {
+    display: flex;
+    justify-content: center;
+    gap: .75rem;
+    flex-wrap: wrap;
+}
+
+.dish-confirmation__cal-link.button {
+    font-size: .875rem;
+}
+
+/* -- What happens next ----------------------------------------------------- */
+
+.dish-confirmation__next-steps {
+    background: var( --dish-input-bg );
+    border: 1px solid var( --dish-border );
+    border-radius: var( --dish-radius-lg );
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.dish-confirmation__next-title {
+    font-weight: 700;
+    margin: 0 0 .875rem;
+    color: var( --dish-text );
+}
+
+.dish-confirmation__steps {
+    margin: 0;
+    padding: 0 0 0 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.dish-confirmation__steps li {
+    padding-left: .25rem;
+}
+
+/* -- CTA ------------------------------------------------------------------- */
+
+.dish-confirmation__cta {
+        text-align: center;
+}
+
+
 
 
 /* Min width 480px

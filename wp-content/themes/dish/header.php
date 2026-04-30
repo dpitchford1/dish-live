@@ -4,13 +4,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <?php /* Mobile */ ?>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<?php /* service worker - uncomment if using
-<script>if (navigator && navigator.serviceWorker) { navigator.serviceWorker.register('/worker.min.js'); }</script>  */ ?>
+<?php /* service worker - uncomment if using */ ?>
+<script>if (navigator && navigator.serviceWorker) { navigator.serviceWorker.register('/worker.min.js'); }</script>  
 
 <script>var doc = window.document; doc.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'has-js enhanced';</script>
-
-<!-- <link rel="preload" href="/assets/fonts/poppins/poppins-light.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/brandon-grotesque/BrandonGrotesque-Light.woff2" as="font" type="font/woff2" crossorigin> -->
 
 <?php /* inject critical css inline */ ?>
 <?php Basecamp_Frontend::output_critical_css( ABSPATH . 'assets/css/build/critical-css.min.css' ); ?>
@@ -19,11 +16,7 @@
 <link rel="stylesheet" href="/assets/css/build/a-dish-base.min.css" media="screen">
 <link rel="stylesheet" href="/assets/css/build/a-dish-global.min.css" media="screen">
 
-<!-- <link rel="stylesheet" href="/assets/css/resources/dish-events.min.css" media="screen"> -->
-
-<?php /* css files 
-<link rel="stylesheet" href="/assets/css/build/normalize.min.css" media="screen"> */ ?>
-<!-- <link rel="stylesheet" href="/assets/css/build/kaneism-base-layout.min.css" media="screen"> -->
+<?php /* css files here when ready */ ?>
 
 <?php /* favicon */ ?>
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -102,7 +95,7 @@ $account_url     = $profile_page_id ? get_permalink( $profile_page_id ) : admin_
 					)
 				);
             ?>
-            <ul class="utility-menu utility-menu--account">
+            <!-- <ul class="utility-menu utility-menu--account">
                 <?php if ( is_user_logged_in() ) : ?>
                     <li class="menu-item menu-item--account">
                         <a href="<?php echo esc_url( $account_url ); ?>"><?php esc_html_e( 'My Account', 'dish-events' ); ?></a>
@@ -115,7 +108,7 @@ $account_url     = $profile_page_id ? get_permalink( $profile_page_id ) : admin_
                         <a href="<?php echo esc_url( $login_url ); ?>"><?php esc_html_e( 'Login', 'dish-events' ); ?></a>
                     </li>
                 <?php endif; ?>
-            </ul>
+            </ul> -->
 	    </nav>
     </header>
 </div>

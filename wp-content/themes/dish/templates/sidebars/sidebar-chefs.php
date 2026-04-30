@@ -34,11 +34,7 @@ use Dish\Events\Frontend\Frontend;
                 <?php include Frontend::locate( 'formats/card.php' ); ?>
             <?php endforeach; ?>
         </div>
-        <p>
-            <a href="<?php echo esc_url( get_post_type_archive_link( 'dish_format' ) ); ?>" class="button">
-                <?php esc_html_e( 'All Formats', 'dish-events' ); ?>
-            </a>
-        </p>
+        <p><a href="<?php echo esc_url( get_post_type_archive_link( 'dish_format' ) ); ?>" class="button button--primary"><?php esc_html_e( 'All Formats', 'dish-events' ); ?></a></p>
     </section>
     <?php endif; ?>
 
@@ -74,11 +70,7 @@ use Dish\Events\Frontend\Frontend;
                 <?php include Frontend::locate( 'classes/card.php' ); ?>
             <?php endforeach; ?>
         </div>
-        <p>
-            <a href="<?php echo esc_url( get_post_type_archive_link( 'dish_class' ) ); ?>" class="button">
-                <?php esc_html_e( 'All Classes', 'dish-events' ); ?>
-            </a>
-        </p>
+        <p><a href="<?php echo esc_url( get_post_type_archive_link( 'dish_class' ) ); ?>" class="button button--primary"><?php esc_html_e( 'All Classes', 'dish-events' ); ?></a></p>
     </section>
     <?php endif; ?>
 

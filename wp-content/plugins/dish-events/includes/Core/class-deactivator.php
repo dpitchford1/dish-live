@@ -39,6 +39,7 @@ final class Deactivator {
 	private static function unschedule_cron(): void {
 		$jobs = [
 			'dish_cleanup_expired_bookings',
+			\Dish\Events\Core\GoogleReviews::CRON_HOOK,
 		];
 
 		foreach ( $jobs as $hook ) {

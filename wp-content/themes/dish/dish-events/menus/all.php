@@ -94,7 +94,7 @@ $_friendly_labels = MenuMetaBox::FRIENDLY_FOR;
 		<?php endif; ?>
 
 		<?php if ( $_has_dietary || $_has_friendly || $_has_custom_dietary || $_has_custom_friendly ) : ?>
-			<div class="card--flags txt--sm">
+			<div class="dietary--meta-flags txt--sm">
             <?php if ( $_has_dietary ) :
                 $_flag_display = array_map(
                     fn( $k ) => $_flag_labels[ $k ] ?? ucfirst( str_replace( '_', ' ', $k ) ),

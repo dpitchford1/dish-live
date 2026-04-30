@@ -212,9 +212,7 @@ while ( have_posts() ) :
         $_inst_start  = (int) get_post_meta( $display_class->ID, 'dish_start_datetime', true );
         $_inst_end    = (int) get_post_meta( $display_class->ID, 'dish_end_datetime',   true );
         $_is_private  = (bool) get_post_meta( $display_class->ID, 'dish_is_private', true );
-        $_booked      = ClassRepository::get_booked_count( $display_class->ID );
-        $_remaining   = $capacity > 0 ? max( 0, $capacity - $_booked ) : null;
-
+		$_is_past     = DateHelper::is_past( $_inst_start );
         $_date_label  = $_inst_start ? DateHelper::to_display( $_inst_start ) : '';
         $_time_label  = '';
         if ( $_inst_start ) {
@@ -254,7 +252,11 @@ while ( have_posts() ) :
                     </span>
                 <?php endif; ?>
             </div>
-        <?php if ( ! $_is_private && ( $_remaining === null || $_remaining > 0 ) ) : ?>
+        <?php if ( $_is_past ) : ?>
+                <span class="dish-instance-panel__cta dish-instance-panel__cta--past">
+                    <?php esc_html_e( 'This class has already taken place.', 'dish-events' ); ?>
+                </span>
+            <?php elseif ( ! $_is_private && ( $_remaining === null || $_remaining > 0 ) ) : ?>
             <?php if ( $is_enquiry ) : ?>
                 <a href="<?php echo esc_url( dish_get_enquiry_url() ); ?>" class="dish-instance-panel__cta button button--secondary">
                     <?php esc_html_e( 'Enquire to Book', 'dish-events' ); ?>
@@ -434,6 +436,16 @@ if ( document.readyState === "loading" ) {
 
     </article>
 </main>
+
+<?php
+/**
+ * Fires after the main class template content.
+ * dish-recipes hooks in here to render related recipes when active.
+ *
+ * @since 1.0.0
+ */
+do_action( 'dish_after_class_template_content' );
+?>
 
 <?php endwhile; ?>
 

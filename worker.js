@@ -9,8 +9,8 @@ const ASSETS_TO_CACHE = [
   //'/assets/css/build/dish-base-layout.min.css',
   
   // Images
-//   '/assets/img/logos/dish.svg',
-//   '/favicon.ico',
+  '/assets/img/logos/dish.svg',
+  '/favicon.ico',
 //   '/assets/img/logos/dish-favicon-260x260.png',
 //   '/assets/img/logos/dish-favicon-150x150.png',
   
@@ -22,8 +22,8 @@ const ASSETS_TO_CACHE = [
 //   '/assets/img/icon/apple-touch-icon.png',
   
 // Add your font files here - examples:
-  '/assets/fonts/proxima-light.woff2',
-  '/assets/fonts/proxima-reg.woff', 
+  '/assets/fonts/poppins/poppins-light.woff2', 
+  '/assets/fonts/brandon-grotesque/BrandonGrotesque-Regular.woff2', 
 
    // JS files
    //'/assets/js/core/base.min.js',

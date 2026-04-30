@@ -893,17 +893,17 @@ span.dish-format-pill {
    Booking Confirmation Page
    ========================================================================== */
 
-.dish-confirmation-page {
+/* .dish-confirmation-page {
         padding: 3rem 0 5rem;
 }
 
 .dish-confirmation {
         max-width: 600px;
-}
+} */
 
 /* -- Hero / success header ------------------------------------------------- */
 
-.dish-confirmation__hero {
+/* .dish-confirmation__hero {
         text-align: center;
         padding: 2rem 0 2.5rem;
 }
@@ -921,11 +921,11 @@ span.dish-format-pill {
         font-weight: 700;
         line-height: 1;
         margin-bottom: 1.25rem;
-}
+} */
 
 /* -- Booking card ---------------------------------------------------------- */
 
-.dish-confirmation__card {
+/* .dish-confirmation__card {
         background: var( --dish-card-bg );
         border: 1px solid var( --dish-border );
         border-radius: var( --dish-radius-lg );
@@ -962,11 +962,11 @@ span.dish-format-pill {
         font-weight: 700;
         margin: 0 0 1.25rem;
         color: var( --dish-text );
-}
+} */
 
 /* -- Meta list (date / time / chef / venue / tickets) ---------------------- */
 
-.dish-confirmation__meta {
+/* .dish-confirmation__meta {
         list-style: none;
         margin: 0 0 1.25rem;
         padding: 0;
@@ -999,11 +999,11 @@ span.dish-format-pill {
         margin: 0;
         padding-top: 1rem;
         border-top: 1px solid var( --dish-border );
-}
+} */
 
 /* -- Add to calendar ------------------------------------------------------- */
 
-.dish-confirmation__calendar {
+/* .dish-confirmation__calendar {
         background: var( --dish-card-bg );
         border: 1px solid var( --dish-border );
         border-radius: var( --dish-radius-lg );
@@ -1029,11 +1029,11 @@ span.dish-format-pill {
 
 .dish-confirmation__cal-link.button {
         font-size: .875rem;
-}
+} */
 
 /* -- What happens next ----------------------------------------------------- */
 
-.dish-confirmation__next-steps {
+/* .dish-confirmation__next-steps {
         background: var( --dish-input-bg );
         border: 1px solid var( --dish-border );
         border-radius: var( --dish-radius-lg );
@@ -1061,17 +1061,17 @@ span.dish-format-pill {
         color: var( --dish-muted );
         line-height: 1.55;
         padding-left: .25rem;
-}
+} */
 
 /* -- CTA ------------------------------------------------------------------- */
 
-.dish-confirmation__cta {
+/* .dish-confirmation__cta {
         text-align: center;
-}
+} */
 
 /* -- Responsive ------------------------------------------------------------ */
 
-@media ( max-width: 640px ) {
+/* @media ( max-width: 640px ) {
         .dish-confirmation__card,
         .dish-confirmation__calendar,
         .dish-confirmation__next-steps {
@@ -1086,7 +1086,7 @@ span.dish-format-pill {
                 flex-direction: column;
                 gap: .25rem;
         }
-}
+} */
 
 
 /* ==========================================================================
@@ -1094,7 +1094,7 @@ span.dish-format-pill {
    Shown when ?class_id=N is present (calendar or card click).
    ========================================================================== */
 
-.dish-instance-panel {
+/* .dish-instance-panel {
         margin: 1.5rem auto;
 }
 
@@ -1153,7 +1153,7 @@ span.dish-format-pill {
                 width: 100%;
                 text-align: center;
         }
-}
+} */
 
 
 /* ==========================================================================
@@ -1161,13 +1161,13 @@ span.dish-format-pill {
    ========================================================================== */
 
 /* Page wrapper */
-.dish-checkout-page {
+/* .dish-checkout-page {
         padding: 2.5rem 0 4rem;
-}
+} */
 
 /* ── Notice / Error Banner ─────────────────────────────────────────── */
 
-.dish-notice {
+/* .dish-notice {
         display: flex;
         align-items: flex-start;
         gap: .75rem;
@@ -1192,11 +1192,11 @@ span.dish-format-pill {
 
 .dish-checkout__error {
         margin-bottom: 1.5rem;
-}
+} */
 
 /* ── Countdown Timer Strip ─────────────────────────────────────────── */
 
-.dish-checkout__timer {
+/* .dish-checkout__timer {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1226,20 +1226,20 @@ span.dish-format-pill {
         font-variant-numeric: tabular-nums;
         font-weight: 700;
         color: var( --dish-danger );
-}
+} */
 
 /* ── Two-Column Layout ─────────────────────────────────────────────── */
 
-.dish-checkout__layout {
+/* .dish-checkout__layout {
         display: grid;
         grid-template-columns: 1fr 1.9fr;
         gap: 2.25rem;
         align-items: start;
-}
+} */
 
 /* ── Summary Sidebar ───────────────────────────────────────────────── */
 
-.dish-checkout__summary {
+/* .dish-checkout__summary {
         position: sticky;
         top: 5rem;
         background: var( --dish-card-bg );
@@ -1269,10 +1269,10 @@ span.dish-format-pill {
         color: var( --dish-text );
         padding: 1rem 1.25rem .5rem;
         margin: 0;
-}
+} */
 
 /* Meta list */
-.dish-checkout__meta {
+/* .dish-checkout__meta {
         list-style: none;
         margin: 0;
         padding: .5rem 1.25rem 1rem;
@@ -1294,10 +1294,10 @@ span.dish-format-pill {
         font-size: .95rem;
         line-height: 1;
         flex-shrink: 0;
-}
+} */
 
 /* Price row */
-.dish-checkout__price-row {
+/* .dish-checkout__price-row {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -1317,11 +1317,11 @@ span.dish-format-pill {
         font-size: 1.25rem;
         font-weight: 700;
         color: var( --dish-primary );
-}
+} */
 
 /* ── Form Wrapper ──────────────────────────────────────────────────── */
 
-.dish-checkout__form-wrap {
+/* .dish-checkout__form-wrap {
         min-width: 0;
 }
 
@@ -1329,11 +1329,11 @@ span.dish-format-pill {
         display: flex;
         flex-direction: column;
         gap: 0;
-}
+} */
 
 /* ── Fieldsets & Legends ───────────────────────────────────────────── */
 
-.dish-checkout__fieldset {
+/* .dish-checkout__fieldset {
         border: none;
         padding: 0;
         margin: 0 0 1.75rem;
@@ -1356,11 +1356,11 @@ span.dish-format-pill {
         width: 100%;
         border-bottom: 2px solid var( --dish-border );
         padding-bottom: .5rem;
-}
+} */
 
 /* ── Form Rows ─────────────────────────────────────────────────────── */
 
-.dish-form-row {
+/* .dish-form-row {
         display: flex;
         flex-direction: column;
         gap: .375rem;
@@ -1369,10 +1369,10 @@ span.dish-format-pill {
 
 .dish-form-row:last-child {
         margin-bottom: 0;
-}
+} */
 
 /* Checkbox rows: horizontal alignment */
-.dish-form-row--create-account,
+/* .dish-form-row--create-account,
 .dish-form-row--terms {
         flex-direction: row;
         align-items: flex-start;
@@ -1392,11 +1392,11 @@ span.dish-format-pill {
         height: 1.1rem;
         accent-color: var( --dish-primary );
         cursor: pointer;
-}
+} */
 
 /* ── Labels ────────────────────────────────────────────────────────── */
 
-.dish-form-label {
+/* .dish-form-label {
         font-size: .9rem;
         font-weight: 600;
         color: var( --dish-text );
@@ -1434,11 +1434,11 @@ span.dish-format-pill {
 .dish-form-terms-label a {
         color: var( --dish-primary );
         text-decoration: underline;
-}
+} */
 
 /* ── Inputs, Selects, Textareas ────────────────────────────────────── */
 
-.dish-form-input,
+/* .dish-form-input,
 .dish-form-select,
 .dish-form-textarea {
         width: 100%;
@@ -1480,11 +1480,11 @@ span.dish-format-pill {
 .dish-form-textarea {
         min-height: 100px;
         resize: vertical;
-}
+} */
 
 /* ── Attendee Fieldsets ────────────────────────────────────────────── */
 
-.dish-checkout__attendee-fieldset {
+/* .dish-checkout__attendee-fieldset {
         background: #f9fafb;
         border: 1px solid var( --dish-border );
         border-radius: var( --dish-radius );
@@ -1495,11 +1495,11 @@ span.dish-format-pill {
 .dish-checkout__attendee-fieldset .dish-checkout__legend {
         font-size: .9rem;
         color: var( --dish-muted );
-}
+} */
 
 /* ── Payment Section ───────────────────────────────────────────────── */
 
-.dish-checkout__payment {
+/* .dish-checkout__payment {
         padding: 1rem 1.25rem;
         background: #f0fdf4;
         border: 1px solid #bbf7d0;
@@ -1514,11 +1514,11 @@ span.dish-format-pill {
         display: flex;
         align-items: center;
         gap: .5rem;
-}
+} */
 
 /* ── Submit Row ────────────────────────────────────────────────────── */
 
-.dish-checkout__submit-row {
+/* .dish-checkout__submit-row {
         display: flex;
         flex-direction: column;
         gap: .875rem;
@@ -1533,10 +1533,10 @@ span.dish-format-pill {
         font-size: .9rem;
         color: #991b1b;
         font-weight: 500;
-}
+} */
 
 /* Submit button — layer dish-button--primary styles onto .button.button--primary */
-.dish-checkout__submit {
+/* .dish-checkout__submit {
         width: 100%;
         padding: .875rem 1.5rem;
         font-size: 1.025rem;
@@ -1588,18 +1588,18 @@ span.dish-format-pill {
 .dish-checkout__back a:hover,
 .dish-checkout__back .button:hover {
         color: var( --dish-text );
-}
+} */
 
 /* ── Responsive ────────────────────────────────────────────────────── */
 
-@media ( max-width: 900px ) {
+/* @media ( max-width: 900px ) {
         .dish-checkout__layout {
                 grid-template-columns: 1fr;
         }
 
         .dish-checkout__summary {
                 position: static;
-                order: -1;                /* summary above form on mobile */
+                order: -1;                
         }
 }
 
@@ -1611,7 +1611,7 @@ span.dish-format-pill {
         .dish-checkout__timer {
                 font-size: .8rem;
         }
-}
+} */
 
 /* ── Gallery Swiper ─────────────────────────────────────────────────────────── */
 

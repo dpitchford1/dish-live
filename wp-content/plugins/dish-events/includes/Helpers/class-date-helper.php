@@ -116,4 +116,16 @@ final class DateHelper {
 	public static function now(): int {
 		return time();
 	}
+
+	/**
+	 * Return true when the given epoch is in the past.
+	 *
+	 * An epoch of 0 (unset) is not considered past.
+	 *
+	 * @param int $epoch UTC Unix timestamp.
+	 * @return bool
+	 */
+	public static function is_past( int $epoch ): bool {
+		return $epoch > 0 && $epoch < time();
+	}
 }

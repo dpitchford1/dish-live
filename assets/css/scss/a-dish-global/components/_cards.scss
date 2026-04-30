@@ -102,7 +102,8 @@
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-    border: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 1rem;
 
     .card--img {
         aspect-ratio: 16 / 9;
@@ -113,8 +114,9 @@
         display: flex;
         flex-direction: column;
         flex: 1;
-        padding: 1.25rem;
+        padding: .5rem 1rem 1rem;
         gap: .5rem;
+        // justify-content: space-between;
     }
     .card--date {
         display: block;
@@ -123,6 +125,9 @@
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: .04em;
+    }
+    .card-title{
+        margin-bottom: 0;
     }
     .card--meta {
         display: flex;
@@ -140,9 +145,33 @@
     }
     .card-spots--low      { color: var( --dish-warn );   }
     .card-spots--soldout { color: var( --dish-danger );  font-weight: 600; } 
+
+    .button{
+        margin-top: auto;
+        align-self: flex-start;
+    }
 }
+
+.card--featured{
+    background-color: #f9fafb;
+    padding: 1rem;
+
+    .card--featured-badge{
+        color: var( --dish-accent, #c0392b );
+        font-size: .875rem;
+        text-transform: uppercase;
+        padding: .35rem .75rem;
+        letter-spacing: .2ch;
+    }
+}
+
+
+
 .formats--private .full--card {
     border: 0 none;
+    .button{
+        margin-top: 0;
+    }
 }
 
 /* Card excerpt */
@@ -152,6 +181,7 @@
 	margin: 0;
 	flex: 1;
 	-webkit-line-clamp: 3;
+    line-clamp: 3;
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
@@ -234,13 +264,7 @@
     .card--format{
         margin: 0 0 .25rem;
     }
-    .menu--list{
-        padding-left: 1.5rem;
-        margin: 0;
-        li{
-            margin-bottom: .25rem;
-        }
-    }
+    
     .card--flags{
         margin-top: 0.75rem;
         padding-top: 0.75rem;
@@ -248,17 +272,69 @@
     }
     .dietary--flags{
         margin: 0 0 0.25rem;
+        border-top: 0 none;
+        padding-top: 0;
     }
 
     .dietary--disclaimer{
         margin-top: .7rem;
     }
-    
-
 }
+.menu--list{
+    padding-left: 1.5rem;
+    margin: 0;
+    line-height: 1.3;
+    li{
+        margin-bottom: .4rem;
+    }
+}
+.card-title.has--icon{
+    margin-bottom: .5rem;
+}
+.card-title.has--icon::before{
+    top: .35em;
+}
+
+.dietary--meta-flags{
+    margin: 0.75rem 0 1.3rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #eee;
+ 
+    .dietary--flags{
+        margin: 0 0 0.25rem;
+        border-top: 0 none;
+        padding-top: 0;
+    }
+
+    .dietary--disclaimer{
+        margin-top: .7rem;
+    }
+}
+
+
 // .split-grid--card:hover img {
 // 	transform: scale( 1.03 );
 // }
+
+.layout--swapper{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .layout--swapper-image{
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+
+        img{
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+    }
+}
 
 
 /* Min width 480px
@@ -300,6 +376,18 @@
     .mini-card--image{
         margin: 0;
     }
+
+    .full--card {
+        border: 1px solid #eee;
+
+        .card-title{
+            margin-bottom: 1rem;
+        }
+
+        .card--body {
+            padding: 1.25rem;
+        }
+    }
     
 }
 
@@ -308,6 +396,7 @@
 @mixin bp-1280() { 
     // min-width: 80em
 
+    
 }
 
 /* Min width 1440px

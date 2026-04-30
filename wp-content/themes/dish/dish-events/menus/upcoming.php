@@ -49,7 +49,7 @@ $_friendly_labels = MenuMetaBox::FRIENDLY_FOR;
 	<div class="split-grid--card">
 
         <?php if ( $_thumb_id ) : ?>
-			<a href="<?php echo esc_url( $_template_url ); ?>" class="card--img" tabindex="-1" aria-hidden="true"><?php echo wp_get_attachment_image( $_thumb_id, 'basecamp-img-sm', false, [ 'class' => 'dish-menu-entry__imgs', 'loading' => 'lazy' ] ); ?></a>
+			<a href="<?php echo esc_url( $_class_url ); ?>" class="card--img" tabindex="-1" aria-hidden="true"><?php echo wp_get_attachment_image( $_thumb_id, 'basecamp-img-sm', false, [ 'class' => 'dish-menu-entry__imgs', 'loading' => 'lazy' ] ); ?></a>
 		<?php endif; ?>
 
         <div class="card--content">
@@ -93,7 +93,7 @@ $_friendly_labels = MenuMetaBox::FRIENDLY_FOR;
 		<?php endif; ?>
 
 		<?php if ( $_has_dietary || $_has_friendly || $_has_custom_dietary || $_has_custom_friendly ) : ?>
-			<div class="card--flags txt--sm">
+			<div class="dietary--meta-flags txt--sm">
 
             <?php if ( $_has_dietary ) :
                 $_flag_display = array_map(

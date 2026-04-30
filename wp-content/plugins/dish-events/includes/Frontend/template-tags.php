@@ -126,7 +126,7 @@ function dish_the_breadcrumb(): void {
 	}
 
 	?>
-<nav class="breadcrumb-global" aria-label="<?php esc_attr_e( 'Breadcrumb', 'dish-events' ); ?>">
+<nav class="breadcrumb-global content--utility" aria-label="<?php esc_attr_e( 'Breadcrumb', 'dish-events' ); ?>">
     <ol itemscope itemtype="https://schema.org/BreadcrumbList" class="is--flex-list">
         <?php foreach ( $crumbs as $position => $crumb ) :
             $is_current = ! empty( $crumb['current'] );
@@ -177,27 +177,27 @@ function dish_the_menu( int $template_id ): void {
 	$friendly_labels = MenuMetaBox::FRIENDLY_FOR;
 	?>
 	<!-- <section class="dish-class-menus dish-containers" aria-label="<?php esc_attr_e( 'Class menu', 'dish-events' ); ?>"> -->
-		<h3 class="dish-class-menu__heading"><?php esc_html_e( 'The Menu', 'dish-events' ); ?></h3>
+		<h3 class="has--icon ico--menu card-title"><?php esc_html_e( 'The Menu', 'dish-events' ); ?></h3>
 
 		<?php if ( $menu_items ) :
 			$items = array_filter( array_map( 'trim', explode( "\n", $menu_items ) ) );
 		?>
-			<ol class="dish-menu-lists">
+			<ol class="menu--list">
 				<?php foreach ( $items as $item ) : ?>
-					<li class="dish-menu-list__item"><?php echo esc_html( $item ); ?></li>
+					<li><?php echo esc_html( $item ); ?></li>
 				<?php endforeach; ?>
 			</ol>
 		<?php endif; ?>
 
 		<?php if ( $menu_dietary || $menu_friendly ) : ?>
-			<div class="dish-menu-dietary">
+			<div class="dietary--meta-flags txt--sm">
 				<?php if ( $menu_dietary ) :
 					$flag_display = array_map(
 						fn( $k ) => $flag_labels[ $k ] ?? ucfirst( str_replace( '_', ' ', $k ) ),
 						$menu_dietary
 					);
 				?>
-					<p class="dish-menu-dietary__flags"><em><?php esc_html_e( 'Dietary Flags:', 'dish-events' ); ?></em> <?php echo esc_html( implode( ', ', $flag_display ) ); ?></p>
+					<p class="dietary--flags"><em><?php esc_html_e( 'Dietary Flags:', 'dish-events' ); ?></em> <?php echo esc_html( implode( ', ', $flag_display ) ); ?></p>
 				<?php endif; ?>
 				<?php if ( $menu_friendly ) :
 					$friendly_display = array_map(
@@ -205,10 +205,10 @@ function dish_the_menu( int $template_id ): void {
 						$menu_friendly
 					);
 				?>
-					<p class="dish-menu-dietary__friendly"><?php echo esc_html( implode( '/', $friendly_display ) . ' ' . __( 'Friendly', 'dish-events' ) ); ?></p>
+					<p class="dietary--flags"><?php echo esc_html( implode( '/', $friendly_display ) . ' ' . __( 'Friendly', 'dish-events' ) ); ?></p>
 				<?php endif; ?>
 				<?php if ( $menu_dietary ) : ?>
-					<p class="dish-menu-dietary__disclaimer"><em><?php esc_html_e( '*Please contact us if any of the above dietary flags apply to you to ensure we can accommodate your dietary requirements.*', 'dish-events' ); ?></em></p>
+					<p class="dietary--disclaimer"><em><?php esc_html_e( '*Please contact us if any of the above dietary flags apply to you to ensure we can accommodate your dietary requirements.*', 'dish-events' ); ?></em></p>
 				<?php endif; ?>
 			</div>
 		<?php endif; ?>
@@ -257,6 +257,21 @@ function dish_get_enquiry_url(): string {
 }
 
 /**
+ * Return the waiting list page URL.
+ *
+ * Resolves the page set under Settings → waitlist_page. Falls back to
+ * /contact-us/waiting-list/ so the link is never empty.
+ *
+ * @return string
+ */
+function dish_get_waitlist_url(): string {
+	$page_id = (int) Settings::get( 'waitlist_page', 0 );
+	return $page_id
+		? (string) get_permalink( $page_id )
+		: '/contact-us/waiting-list/';
+}
+
+/**
  * Output a grid of upcoming class instance cards.
  *
  * Fetches upcoming public instances ordered by start time and renders each
@@ -282,6 +297,7 @@ function dish_the_upcoming_classes( array $args = [] ): void {
 		'template_id'          => 0,
 		'template_ids'         => [],
 		'dedupe_by_template'   => false,
+		'exclude_private'      => true,
 		'heading'              => __( 'Upcoming Classes', 'dish-events' ),
 		'heading_tag'          => 'h2',
 		'section_class'        => '',
@@ -294,6 +310,10 @@ function dish_the_upcoming_classes( array $args = [] ): void {
 		'limit'       => $args['dedupe_by_template'] ? -1 : (int) $args['limit'],
 		'order'       => 'ASC',
 	];
+
+	if ( $args['exclude_private'] ) {
+		$query_args['is_private'] = false;
+	}
 
 	if ( $args['template_id'] ) {
 		$query_args['template_id'] = (int) $args['template_id'];

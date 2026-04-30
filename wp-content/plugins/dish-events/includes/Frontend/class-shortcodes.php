@@ -52,6 +52,7 @@ final class Shortcodes {
 		add_shortcode( 'dish_login',    [ $this, 'render_login'    ] );
 		add_shortcode( 'dish_register', [ $this, 'render_register' ] );
 		add_shortcode( 'dish_profile',  [ $this, 'render_profile'  ] );
+		add_shortcode( 'dish_reviews',  [ $this, 'render_reviews'  ] );
 	}
 
 	// -------------------------------------------------------------------------
@@ -91,9 +92,23 @@ final class Shortcodes {
 	 * @param array<string,string> $atts  Unused; reserved for future use.
 	 * @return string HTML output.
 	 */
-	public function render_profile( array $atts = [] ): string {
+	/**
+	 * [dish_reviews] — renders Google reviews from the server-side transient cache.
+	 * Outputs nothing when no API credentials are configured or when the cache
+	 * is empty.
+	 *
+	 * @param array<string,string> $atts  Unused; reserved for future use.
+	 * @return string HTML output.
+	 */
+	public function render_reviews( array $atts = [] ): string {
+		$reviews = \Dish\Events\Core\GoogleReviews::get();
+
+		if ( empty( $reviews ) ) {
+			return '';
+		}
+
 		ob_start();
-		include Frontend::locate( 'account/profile.php' );
+		include Frontend::locate( 'reviews.php' );
 		return (string) ob_get_clean();
 	}
 }

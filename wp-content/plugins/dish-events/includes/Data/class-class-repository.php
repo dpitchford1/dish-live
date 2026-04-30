@@ -122,11 +122,28 @@ final class ClassRepository {
 		}
 
 		if ( isset( $args['is_private'] ) ) {
-			$meta_query[] = [
-				'key'     => 'dish_is_private',
-				'value'   => $args['is_private'] ? '1' : '0',
-				'compare' => '=',
-			];
+			if ( $args['is_private'] ) {
+				// Explicitly private only.
+				$meta_query[] = [
+					'key'     => 'dish_is_private',
+					'value'   => '1',
+					'compare' => '=',
+				];
+			} else {
+				// Exclude private: value is '0' OR the key is not set at all.
+				$meta_query[] = [
+					'relation' => 'OR',
+					[
+						'key'     => 'dish_is_private',
+						'value'   => '1',
+						'compare' => '!=',
+					],
+					[
+						'key'     => 'dish_is_private',
+						'compare' => 'NOT EXISTS',
+					],
+				];
+			}
 		}
 
 		if ( ! empty( $meta_query ) ) {

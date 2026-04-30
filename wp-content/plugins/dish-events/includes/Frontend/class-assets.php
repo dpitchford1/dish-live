@@ -44,14 +44,14 @@ final class Assets {
 	public function enqueue(): void {
 		wp_enqueue_style(
 			'dish-calendar',
-			DISH_EVENTS_URL . 'assets/css/dish-calendar.css',
+			DISH_EVENTS_URL . 'assets/css/dish-calendar.min.css',
 			[],
 			DISH_EVENTS_VERSION
 		);
 
 		wp_enqueue_style(
 			'dish-events',
-			DISH_EVENTS_URL . 'assets/css/dish-events.css',
+			DISH_EVENTS_URL . 'assets/css/dish-events.min.css',
 			[ 'dish-calendar' ],
 			DISH_EVENTS_VERSION
 		);

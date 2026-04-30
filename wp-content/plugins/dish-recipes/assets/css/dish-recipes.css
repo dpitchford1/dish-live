@@ -1,0 +1,266 @@
+/* ==========================================================================
+   Dish Recipes — Frontend Styles
+   Compiled by Live Sass Compiler. Do not manually minify.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Archive grid
+   -------------------------------------------------------------------------- */
+
+.recipe-archive {
+}
+
+.recipe-archive__header {
+}
+
+.recipe-archive__title {
+}
+
+.recipe-archive__filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.recipe-filter-btn {
+}
+
+.recipe-filter-btn.menu--selected {
+}
+
+.recipe-archive__grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.recipe-archive__grid--cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.recipe-archive__grid--cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.recipe-archive__empty {
+}
+
+/* --------------------------------------------------------------------------
+   Recipe card
+   -------------------------------------------------------------------------- */
+
+.recipe-card {
+}
+
+.recipe-card__picture {
+}
+
+.recipe-card__img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.recipe-card__body {
+}
+
+.recipe-card__category {
+}
+
+.recipe-card__title {
+}
+
+.recipe-card__excerpt {
+}
+
+.recipe-card__meta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.recipe-card__time {
+}
+
+.recipe-card__difficulty {
+}
+
+/* --------------------------------------------------------------------------
+   Single recipe
+   -------------------------------------------------------------------------- */
+
+.recipe-single {
+}
+
+.recipe-single__header {
+}
+
+.recipe-single__hero {
+}
+
+.recipe-single__hero-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.recipe-single__intro {
+}
+
+.recipe-single__title {
+}
+
+.recipe-single__excerpt {
+}
+
+/* Meta strip */
+
+.recipe-single__meta-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.recipe-meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.recipe-meta-item__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.recipe-meta-item__value {
+}
+
+/* Dietary flags */
+
+.recipe-single__dietary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.recipe-dietary-badge {
+}
+
+/* Content */
+
+.recipe-single__content {
+}
+
+/* Ingredients */
+
+.recipe-single__ingredients {
+}
+
+.recipe-ingredient-section {
+}
+
+.recipe-section-heading {
+}
+
+.recipe-ingredient-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recipe-ingredient {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+.recipe-ingredient__qty-unit {
+  min-width: 5rem;
+  font-weight: 600;
+}
+
+.recipe-ingredient__item {
+}
+
+.recipe-ingredient__note {
+  color: #666;
+  font-style: italic;
+}
+
+/* Method */
+
+.recipe-single__method {
+}
+
+.recipe-method-section {
+}
+
+.recipe-method-steps {
+  padding-left: 1.5rem;
+}
+
+.recipe-method-step {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+/* Notes */
+
+.recipe-single__notes {
+}
+
+.recipe-notes__content {
+}
+
+/* Related classes */
+
+.recipe-single__related-classes {
+}
+
+.recipe-related-classes__list {
+  list-style: none;
+  padding: 0;
+}
+
+/* PDF */
+
+.recipe-single__pdf {
+}
+
+/* --------------------------------------------------------------------------
+   Related recipes (on class template pages)
+   -------------------------------------------------------------------------- */
+
+.related-recipes {
+}
+
+.related-recipes__title {
+}
+
+.related-recipes__grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* --------------------------------------------------------------------------
+   Print
+   -------------------------------------------------------------------------- */
+
+@media print {
+  .recipe-single__hero,
+  .recipe-single__related-classes,
+  .recipe-single__pdf {
+    display: none;
+  }
+
+  .recipe-ingredient-list,
+  .recipe-method-steps {
+    page-break-inside: avoid;
+  }
+
+  .recipe-single__ingredients,
+  .recipe-single__method {
+    page-break-before: auto;
+  }
+}

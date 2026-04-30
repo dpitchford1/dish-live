@@ -29,7 +29,7 @@ final class Toast {
 	 * Exits silently when disabled or unconfigured — safe to call unconditionally.
 	 */
 	public static function render(): void {
-		if ( ! \Basecamp_Settings::get( 'toast_enabled' ) ) {
+		if ( \Basecamp_Settings::get( 'toast_enabled' ) !== '1' ) {
 			return;
 		}
 

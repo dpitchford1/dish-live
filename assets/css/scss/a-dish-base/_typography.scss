@@ -7,7 +7,7 @@
 // }
 
 .page-heading {
-    font-size: clamp(1.1rem, calc(1.4rem + 1vw), 2.4rem);
+    font-size: clamp(1.1rem, calc(1.3rem + 1vw), 2.4rem);
     letter-spacing: -.12rem;
     line-height: 1.35;
     margin-bottom: 4vh;
@@ -24,13 +24,13 @@
     color: #777;
 }
 .section-title {
-    font-size: clamp(1.2rem, calc(1.5rem + 1vw), 2.2rem);
-    letter-spacing: -.12rem;
+    font-size: clamp(1.2rem, calc(1.4rem + 1vw), 2rem);
+    letter-spacing: -.07ch;
     line-height: 1.2;
 }
 .section-subtitle {
     font-size: clamp(1.2rem, calc(1.5rem + 1vw), 2rem);
-    letter-spacing: -.12rem;
+    letter-spacing: -.07ch;
     line-height: 1.2;
     margin-bottom: 1.5rem;
     border-bottom: 1px solid #ddd;

@@ -91,6 +91,8 @@ final class Calendar {
 		wp_localize_script( 'dish-calendar', 'dishCalendar', [
 			'restUrl'        => rest_url( 'dish/v1/classes' ),
 			'locale'         => str_replace( '_', '-', (string) get_locale() ),
+			'timeZone'       => wp_timezone_string(),
+			'waitlistUrl'    => dish_get_waitlist_url(),
 			'currencySymbol' => Settings::get( 'currency_symbol', '$' ),
 			'spotsThreshold' => (int) Settings::get( 'spots_left_threshold', 0 ),
 			'i18n'           => [
@@ -99,6 +101,7 @@ final class Calendar {
 				'privateEvent' => __( 'Private Event', 'dish-events' ),
 				'close'        => __( 'Close', 'dish-events' ),
 				'bookIt'       => __( 'Book It', 'dish-events' ),
+				'waitlist'     => __( 'Join the waiting list', 'dish-events' ),
 				'viewClass'    => __( 'View class details', 'dish-events' ),
 			],
 		] );
